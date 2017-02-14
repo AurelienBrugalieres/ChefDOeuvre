@@ -9,6 +9,7 @@ import skynamiccontrol.model.mission.MissionManager;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 
 /**
  * Created by fabien on 14/02/17.
@@ -25,30 +26,45 @@ public class TextView implements Observer{
     }
 
     public boolean mainLoop() {
-        try {
-            int key = 0;
-            key = System.in.read();
-            System.out.println(key);
-            switch (key) {
-                case 10:
-                    Circle circle = new Circle(new Waypoint(43.4637222, 1.2751827, 350), 50);
-                    circle.setDuration(20.f);
-                    missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
-                    break;
-                case 1:
+        Scanner scanner = new Scanner(System.in);;
+        String command = scanner.next();
+        Circle circle;
+        double lat, lon, alt, radius, duration;
+        switch (command) {
+            case "circle":
+                System.out.println("lat : ");
+                lat = scanner.nextDouble();
+                System.out.println("lon : ");
+                lon = scanner.nextDouble();
+                System.out.println("alt : ");
+                alt = scanner.nextDouble();
+                System.out.println("radius : ");
+                radius = scanner.nextDouble();
+                System.out.println("duration : ");
+                duration = scanner.nextDouble();
 
-                    break;
-                case 2:
-                    return false;
-            }
-
-
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
+                circle = new Circle(new Waypoint(lat, lon, alt), radius);
+                circle.setDuration(duration);
+                missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
+                break;
+            case "c1":
+                circle = new Circle(new Waypoint(43.4637222, 1.2751827, 300), 100);
+                circle.setDuration(20);
+                missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
+                break;
+            case "c2":
+                circle = new Circle(new Waypoint(43.464, 1.28, 350), 200);
+                circle.setDuration(30);
+                missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
+                break;
+            case "n":
+                missionManager.goToNextInstruction();
+            case "q":
+                return false;
         }
-        return true;
+
+    return true;
+
     }
 
     private void stop() {
