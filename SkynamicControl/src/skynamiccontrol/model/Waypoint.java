@@ -9,6 +9,22 @@ public class Waypoint {
     private double altitude;
     private CoordinateSystem coordinateSystem;
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getAltitude() {
+        return altitude;
+    }
+
+    public CoordinateSystem getCoordinateSystem() {
+        return coordinateSystem;
+    }
+
     public enum CoordinateSystem {
         LOCAL,
         LLA
