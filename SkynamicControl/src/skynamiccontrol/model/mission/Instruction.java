@@ -13,7 +13,8 @@ public class Instruction {
     public enum CommunicationState {
         NOT_SENT,
         SENT,
-        ACKNOWLEDGED
+        ACKNOWLEDGED,
+        CANCELED        //the instruction has been acknowledged by the aircraft, then canceled by the user, but the cancellation has not been acknowledged (so the aircaft can still run this instruction)
     }
 
     public enum Status {
