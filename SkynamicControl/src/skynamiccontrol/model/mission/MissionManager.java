@@ -20,6 +20,7 @@ public class MissionManager {
 
     public MissionManager(int aircraftId) {
         this.aircraftId = aircraftId;
+        instructions = new ArrayList<>();
         currentInstructionId = 0;
         nextIndex = 0;
     }
@@ -91,8 +92,9 @@ public class MissionManager {
                     MISSION_CIRCLE_LLA + " " +
                     aircraftId + " " +
                     insertMode.getValue() + " " +
-                    (int)circle.getCenter().getLatitude() * 10e7 + " " +
-                    (int)circle.getCenter().getLongitude() * 10e7 + " " +
+                    (int)(circle.getCenter().getLatitude() * 10000000) + " " +
+                    (int)(circle.getCenter().getLongitude() * 10000000) + " " +
+                    (int)(circle.getCenter().getAltitude()) + " " +
                     circle.getRadius() + " " +
                     circle.getDuration() + " " +
                     index;
@@ -103,6 +105,7 @@ public class MissionManager {
                     insertMode.getValue() + " " +
                     circle.getCenter().getLatitude() + " " +
                     circle.getCenter().getLongitude() + " " +
+                    circle.getRadius() + " " +
                     circle.getRadius() + " " +
                     circle.getDuration() + " " +
                     index;
