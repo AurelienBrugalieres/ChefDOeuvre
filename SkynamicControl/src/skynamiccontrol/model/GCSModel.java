@@ -1,14 +1,12 @@
 package skynamiccontrol.model;
 
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Elodie on 14/02/2017.
  */
-public class GCSModel {
+public class GCSModel implements Observer{
     private final int nb_aircraft;
     private List<Aircraft> aircrafts;
     private StatusManager statusManager;
@@ -27,6 +25,12 @@ public class GCSModel {
 
     public void addAircraft(Aircraft aircraft) {
         this.aircrafts.add(aircraft);
+        aircraft.addObserver(this);
         statusManager.createView(aircraft);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        statusManager.updateView((Aircraft)o);
     }
 }
