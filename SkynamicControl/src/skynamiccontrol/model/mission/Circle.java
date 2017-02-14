@@ -7,14 +7,37 @@ import skynamiccontrol.model.Waypoint;
  */
 public class Circle extends Instruction {
     private Waypoint center;
-    private int radius;
+    private double radius;
     private Double altitude = null; //if default value overrided. (default value = waypoint1.altitude)
+
+    public Circle(Waypoint center, int radius) {
+        this.center = center;
+        this.radius = radius;
+    }
+
+    public void setAltitude(Double altitude) {
+        if(getCommunicationState() == CommunicationState.NOT_SENT) {
+            this.altitude = altitude;
+        }
+    }
+
+    public void setCenter(Waypoint center) {
+        if(getCommunicationState() == CommunicationState.NOT_SENT) {
+            this.center = center;
+        }
+    }
+
+    public void setRadius(double radius) {
+        if(getCommunicationState() == CommunicationState.NOT_SENT) {
+            this.radius = radius;
+        }
+    }
 
     public Waypoint getCenter() {
         return center;
     }
 
-    public int getRadius() {
+    public double getRadius() {
         return radius;
     }
 

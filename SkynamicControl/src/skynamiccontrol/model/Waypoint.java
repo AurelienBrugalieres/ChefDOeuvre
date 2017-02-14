@@ -9,6 +9,13 @@ public class Waypoint {
     private double altitude;
     private CoordinateSystem coordinateSystem;
 
+    public Waypoint(double latitude, double longitude, double altitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
+        coordinateSystem = CoordinateSystem.LLA;
+    }
+
     public double getLatitude() {
         return latitude;
     }
