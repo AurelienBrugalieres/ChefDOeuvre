@@ -27,6 +27,10 @@ public class IvyManager extends Observable{
         }
     }
 
+    public void stop() {
+        bus.stop();
+    }
+
     public int registerRegex(String regex) {
         //if the regex is already registered, just return its id.
         int regexNb;
