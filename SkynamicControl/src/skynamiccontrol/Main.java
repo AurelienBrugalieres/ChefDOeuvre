@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.model.Status;
+import skynamiccontrol.textview.TextView;
 
 public class Main extends Application {
 
@@ -34,5 +35,8 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+        ///Uncomment these two lines (and comment the others) to test in text mode
+        //TextView textView = new TextView();
+        //while (textView.mainLoop()){}
     }
 }
