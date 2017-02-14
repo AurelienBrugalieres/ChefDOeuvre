@@ -58,13 +58,13 @@ public class IvyManager extends Observable{
     }
 
 
-    public int sendMessage(String message) {
+    public boolean sendMessage(String message) {
         try {
             bus.sendMsg(message);
-            return 0;
+            return true;
         } catch (IvyException e) {
             e.printStackTrace();
-            return -1;
+            return false;
         }
 
     }
