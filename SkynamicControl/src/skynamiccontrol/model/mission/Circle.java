@@ -10,7 +10,7 @@ public class Circle extends Instruction {
     private double radius;
     private Double altitude = null; //if default value overrided. (default value = waypoint1.altitude)
 
-    public Circle(Waypoint center, int radius) {
+    public Circle(Waypoint center, double radius) {
         this.center = center;
         this.radius = radius;
     }

@@ -6,7 +6,7 @@ package skynamiccontrol.model.mission;
 public class Instruction {
     private String name;
     private int index;          //index as in the aircraft
-    private float duration;
+    private double duration;
     private CommunicationState communicationState = CommunicationState.NOT_SENT;
     private Status status = Status.PENDING;
 
@@ -39,11 +39,11 @@ public class Instruction {
         this.index = index;
     }
 
-    public float getDuration() {
+    public double getDuration() {
         return duration;
     }
 
-    public void setDuration(float duration) {
+    public void setDuration(double duration) {
         this.duration = duration;
     }
 
