@@ -61,7 +61,7 @@ public class MissionManager {
     }
 
     public void goToNextInstruction() {
-        String msg = NAME_ON_IVY + " NEXT_MISSION" + " " + aircraftId;
+        String msg = NAME_ON_IVY + " " + "NEXT_MISSION" + " " + aircraftId;
         IvyManager.getInstance().sendMessage(msg);
     }
 

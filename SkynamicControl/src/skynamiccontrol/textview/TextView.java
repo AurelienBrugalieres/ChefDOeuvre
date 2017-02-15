@@ -59,6 +59,7 @@ public class TextView implements Observer{
                 break;
             case "n":
                 missionManager.goToNextInstruction();
+                break;
             case "q":
                 return false;
         }
