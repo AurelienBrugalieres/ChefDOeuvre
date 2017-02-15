@@ -57,17 +57,17 @@ public class TextView implements Observer{
                 missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
                 break;
             case "c1":
-                circle = new Circle(new Waypoint(43.4637222, 1.2751827, 300), 100);
+                circle = new Circle(new Waypoint(43.4637222, 1.2751827, 300, Waypoint.CoordinateSystem.LLA), 100);
                 circle.setDuration(20);
                 missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
                 break;
             case "c2":
-                circle = new Circle(new Waypoint(200,400, 350, Waypoint.CoordinateSystem.LOCAL), 200);
+                circle = new Circle(new Waypoint(200,600, 350, Waypoint.CoordinateSystem.LOCAL), 200);
                 circle.setDuration(30);
                 missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
                 break;
             case "gt1":
-                goToWP = new GoToWP(new Waypoint(43.4637222, 1.2751827, 300));
+                goToWP = new GoToWP(new Waypoint(43.4637222, 1.2751827, 300, Waypoint.CoordinateSystem.LLA));
                 goToWP.setDuration(50);
                 missionManager.insertInstruction(goToWP, MissionManager.InsertMode.APPEND);
                 break;
