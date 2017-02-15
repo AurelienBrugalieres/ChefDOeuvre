@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.Controller">
-<children>
-    <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Test">
-    </Button>
-    <fx:include source="StatusList.fxml"/>
-</children>
-</AnchorPane>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.Controller">
+   <left>
+    <fx:include source="StatusList.fxml" />
+   </left>
+    <center>
+        <fx:include source="view/map/Map.fxml" />
+    </center>
+</BorderPane>
