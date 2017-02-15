@@ -38,8 +38,8 @@ public class Timeline extends Application{
         for (int i = 0; i < listAircraft.size(); i++) {
             Tab tab = new Tab();
             tab.setText(listAircraft.get(i));
-            mb = new MissionBlock();
-            tab.setContent(mb);
+           // mb = new MissionBlock();
+           // tab.setContent(mb);
             tabPane.getTabs().add(tab);
         }
         primaryStage.setScene(scene);
