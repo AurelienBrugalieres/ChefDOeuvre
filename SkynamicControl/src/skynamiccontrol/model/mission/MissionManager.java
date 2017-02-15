@@ -13,6 +13,8 @@ public class MissionManager {
     private static String MISSION_CIRCLE_LLA = "MISSION_CIRCLE_LLA";
     private static String MISSION_GOTOWP_LOCAL = "MISSION_GOTO_WP";
     private static String MISSION_GOTOWP_LLA = "MISSION_GOTO_WP_LLA";
+    private static String MISSION_SURVEY_LOCAL = "MISSION_SURVEY";
+    private static String MISSION_SURVEY_LLA = "MISSION_SURVEY_LLA";
     private static int INDEX_BIT_LENGTH = 8;
     private int aircraftId;
     private ArrayList<Instruction> instructions;
@@ -99,7 +101,7 @@ public class MissionManager {
                     insertMode.getValue() + " " +
                     (int)(circle.getCenter().getLatitude() * 10000000) + " " +
                     (int)(circle.getCenter().getLongitude() * 10000000) + " " +
-                    (int)(circle.getCenter().getAltitude()) + " " +
+                    circle.getAltitude().intValue() + " " +
                     circle.getRadius() + " " +
                     circle.getDuration() + " " +
                     index;
@@ -107,8 +109,8 @@ public class MissionManager {
             msg = MISSION_CIRCLE_LOCAL + " " +
                     aircraftId + " " +
                     insertMode.getValue() + " " +
-                    circle.getCenter().getLatitude() + " " +
-                    circle.getCenter().getLongitude() + " " +
+                    circle.getCenter().getEast() + " " +
+                    circle.getCenter().getNorth() + " " +
                     circle.getAltitude() + " " +
                     circle.getRadius() + " " +
                     circle.getDuration() + " " +
@@ -126,16 +128,16 @@ public class MissionManager {
                     insertMode.getValue() + " " +
                     (int)(goToWP.getWaypoint().getLatitude() * 10000000) + " " +
                     (int)(goToWP.getWaypoint().getLongitude() * 10000000) + " " +
-                    (int)(goToWP.getWaypoint().getAltitude()) + " " +
+                    goToWP.getAltitude().intValue() + " " +
                     goToWP.getDuration() + " " +
                     index;
         } else if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
             msg = MISSION_GOTOWP_LOCAL + " " +
                     aircraftId + " " +
                     insertMode.getValue() + " " +
-                    goToWP.getWaypoint().getLatitude() + " " +
-                    goToWP.getWaypoint().getLongitude() + " " +
-                    (int)(goToWP.getWaypoint().getAltitude()) + " " +
+                    goToWP.getWaypoint().getEast() + " " +
+                    goToWP.getWaypoint().getNorth() + " " +
+                    goToWP.getAltitude() + " " +
                     goToWP.getDuration() + " " +
                     index;
         }
@@ -151,7 +153,32 @@ public class MissionManager {
     }
 
     private String forgeSurveyMessage(Survey survey, InsertMode insertMode) {
-        return "";
+        String msg = "";
+        int index = getNextIndex();
+        if(survey.getWpStart().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
+            msg = MISSION_SURVEY_LLA + " " +
+                    aircraftId + " " +
+                    insertMode.getValue() + " " +
+                    (int)(survey.getWpStart().getLatitude() * 10000000) + " " +
+                    (int)(survey.getWpStart().getLongitude() * 10000000) + " " +
+                    (int)(survey.getWpEnd().getLatitude() * 10000000) + " " +
+                    (int)(survey.getWpEnd().getLongitude() * 10000000) + " " +
+                    survey.getAltitude().intValue() + " " +
+                    survey.getDuration() + " " +
+                    index;
+        } else if(survey.getWpStart().getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
+            msg = MISSION_SURVEY_LOCAL + " " +
+                    aircraftId + " " +
+                    insertMode.getValue() + " " +
+                    survey.getWpStart().getEast() + " " +
+                    survey.getWpStart().getNorth() + " " +
+                    survey.getWpEnd().getEast() + " " +
+                    survey.getWpEnd().getNorth() + " " +
+                    survey.getAltitude().intValue() + " " +
+                    survey.getDuration() + " " +
+                    index;
+        }
+        return msg;
     }
 
     private int getNextIndex() {
