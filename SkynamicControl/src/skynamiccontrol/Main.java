@@ -17,7 +17,7 @@ import skynamiccontrol.textview.TextView;
 
 public class Main extends Application {
 
-    private static final boolean DEBUG = true;
+    public static final boolean DEBUG = true;
 
     @Override
     public void start(Stage primaryStage) throws Exception{

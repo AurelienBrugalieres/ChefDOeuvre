@@ -58,4 +58,21 @@ function initialize() {
             }
         });
     };
+
+    document.map.addListener('click', onMapClick);
+
+}
+
+function onMapClick(event) {
+    mapObj = document.map;
+    var latitude = event.latLng;
+    var marker = new google.maps.Marker({
+       position: event.latLng,
+       map: mapObj,
+       title: "New waypoint",
+       icon: {
+           url: "/home/aurelien/IdeaProjects/ChefDOeuvre/SkynamicControl/src/resources/bitmaps/waypoint32x32.png"
+       }
+    });
+    java.onMapClick(marker);
 }
