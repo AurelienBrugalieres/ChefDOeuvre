@@ -99,7 +99,7 @@ public class MissionManager {
                     insertMode.getValue() + " " +
                     (int)(circle.getCenter().getLatitude() * 10000000) + " " +
                     (int)(circle.getCenter().getLongitude() * 10000000) + " " +
-                    (int)(circle.getCenter().getAltitude()) + " " +
+                    circle.getAltitude().intValue() + " " +
                     circle.getRadius() + " " +
                     circle.getDuration() + " " +
                     index;
@@ -107,8 +107,8 @@ public class MissionManager {
             msg = MISSION_CIRCLE_LOCAL + " " +
                     aircraftId + " " +
                     insertMode.getValue() + " " +
-                    circle.getCenter().getLatitude() + " " +
-                    circle.getCenter().getLongitude() + " " +
+                    circle.getCenter().getEast() + " " +
+                    circle.getCenter().getNorth() + " " +
                     circle.getAltitude() + " " +
                     circle.getRadius() + " " +
                     circle.getDuration() + " " +
@@ -126,16 +126,16 @@ public class MissionManager {
                     insertMode.getValue() + " " +
                     (int)(goToWP.getWaypoint().getLatitude() * 10000000) + " " +
                     (int)(goToWP.getWaypoint().getLongitude() * 10000000) + " " +
-                    (int)(goToWP.getWaypoint().getAltitude()) + " " +
+                    goToWP.getAltitude().intValue() + " " +
                     goToWP.getDuration() + " " +
                     index;
         } else if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
             msg = MISSION_GOTOWP_LOCAL + " " +
                     aircraftId + " " +
                     insertMode.getValue() + " " +
-                    goToWP.getWaypoint().getLatitude() + " " +
-                    goToWP.getWaypoint().getLongitude() + " " +
-                    (int)(goToWP.getWaypoint().getAltitude()) + " " +
+                    goToWP.getWaypoint().getEast() + " " +
+                    goToWP.getWaypoint().getNorth() + " " +
+                    goToWP.getAltitude() + " " +
                     goToWP.getDuration() + " " +
                     index;
         }
