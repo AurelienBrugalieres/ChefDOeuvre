@@ -3,10 +3,7 @@ package skynamiccontrol.textview;
 import skynamiccontrol.communication.IncomeMessage;
 import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Waypoint;
-import skynamiccontrol.model.mission.Circle;
-import skynamiccontrol.model.mission.GoToWP;
-import skynamiccontrol.model.mission.MissionManager;
-import skynamiccontrol.model.mission.Survey;
+import skynamiccontrol.model.mission.*;
 
 import java.io.IOException;
 import java.util.Observable;
@@ -23,8 +20,8 @@ public class TextView implements Observer{
         lastStatus = "";
         IvyManager.getInstance().initIvyBus("SkynamicControl", "SkynamicControl Ready", "127.255.255.255:2010");
         missionManager = new MissionManager(14);
-        IvyManager.getInstance().addObserver(this);
-        IvyManager.getInstance().registerRegex("(.*MISSION_STATUS.*)");
+        //IvyManager.getInstance().addObserver(this);
+        //IvyManager.getInstance().registerRegex("(.*MISSION_STATUS.*)");
         //IvyManager.getInstance().registerRegex("(.*GPS.*)");
     }
 
@@ -34,6 +31,7 @@ public class TextView implements Observer{
         Circle circle;
         GoToWP goToWP;
         Survey survey;
+        Path path;
         Waypoint.CoordinateSystem coordinateSystem = Waypoint.CoordinateSystem.LLA;
         double lat, lon, alt, radius, duration;
         switch (command) {
@@ -69,12 +67,12 @@ public class TextView implements Observer{
                 missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
                 break;
             case "gt1":
-                goToWP = new GoToWP(new Waypoint(43.4637222, 1.2751827, 300, Waypoint.CoordinateSystem.LLA));
+                goToWP = new GoToWP(new Waypoint(43.4637222, 1.2751827, 323, Waypoint.CoordinateSystem.LLA));
                 goToWP.setDuration(50);
                 missionManager.insertInstruction(goToWP, MissionManager.InsertMode.APPEND);
                 break;
             case "gt2":
-                goToWP = new GoToWP(new Waypoint(100, 200, 300, Waypoint.CoordinateSystem.LOCAL));
+                goToWP = new GoToWP(new Waypoint(100, 200, 321, Waypoint.CoordinateSystem.LOCAL));
                 goToWP.setDuration(55);
                 missionManager.insertInstruction(goToWP, MissionManager.InsertMode.APPEND);
                 break;
@@ -87,6 +85,13 @@ public class TextView implements Observer{
                 survey = new Survey(0, 400, 600, 0, 360, Waypoint.CoordinateSystem.LOCAL);
                 survey.setDuration(50);
                 missionManager.insertInstruction(survey, MissionManager.InsertMode.APPEND);
+            case "p1":
+                path = new Path();
+                path.addWaypoint(new Waypoint(43.4637117,1.2756799, 320, Waypoint.CoordinateSystem.LLA));
+                path.addWaypoint(new Waypoint(43.4661319, 1.2768373, 340, Waypoint.CoordinateSystem.LLA));
+                path.addWaypoint(new Waypoint(43.4665644, 1.2726432, 340, Waypoint.CoordinateSystem.LLA));
+                path.setDuration(700);
+                missionManager.insertInstruction(path, MissionManager.InsertMode.APPEND);
                 break;
             case "n":
                 missionManager.goToNextInstruction();
@@ -106,13 +111,13 @@ public class TextView implements Observer{
 
     @Override
     public void update(Observable observable, Object o) {
-        IncomeMessage msg = (IncomeMessage)o;
-        if(msg.getPayload()[0].equals(lastStatus)){
-            return;
-        }
-        if(msg.getPayload()[0].contains("MISSION_STATUS")){
-            lastStatus = msg.getPayload()[0];
-        }
-        System.out.println(msg.getId() + "    " + msg.getPayload()[0]);
+//        IncomeMessage msg = (IncomeMessage)o;
+//        if(msg.getPayload()[0].equals(lastStatus)){
+//            return;
+//        }
+//        if(msg.getPayload()[0].contains("MISSION_STATUS")){
+//            lastStatus = msg.getPayload()[0];
+//        }
+//        System.out.println(msg.getId() + "    " + msg.getPayload()[0]);
     }
 }
