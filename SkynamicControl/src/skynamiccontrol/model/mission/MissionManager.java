@@ -9,8 +9,10 @@ import java.util.ArrayList;
  * Created by fabien on 13/02/17.
  */
 public class MissionManager {
-    private static String MISSION_CIRCLE = "MISSION_CIRCLE";
+    private static String MISSION_CIRCLE_LOCAL = "MISSION_CIRCLE";
     private static String MISSION_CIRCLE_LLA = "MISSION_CIRCLE_LLA";
+    private static String MISSION_GOTOWP_LOCAL = "MISSION_GOTO_WP";
+    private static String MISSION_GOTOWP_LLA = "MISSION_GOTO_WP_LLA";
     private static int INDEX_BIT_LENGTH = 8;
     private int aircraftId;
     private ArrayList<Instruction> instructions;
@@ -116,7 +118,28 @@ public class MissionManager {
     }
 
     private String forgeGoToWPMessage(GoToWP goToWP, InsertMode insertMode) {
-        return "";
+        String msg = "";
+        int index = getNextIndex();
+        if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
+            msg = MISSION_GOTOWP_LLA + " " +
+                    aircraftId + " " +
+                    insertMode.getValue() + " " +
+                    (int)(goToWP.getWaypoint().getLatitude() * 10000000) + " " +
+                    (int)(goToWP.getWaypoint().getLongitude() * 10000000) + " " +
+                    (int)(goToWP.getWaypoint().getAltitude()) + " " +
+                    goToWP.getDuration() + " " +
+                    index;
+        } else if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
+            msg = MISSION_GOTOWP_LOCAL + " " +
+                    aircraftId + " " +
+                    insertMode.getValue() + " " +
+                    goToWP.getWaypoint().getLatitude() + " " +
+                    goToWP.getWaypoint().getLongitude() + " " +
+                    (int)(goToWP.getWaypoint().getAltitude()) + " " +
+                    goToWP.getDuration() + " " +
+                    index;
+        }
+        return msg;
     }
 
     private String forgePathMessage(Path path, InsertMode insertMode) {
