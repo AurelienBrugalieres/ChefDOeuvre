@@ -3,16 +3,21 @@ package skynamiccontrol.view.status;/**
  */
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import skynamiccontrol.core.StatusStateMachine;
 import skynamiccontrol.model.Aircraft;
+
 
 import java.util.Observable;
 import java.util.Observer;
@@ -53,14 +58,16 @@ public class StatusContainer extends Parent implements Observer {
     private javafx.scene.image.ImageView batterie_image;
 
     private Aircraft aircraft;
-
+    private StatusStateMachine statusStateMachine;
 
     public StatusContainer(Aircraft air) {
         System.out.println("construct status container");
+        statusStateMachine = new StatusStateMachine(air.getColor());
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), StatusListContainer.FONT_SIZE_BODY);
         this.setStyle("-fx-font-family: OpenSans-Regular;");
         global_pane = new BorderPane();
         global_pane.setPrefSize(SIZE,SIZE);
+        global_pane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
         info_box = new VBox();
 
         Pane title_pane = new Pane();
@@ -114,6 +121,13 @@ public class StatusContainer extends Parent implements Observer {
         global_pane.setCenter(info_box);
         aircraft.addPrivateObserver(this);
         this.getChildren().add(global_pane);
+
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                statusStateMachine.onMouseClick(global_pane);
+            }
+        });
     }
 
     @Override
