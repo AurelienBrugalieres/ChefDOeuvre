@@ -1,5 +1,7 @@
 package skynamiccontrol.view.map;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,7 +26,13 @@ public class MapController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         WebEngine webEngine = webView.getEngine();
 
-        webEngine.load("file:/home/aurelien/IdeaProjects/ChefDOeuvre/SkynamicControl/src/skynamiccontrol/view/map/map_api/google/index.html");
+        File file = new File("SkynamicControl/src/skynamiccontrol/view/map/map_api/google/index.html");
+
+        try {
+            webEngine.load(file.toURI().toURL().toExternalForm());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
 
     }
