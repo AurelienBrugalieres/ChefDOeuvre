@@ -24,15 +24,15 @@ public class Aircraft extends Observable{
     private double speed;
     private Status current_status;
 
-    private List<Observer> observers;
+   // private List<Observer> observers;
 
     public Aircraft() {
-        this.observers = new ArrayList<>();
+       // this.observers = new ArrayList<>();
 
     }
 
     public Aircraft(int id, String name, double batteryLevel, double altitude, double speed, Status current_status) {
-        this.observers = new ArrayList<>();
+      //  this.observers = new ArrayList<>();
         this.id = id;
         this.name = name;
         this.batteryLevel = batteryLevel;
@@ -41,12 +41,12 @@ public class Aircraft extends Observable{
         this.current_status = current_status;
     }
 
-    public void addObserver(Observer obs) {
-        this.observers.add(obs);
+    public void addPrivateObserver(Observer obs) {
+        addObserver(obs);
     }
 
     public void removeObserver(Observer obs) {
-        this.observers.remove(obs);
+        removeObserver(obs);
     }
 
     public int getId() {

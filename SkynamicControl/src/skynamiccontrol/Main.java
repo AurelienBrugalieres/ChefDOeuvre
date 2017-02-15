@@ -22,8 +22,8 @@ public class Main extends Application {
 
 
         /* test */
-        Aircraft aircraft = new Aircraft(1,"microJet",80.0,102.0,30.0, Status.AUTO);
-        model.addAircraft(aircraft);
+     //  Aircraft aircraft = new Aircraft(1,"microJet",80.0,102.0,30.0, Status.AUTO);
+     //   model.addAircraft(aircraft);
 
 
 

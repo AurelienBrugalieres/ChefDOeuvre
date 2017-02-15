@@ -25,7 +25,7 @@ public class GCSModel implements Observer{
 
     public void addAircraft(Aircraft aircraft) {
         this.aircrafts.add(aircraft);
-        aircraft.addObserver(this);
+        aircraft.addPrivateObserver(this);
         statusManager.createView(aircraft);
     }
 

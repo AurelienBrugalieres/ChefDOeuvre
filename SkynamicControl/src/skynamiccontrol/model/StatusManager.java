@@ -28,9 +28,9 @@ public class StatusManager {
         for (EventType eventType : values()) {
             eventAvailability.put(eventType, null);
         }
-        statusListController.addPropertyChangeListener(Aircraft.AIRCRAFT_STATUS_PROPERTY,(e) -> {
+       /* statusListController.addPropertyChangeListener(Aircraft.AIRCRAFT_STATUS_PROPERTY,(e) -> {
             firePropertyChange(StatusListController.AIRCRAFT_STATUS_PROPERTY_LIST, null, model.getAircrafts());
-        });
+        });*/
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
