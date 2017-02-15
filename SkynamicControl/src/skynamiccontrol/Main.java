@@ -18,7 +18,6 @@ public class Main extends Application {
 
     private static final boolean DEBUG = true;
 
-    private GCSModel model = new GCSModel(2);
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("skynamicControlMain.fxml"));

@@ -4,6 +4,7 @@ package skynamiccontrol.view.status;/**
 
 import javafx.application.Application;
 import javafx.scene.Parent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import skynamiccontrol.model.Aircraft;
@@ -27,10 +28,9 @@ public class StatusListContainer extends Parent {
 
     public void addStatus(Aircraft aircraft) {
        StatusContainer statusContainer = new StatusContainer(aircraft);
+       VBox.setVgrow(statusContainer, Priority.ALWAYS);
        vbox.getChildren().add(statusContainer);
        status.add(statusContainer);
-       this.getChildren().clear();
-       this.getChildren().add(statusContainer);
     }
 
 }

@@ -1,16 +1,7 @@
 package skynamiccontrol.model;
 
-import com.sun.deploy.security.WIExplorerBrowserAuthenticator14;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.AnchorPane;
-import skynamiccontrol.view.status.StatusController;
 import skynamiccontrol.view.status.StatusListContainer;
-import skynamiccontrol.view.status.StatusListController;
-import static skynamiccontrol.model.EventType.values;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.io.IOException;
 import java.util.*;
 
 /**
