@@ -24,7 +24,7 @@ public class MapController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         WebEngine webEngine = webView.getEngine();
 
-        webEngine.load("file:/home/aurelien/IdeaProjects/ChefDOeuvre/SkynamicControl/src/skynamiccontrol/view/map/map_api/index.html");
+        webEngine.load("file:/home/aurelien/IdeaProjects/ChefDOeuvre/SkynamicControl/src/skynamiccontrol/view/map/map_api/google/index.html");
 
 
     }
