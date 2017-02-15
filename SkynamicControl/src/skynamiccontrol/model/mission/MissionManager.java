@@ -30,20 +30,23 @@ public class MissionManager {
 
     public void insertInstruction(Instruction instruction, InsertMode insertMode) {
         String msg;
-        if(instruction instanceof Circle) {
-            msg = forgeCircleMessage((Circle) instruction, insertMode);
-        } else if(instruction instanceof GoToWP) {
-            msg = forgeGoToWPMessage((GoToWP) instruction, insertMode);
-        } else if(instruction instanceof Path) {
-            msg = forgePathMessage((Path) instruction, insertMode);
-        } else if(instruction instanceof Segment) {
-            msg = forgeSegmentMessage((Segment) instruction, insertMode);
-        } else if(instruction instanceof Survey) {
-            msg = forgeSurveyMessage((Survey) instruction, insertMode);
-        } else {
-            System.out.println("Type not known.");
+        try {
+            if(instruction instanceof Circle) {
+                msg = forgeCircleMessage((Circle) instruction, insertMode);
+            } else if(instruction instanceof GoToWP) {
+                msg = forgeGoToWPMessage((GoToWP) instruction, insertMode);
+            } else if(instruction instanceof Path) {
+                msg = forgePathMessage((Path) instruction, insertMode);
+            } else if(instruction instanceof Survey) {
+                msg = forgeSurveyMessage((Survey) instruction, insertMode);
+            } else {
+                System.out.println("Type not known.");
+                return;
+            }
+        } catch (Exception e) {
             return;
         }
+
 
         if(IvyManager.getInstance().sendMessage(msg)) {     //if message sent
             switch(insertMode) {
