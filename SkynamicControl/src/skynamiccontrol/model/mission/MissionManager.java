@@ -9,7 +9,6 @@ import java.util.ArrayList;
  * Created by fabien on 13/02/17.
  */
 public class MissionManager {
-    private static String NAME_ON_IVY = "gcs";
     private static String MISSION_CIRCLE = "MISSION_CIRCLE";
     private static String MISSION_CIRCLE_LLA = "MISSION_CIRCLE_LLA";
     private static int INDEX_BIT_LENGTH = 8;
@@ -61,7 +60,7 @@ public class MissionManager {
     }
 
     public void goToNextInstruction() {
-        String msg = NAME_ON_IVY + " " + "NEXT_MISSION" + " " + aircraftId;
+        String msg = "NEXT_MISSION" + " " + aircraftId;
         IvyManager.getInstance().sendMessage(msg);
     }
 
@@ -91,10 +90,9 @@ public class MissionManager {
 
     private String forgeCircleMessage(Circle circle, InsertMode insertMode) {
         String msg = "";
-        int index = nextIndex++ % (1<<INDEX_BIT_LENGTH);
+        int index = getNextIndex();
         if(circle.getCenter().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg = NAME_ON_IVY + " " +
-                    MISSION_CIRCLE_LLA + " " +
+            msg = MISSION_CIRCLE_LLA + " " +
                     aircraftId + " " +
                     insertMode.getValue() + " " +
                     (int)(circle.getCenter().getLatitude() * 10000000) + " " +
@@ -104,13 +102,12 @@ public class MissionManager {
                     circle.getDuration() + " " +
                     index;
         } else if(circle.getCenter().getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
-            msg = NAME_ON_IVY + " " +
-                    MISSION_CIRCLE + " " +
+            msg = MISSION_CIRCLE_LOCAL + " " +
                     aircraftId + " " +
                     insertMode.getValue() + " " +
                     circle.getCenter().getLatitude() + " " +
                     circle.getCenter().getLongitude() + " " +
-                    circle.getRadius() + " " +
+                    circle.getAltitude() + " " +
                     circle.getRadius() + " " +
                     circle.getDuration() + " " +
                     index;
@@ -132,6 +129,10 @@ public class MissionManager {
 
     private String forgeSurveyMessage(Survey survey, InsertMode insertMode) {
         return "";
+    }
+
+    private int getNextIndex() {
+        return nextIndex++ % (1<<INDEX_BIT_LENGTH);
     }
 
     public enum InsertMode {
