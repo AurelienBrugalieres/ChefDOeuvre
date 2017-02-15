@@ -1,14 +1,17 @@
 package skynamiccontrol.model.mission;
 
+import skynamiccontrol.communication.IncomeMessage;
 import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Waypoint;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by fabien on 13/02/17.
  */
-public class MissionManager {
+public class MissionManager implements Observer{
     private static String MISSION_CIRCLE_LOCAL = "MISSION_CIRCLE";
     private static String MISSION_CIRCLE_LLA = "MISSION_CIRCLE_LLA";
     private static String MISSION_GOTOWP_LOCAL = "MISSION_GOTO_WP";
@@ -16,6 +19,7 @@ public class MissionManager {
     private static String MISSION_SURVEY_LOCAL = "MISSION_SURVEY";
     private static String MISSION_SURVEY_LLA = "MISSION_SURVEY_LLA";
     private static int INDEX_BIT_LENGTH = 8;
+    private int missionStatusMessageId;
     private int aircraftId;
     private ArrayList<Instruction> instructions;
     private int currentInstructionId;
@@ -26,6 +30,8 @@ public class MissionManager {
         instructions = new ArrayList<>();
         currentInstructionId = 0;
         nextIndex = 0;
+        IvyManager.getInstance().addObserver(this);
+        missionStatusMessageId = IvyManager.getInstance().registerRegex(aircraftId + " MISSION_STATUS " + "(.*)");
     }
 
     public void insertInstruction(Instruction instruction, InsertMode insertMode) {
@@ -202,6 +208,17 @@ public class MissionManager {
 
     private int getNextIndex() {
         return nextIndex++ % (1<<INDEX_BIT_LENGTH);
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if(o instanceof IncomeMessage) {
+            IncomeMessage incomeMessage = (IncomeMessage) o;
+            if(incomeMessage.getId() == missionStatusMessageId) {
+                System.out.println(aircraftId + " MISSION_STATUS " + incomeMessage.getPayload()[0]);
+            }
+        }
+
     }
 
     public enum InsertMode {
