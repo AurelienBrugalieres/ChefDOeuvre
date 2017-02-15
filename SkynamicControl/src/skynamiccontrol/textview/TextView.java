@@ -6,6 +6,7 @@ import skynamiccontrol.model.Waypoint;
 import skynamiccontrol.model.mission.Circle;
 import skynamiccontrol.model.mission.GoToWP;
 import skynamiccontrol.model.mission.MissionManager;
+import skynamiccontrol.model.mission.Survey;
 
 import java.io.IOException;
 import java.util.Observable;
