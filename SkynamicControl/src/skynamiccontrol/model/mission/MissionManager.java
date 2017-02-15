@@ -33,7 +33,7 @@ public class MissionManager implements Observer{
         this.aircraftId = aircraftId;
         instructions = new ArrayList<>();
         currentInstructionId = 0;
-        nextIndex = 0;
+        nextIndex = 1;              //start at 1 to discrimine from "no instruction" case
         IvyManager.getInstance().addObserver(this);
         missionStatusMessageId = IvyManager.getInstance().registerRegex(aircraftId + " MISSION_STATUS " + "(.*)");
     }
