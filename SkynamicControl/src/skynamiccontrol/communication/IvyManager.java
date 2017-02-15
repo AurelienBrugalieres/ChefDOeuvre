@@ -11,7 +11,7 @@ import java.util.Observable;
  * Created by fabien on 13/02/17.
  */
 public class IvyManager extends Observable{
-
+    private static String NAME_ON_IVY = "gcs";
     private Ivy bus;
     private ArrayList<String> regexes;
 
@@ -64,7 +64,7 @@ public class IvyManager extends Observable{
 
     public boolean sendMessage(String message) {
         try {
-            bus.sendMsg(message);
+            bus.sendMsg(NAME_ON_IVY + " " + message);
             return true;
         } catch (IvyException e) {
             e.printStackTrace();

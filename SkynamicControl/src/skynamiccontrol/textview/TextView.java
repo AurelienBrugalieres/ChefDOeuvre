@@ -4,6 +4,7 @@ import skynamiccontrol.communication.IncomeMessage;
 import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Waypoint;
 import skynamiccontrol.model.mission.Circle;
+import skynamiccontrol.model.mission.GoToWP;
 import skynamiccontrol.model.mission.MissionManager;
 
 import java.io.IOException;
@@ -23,15 +24,22 @@ public class TextView implements Observer{
         missionManager = new MissionManager(14);
         IvyManager.getInstance().addObserver(this);
         IvyManager.getInstance().registerRegex("(.*MISSION_STATUS.*)");
+        //IvyManager.getInstance().registerRegex("(.*GPS.*)");
     }
 
     public boolean mainLoop() {
         Scanner scanner = new Scanner(System.in);;
         String command = scanner.next();
         Circle circle;
+        GoToWP goToWP;
+        Waypoint.CoordinateSystem coordinateSystem = Waypoint.CoordinateSystem.LLA;
         double lat, lon, alt, radius, duration;
         switch (command) {
             case "circle":
+                System.out.println("local vs lla ? (0/1)");
+                if(scanner.nextInt() == 0) {
+                    coordinateSystem = Waypoint.CoordinateSystem.LOCAL;
+                }
                 System.out.println("lat : ");
                 lat = scanner.nextDouble();
                 System.out.println("lon : ");
@@ -43,7 +51,8 @@ public class TextView implements Observer{
                 System.out.println("duration : ");
                 duration = scanner.nextDouble();
 
-                circle = new Circle(new Waypoint(lat, lon, alt), radius);
+
+                circle = new Circle(new Waypoint(lat, lon, alt, coordinateSystem), radius);
                 circle.setDuration(duration);
                 missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
                 break;
@@ -53,9 +62,19 @@ public class TextView implements Observer{
                 missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
                 break;
             case "c2":
-                circle = new Circle(new Waypoint(43.464, 1.28, 350), 200);
+                circle = new Circle(new Waypoint(200,400, 350, Waypoint.CoordinateSystem.LOCAL), 200);
                 circle.setDuration(30);
                 missionManager.insertInstruction(circle, MissionManager.InsertMode.APPEND);
+                break;
+            case "gt1":
+                goToWP = new GoToWP(new Waypoint(43.4637222, 1.2751827, 300));
+                goToWP.setDuration(50);
+                missionManager.insertInstruction(goToWP, MissionManager.InsertMode.APPEND);
+                break;
+            case "gt2":
+                goToWP = new GoToWP(new Waypoint(100, 200, 300, Waypoint.CoordinateSystem.LOCAL));
+                goToWP.setDuration(55);
+                missionManager.insertInstruction(goToWP, MissionManager.InsertMode.APPEND);
                 break;
             case "n":
                 missionManager.goToNextInstruction();
@@ -81,6 +100,6 @@ public class TextView implements Observer{
         if(msg.getPayload()[0].contains("MISSION_STATUS")){
             lastStatus = msg.getPayload()[0];
         }
-        System.out.println(msg.getPayload()[0]);
+        System.out.println(msg.getId() + "    " + msg.getPayload()[0]);
     }
 }
