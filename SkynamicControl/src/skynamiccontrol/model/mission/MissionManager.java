@@ -181,6 +181,22 @@ public class MissionManager {
         return msg;
     }
 
+    private String extractLatEast(Waypoint wp) {
+        if (wp.getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
+            return Double.toString(wp.getEast());
+        } else {
+            return Integer.toString((int)(wp.getLatitude() * 10000000));
+        }
+    }
+
+    private String extractLonNorth(Waypoint wp) {
+        if (wp.getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
+            return Double.toString(wp.getNorth());
+        } else {
+            return Integer.toString((int)(wp.getLongitude() * 10000000));
+        }
+    }
+
     private int getNextIndex() {
         return nextIndex++ % (1<<INDEX_BIT_LENGTH);
     }
