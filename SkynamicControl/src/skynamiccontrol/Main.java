@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.model.Status;
@@ -34,9 +35,10 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        launch(args);
+        //launch(args);
         ///Uncomment these two lines (and comment the others) to test in text mode
-        //TextView textView = new TextView();
-        //while (textView.mainLoop()){}
+        TextView textView = new TextView();
+        while (textView.mainLoop()){}
+        IvyManager.getInstance().stop();
     }
 }
