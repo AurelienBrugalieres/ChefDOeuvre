@@ -18,6 +18,10 @@ public class MissionManager implements Observer{
     private static String MISSION_GOTOWP_LLA = "MISSION_GOTO_WP_LLA";
     private static String MISSION_SURVEY_LOCAL = "MISSION_SURVEY";
     private static String MISSION_SURVEY_LLA = "MISSION_SURVEY_LLA";
+    private static String MISSION_PATH_LOCAL = "MISSION_PATH";
+    private static String MISSION_PATH_LLA = "MISSION_PATH_LLA";
+    private static String MISSION_SEGMENT_LOCAL = "MISSION_SEGMENT";
+    private static String MISSION_SEGMENT_LLA = "MISSION_SEGMENT_LLA";
     private static int INDEX_BIT_LENGTH = 8;
     private int missionStatusMessageId;
     private int aircraftId;
@@ -153,12 +157,45 @@ public class MissionManager implements Observer{
         return msg;
     }
 
-    private String forgePathMessage(Path path, InsertMode insertMode) {
-        return "";
-    }
+    private String forgePathMessage(Path path, InsertMode insertMode) throws Exception {
+        int nbPoints = path.getNbWaypoints();
+        if(nbPoints < 2) {
+            throw new Exception("Path with less than 2 points.");
+        }
 
-    private String forgeSegmentMessage(Segment segment, InsertMode insertMode) {
-        return "";
+        String msg = "";
+        if(path.getWaypoint(0).getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
+            if(nbPoints == 2) {
+                msg += MISSION_SEGMENT_LLA;
+            } else {
+                msg += MISSION_PATH_LLA;
+            }
+        } else {
+            if(nbPoints == 2) {
+                msg += MISSION_SEGMENT_LOCAL;
+            } else {
+                msg += MISSION_PATH_LOCAL;
+            }
+        }
+
+        msg += " " +
+                aircraftId + " " +
+                insertMode.getValue() + " ";
+        for(int i=0; i<Path.NB_WAYPOINTS_MAX; i++) {
+            if(i<nbPoints) {
+                msg += extractLatEast(path.getWaypoint(i)) + " " +
+                        extractLonNorth(path.getWaypoint(i)) + " ";
+            } else {
+                msg += "0 0 ";
+            }
+        }
+
+        msg +=path.getAltitude().intValue() + " " +
+                path.getDuration() + " " +
+                nbPoints + " " +
+                getNextIndex();
+
+        return msg;
     }
 
     private String forgeSurveyMessage(Survey survey, InsertMode insertMode) {
