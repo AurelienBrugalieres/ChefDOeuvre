@@ -1,54 +1,55 @@
-package skynamiccontrol.view.status;
+package skynamiccontrol.view.status;/**
+ * Created by Elodie on 15/02/2017.
+ */
 
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import skynamiccontrol.model.Aircraft;
 
-import javax.swing.text.html.ImageView;
-import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.ResourceBundle;
 
-/**
- * Created by Elodie on 14/02/2017.
- * Controller of Status View
- */
-public class StatusController implements Initializable{
+public class StatusContainer extends Parent implements Observer {
 
-    @FXML
+    private BorderPane global_pane;
+
+    private VBox info_box;
+
+    private Text aircraft_name;
+
     private Text altitude;
 
-    @FXML
     private Text speed;
 
-    @FXML
     private Text status;
 
-    @FXML
     private javafx.scene.image.ImageView batterie_image;
 
     private Aircraft aircraft;
 
-    public StatusController() {
 
-    }
+    public StatusContainer(Aircraft air) {
+        System.out.println("construct status container");
+        global_pane = new BorderPane();
+        global_pane.setPrefSize(380,270);
+        info_box = new VBox();
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+        aircraft_name = new Text(air.getName());
 
-    }
+        this.batterie_image = new ImageView();
+        aircraft = air;
+        altitude = new Text(String.valueOf(air.getAltitude()));
+        speed = new Text(String.valueOf(air.getSpeed()));
+        status = new Text(String.valueOf(air.getCurrent_status()));
+        double battery_level = (aircraft.getBatteryLevel());
 
-    public void setView(Aircraft aircraft) {
-        this.aircraft = aircraft;
-        altitude.setText(String.valueOf(aircraft.getAltitude()));
-        speed.setText(String.valueOf(aircraft.getSpeed()));
-        status.setText(String.valueOf(aircraft.getCurrent_status()));
-
-        double battery_level = aircraft.getBatteryLevel();
-        System.out.println("batterie : "+battery_level+" "+Aircraft.MAX_BATTERY_VOLTAGE * (2.0 / 5.0)+" "+Aircraft.MAX_BATTERY_VOLTAGE * (3 / 5));
         if (battery_level < Aircraft.MAX_BATTERY_VOLTAGE / 5.0) {
             batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat5.png").toExternalForm()));
         } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (2.0 / 5.0)) {
@@ -60,18 +61,20 @@ public class StatusController implements Initializable{
         } else {
             batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat1.png").toExternalForm()));
         }
-        altitude.setVisible(true);
-        speed.setVisible(true);
-        status.setVisible(true);
-        batterie_image.setVisible(true);
-        // status_pane.getScene().setRoot(vbox);
+        global_pane.setTop(aircraft_name);
+        global_pane.setLeft(batterie_image);
+        info_box.getChildren().addAll(altitude,speed,status);
+        global_pane.setCenter(info_box);
+        aircraft.addPrivateObserver(this);
+        this.getChildren().add(global_pane);
     }
 
-    public void update() {
+    @Override
+    public void update(Observable o, Object arg) {
         this.altitude.setText(String.valueOf(aircraft.getAltitude()));
         this.speed.setText(String.valueOf(aircraft.getSpeed()));
         this.status.setText(String.valueOf(aircraft.getCurrent_status()));
-       System.out.println("update");
+        System.out.println("update");
         System.out.println(aircraft.getCurrent_status());
         double battery_level = (aircraft.getBatteryLevel());
 
@@ -86,6 +89,5 @@ public class StatusController implements Initializable{
         } else {
             this.batterie_image.setImage(new Image("src\\resources\\bitmaps\\bat1.png"));
         }
-
     }
 }

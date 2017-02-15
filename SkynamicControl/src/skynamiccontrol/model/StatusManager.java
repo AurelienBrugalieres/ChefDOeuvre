@@ -1,23 +1,36 @@
 package skynamiccontrol.model;
 
+import com.sun.deploy.security.WIExplorerBrowserAuthenticator14;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
 import skynamiccontrol.view.status.StatusController;
+import skynamiccontrol.view.status.StatusListContainer;
 import skynamiccontrol.view.status.StatusListController;
 import static skynamiccontrol.model.EventType.values;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 import java.util.*;
 
 /**
  * Created by Elodie on 14/02/2017.
  */
-public class StatusManager {
+public class StatusManager extends Observable{
 
 
-    private StatusListController statusListController;
-    private List<Observer> observers;
+   // private StatusListController statusListController;
+    private StatusListContainer statusListContainer;
     private GCSModel model;
-    private final Map<EventType, Boolean> eventAvailability;
+
+    public StatusManager(GCSModel model1, StatusListContainer s) {
+        this.model = model1;
+        statusListContainer = s;
+    }
+
+
+    //FXMLLoader fxmlLoader;
+  /*  private final Map<EventType, Boolean> eventAvailability;
     private final PropertyChangeSupport support;
 
     public StatusManager(GCSModel modelgcs) {
@@ -28,11 +41,21 @@ public class StatusManager {
         for (EventType eventType : values()) {
             eventAvailability.put(eventType, null);
         }
-       /* statusListController.addPropertyChangeListener(Aircraft.AIRCRAFT_STATUS_PROPERTY,(e) -> {
-            firePropertyChange(StatusListController.AIRCRAFT_STATUS_PROPERTY_LIST, null, model.getAircrafts());
-        });*/
-    }
+        fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("skynamiccontrol/StatusList.fxml"));
+        try {
+            AnchorPane pane = (AnchorPane)fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        statusListController = fxmlLoader.getController();
 
+       statusListController.addPropertyChangeListener(Aircraft.AIRCRAFT_STATUS_PROPERTY,(e) -> {
+            firePropertyChange(StatusListController.AIRCRAFT_STATUS_PROPERTY_LIST, null, model.getAircrafts());
+        })
+
+    }*/
+/*
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
@@ -52,12 +75,21 @@ public class StatusManager {
     protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
         support.firePropertyChange(propertyName, oldValue, newValue);
     }
+    */
+
     public void updateView(Aircraft aircraft) {
-        statusListController.updateView(aircraft);
+
     }
 
     public void createView(Aircraft aircraft) {
-        statusListController.addView(aircraft);
+        statusListContainer.addStatus(aircraft);
+
+
+       /* statusListController = new StatusListController(model.getAircrafts());
+
+        statusListController.addAircraft(aircraft);
+        fxmlLoader.setController(statusListController);*/
+       // statusListController.addView(aircraft);
     }
 
 

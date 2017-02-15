@@ -10,6 +10,6 @@
 <children>
     <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Test">
     </Button>
-    <fx:include source="StatusList.fxml"/>
+
 </children>
 </AnchorPane>

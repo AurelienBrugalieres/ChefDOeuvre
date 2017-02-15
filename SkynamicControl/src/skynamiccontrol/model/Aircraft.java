@@ -14,7 +14,7 @@ import java.util.Observer;
 public class Aircraft extends Observable{
 
     public final static String AIRCRAFT_STATUS_PROPERTY = "aircraft_status";
-    public static final double MAX_BATTERY_VOLTAGE = 100;
+    public static final double MAX_BATTERY_VOLTAGE = 100.0;
     public static final double MIN_BATTERY_VOLTAGE = 0;
     private int id;
     private String name;
