@@ -107,53 +107,40 @@ public class MissionManager implements Observer{
 
     private String forgeCircleMessage(Circle circle, InsertMode insertMode) {
         String msg = "";
-        int index = getNextIndex();
         if(circle.getCenter().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg = MISSION_CIRCLE_LLA + " " +
-                    aircraftId + " " +
-                    insertMode.getValue() + " " +
-                    (int)(circle.getCenter().getLatitude() * 10000000) + " " +
-                    (int)(circle.getCenter().getLongitude() * 10000000) + " " +
-                    circle.getAltitude().intValue() + " " +
-                    circle.getRadius() + " " +
-                    circle.getDuration() + " " +
-                    index;
-        } else if(circle.getCenter().getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
-            msg = MISSION_CIRCLE_LOCAL + " " +
-                    aircraftId + " " +
-                    insertMode.getValue() + " " +
-                    circle.getCenter().getEast() + " " +
-                    circle.getCenter().getNorth() + " " +
-                    circle.getAltitude() + " " +
-                    circle.getRadius() + " " +
-                    circle.getDuration() + " " +
-                    index;
+            msg += MISSION_CIRCLE_LLA;
+        } else {
+            msg += MISSION_CIRCLE_LOCAL;
         }
+
+        msg += " " +
+                aircraftId + " " +
+                insertMode.getValue() + " " +
+                extractLatEast(circle.getCenter()) + " " +
+                extractLonNorth(circle.getCenter()) + " " +
+                circle.getAltitude().intValue() + " " +
+                circle.getRadius() + " " +
+                circle.getDuration() + " " +
+                getNextIndex();
         return msg;
     }
 
     private String forgeGoToWPMessage(GoToWP goToWP, InsertMode insertMode) {
         String msg = "";
-        int index = getNextIndex();
         if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg = MISSION_GOTOWP_LLA + " " +
-                    aircraftId + " " +
-                    insertMode.getValue() + " " +
-                    (int)(goToWP.getWaypoint().getLatitude() * 10000000) + " " +
-                    (int)(goToWP.getWaypoint().getLongitude() * 10000000) + " " +
-                    goToWP.getAltitude().intValue() + " " +
-                    goToWP.getDuration() + " " +
-                    index;
-        } else if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
-            msg = MISSION_GOTOWP_LOCAL + " " +
-                    aircraftId + " " +
-                    insertMode.getValue() + " " +
-                    goToWP.getWaypoint().getEast() + " " +
-                    goToWP.getWaypoint().getNorth() + " " +
-                    goToWP.getAltitude() + " " +
-                    goToWP.getDuration() + " " +
-                    index;
+            msg += MISSION_GOTOWP_LLA;
+        } else {
+            msg += MISSION_GOTOWP_LOCAL;
         }
+
+        msg += " " +
+                aircraftId + " " +
+                insertMode.getValue() + " " +
+                extractLatEast(goToWP.getWaypoint()) + " " +
+                extractLonNorth(goToWP.getWaypoint()) + " " +
+                goToWP.getAltitude().intValue() + " " +
+                goToWP.getDuration() + " " +
+                getNextIndex();
         return msg;
     }
 
@@ -200,30 +187,22 @@ public class MissionManager implements Observer{
 
     private String forgeSurveyMessage(Survey survey, InsertMode insertMode) {
         String msg = "";
-        int index = getNextIndex();
         if(survey.getWpStart().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg = MISSION_SURVEY_LLA + " " +
-                    aircraftId + " " +
-                    insertMode.getValue() + " " +
-                    (int)(survey.getWpStart().getLatitude() * 10000000) + " " +
-                    (int)(survey.getWpStart().getLongitude() * 10000000) + " " +
-                    (int)(survey.getWpEnd().getLatitude() * 10000000) + " " +
-                    (int)(survey.getWpEnd().getLongitude() * 10000000) + " " +
-                    survey.getAltitude().intValue() + " " +
-                    survey.getDuration() + " " +
-                    index;
-        } else if(survey.getWpStart().getCoordinateSystem() == Waypoint.CoordinateSystem.LOCAL) {
-            msg = MISSION_SURVEY_LOCAL + " " +
-                    aircraftId + " " +
-                    insertMode.getValue() + " " +
-                    survey.getWpStart().getEast() + " " +
-                    survey.getWpStart().getNorth() + " " +
-                    survey.getWpEnd().getEast() + " " +
-                    survey.getWpEnd().getNorth() + " " +
-                    survey.getAltitude().intValue() + " " +
-                    survey.getDuration() + " " +
-                    index;
+            msg += MISSION_SURVEY_LLA;
+        } else {
+            msg += MISSION_SURVEY_LOCAL;
         }
+
+        msg += " " +
+                aircraftId + " " +
+                insertMode.getValue() + " " +
+                extractLatEast(survey.getWpStart()) + " " +
+                extractLonNorth(survey.getWpStart()) + " " +
+                extractLatEast(survey.getWpEnd()) + " " +
+                extractLonNorth(survey.getWpEnd()) + " " +
+                survey.getAltitude().intValue() + " " +
+                survey.getDuration() + " " +
+                getNextIndex();
         return msg;
     }
 
