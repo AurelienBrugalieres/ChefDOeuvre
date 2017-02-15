@@ -3,6 +3,7 @@ package skynamiccontrol.model;
 import javafx.beans.InvalidationListener;
 import skynamiccontrol.model.mission.MissionManager;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -23,6 +24,7 @@ public class Aircraft extends Observable{
     private double altitude;
     private double speed;
     private Status current_status;
+    private Color color;
 
    // private List<Observer> observers;
 
@@ -31,7 +33,7 @@ public class Aircraft extends Observable{
 
     }
 
-    public Aircraft(int id, String name, double batteryLevel, double altitude, double speed, Status current_status) {
+    public Aircraft(int id, String name, double batteryLevel, double altitude, double speed, Status current_status, Color color_aircraft) {
       //  this.observers = new ArrayList<>();
         this.id = id;
         this.name = name;
@@ -39,6 +41,15 @@ public class Aircraft extends Observable{
         this.altitude = altitude;
         this.speed = speed;
         this.current_status = current_status;
+        this.color = color_aircraft;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public void addPrivateObserver(Observer obs) {

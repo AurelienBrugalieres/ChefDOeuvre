@@ -23,14 +23,18 @@ import static javafx.application.Application.launch;
 public class StatusListContainer extends Parent {
 
     private VBox vbox;
+    public final static int FONT_SIZE_BODY = 14;
+    public final static int FONT_SIZE_TITLE1 = 20;
+    public final static int FONT_SIZE_TITLE2 = 18;
+    public final static int PADDING = 10;
 
     private List<StatusContainer> status;
 
     public StatusListContainer() {
         vbox = new VBox();
-        vbox.setPadding(new Insets(10,10,10,10));
+        vbox.setPadding(new Insets(PADDING,PADDING,PADDING,PADDING));
         vbox.setStyle("-fx-background-color: #E1E5FF; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
-        Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), 14);
+        Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), FONT_SIZE_BODY);
         this.setStyle("-fx-font-family: OpenSans-Regular;");
         Text title = new Text("Drones' Status");
         title.setStyle("-fx-font-family: OpenSans-Regular; -fx-font-size: 20;");

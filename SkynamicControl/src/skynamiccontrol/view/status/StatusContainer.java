@@ -7,10 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -21,6 +18,25 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class StatusContainer extends Parent implements Observer {
+
+    private final static int SIZE = 250;
+
+    private final static int TRANSLATE_X = 50;
+
+    private final static int TRANSLATE_Y = 18;
+
+    private final static double SPACING_ALTITUDE = 10.0;
+
+    private final static double TRANSLATE_BATTERY = 10.0;
+
+    private final static double SPACING_SPEED = 18.0;
+
+    private final static double SPACING_STATUS = 20.0;
+
+    private final static double SPACING = 20.0;
+
+    private final static double NB_BITMAPS_BATTERIES = 5.0;
+
 
     private BorderPane global_pane;
 
@@ -41,17 +57,20 @@ public class StatusContainer extends Parent implements Observer {
 
     public StatusContainer(Aircraft air) {
         System.out.println("construct status container");
-        Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), 14);
+        Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), StatusListContainer.FONT_SIZE_BODY);
         this.setStyle("-fx-font-family: OpenSans-Regular;");
         global_pane = new BorderPane();
-        global_pane.setPrefSize(250,250);
+        global_pane.setPrefSize(SIZE,SIZE);
         info_box = new VBox();
 
+        Pane title_pane = new Pane();
+        title_pane.setStyle("-fx-background-color: rgb("+air.getColor().getRed()+","+air.getColor().getGreen()+","+air.getColor().getBlue()+");");
         aircraft_name = new Text(air.getName());
-
         aircraft_name.setTextAlignment(TextAlignment.CENTER);
-        aircraft_name.setTranslateX(50);
-        aircraft_name.setStyle("-fx-font-size: 18");
+        aircraft_name.setTranslateX(TRANSLATE_X);
+        aircraft_name.setTranslateY(TRANSLATE_Y);
+        aircraft_name.setStyle("-fx-font-size: 18;");
+
         this.batterie_image = new ImageView();
         aircraft = air;
         altitude = new Text(String.valueOf(air.getAltitude()));
@@ -61,33 +80,36 @@ public class StatusContainer extends Parent implements Observer {
         status = new Text(String.valueOf(air.getCurrent_status()));
         double battery_level = (aircraft.getBatteryLevel());
 
-        if (battery_level < Aircraft.MAX_BATTERY_VOLTAGE / 5.0) {
+        if (battery_level < Aircraft.MAX_BATTERY_VOLTAGE / NB_BITMAPS_BATTERIES) {
             batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat5.png").toExternalForm()));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (2.0 / 5.0)) {
+        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (2.0 / NB_BITMAPS_BATTERIES)) {
             batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat4.png").toExternalForm()));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (3.0 / 5.0)) {
+        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (3.0 / NB_BITMAPS_BATTERIES)) {
             batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat3.png").toExternalForm()));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (4.0 / 5.0)) {
+        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (4.0 / NB_BITMAPS_BATTERIES)) {
             batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat2.png").toExternalForm()));
         } else {
             batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat1.png").toExternalForm()));
         }
-        global_pane.setTop(aircraft_name);
+        batterie_image.setSmooth(true);
+        batterie_image.setTranslateY(TRANSLATE_BATTERY);
+        title_pane.getChildren().add(aircraft_name);
+        global_pane.setTop(title_pane);
         global_pane.setLeft(batterie_image);
 
         HBox alt_box = new HBox();
         alt_box.getChildren().addAll(new Text("Altitude: "),altitude);
-        alt_box.setSpacing(10.0);
+        alt_box.setSpacing(SPACING_ALTITUDE);
         HBox speed_box = new HBox();
 
         speed_box.getChildren().addAll(new Text("Speed: "),speed);
-        speed_box.setSpacing(18.0);
+        speed_box.setSpacing(SPACING_SPEED);
         HBox status_box = new HBox();
         status_box.getChildren().addAll(new Text("Status: "),status);
-        status_box.setSpacing(20.0);
+        status_box.setSpacing(SPACING_STATUS);
 
-        info_box.setSpacing(20);
-        info_box.setPadding(new Insets(20,10,10,10));
+        info_box.setSpacing(SPACING);
+        info_box.setPadding(new Insets(SPACING,StatusListContainer.PADDING,StatusListContainer.PADDING,StatusListContainer.PADDING));
         info_box.getChildren().addAll(alt_box,speed_box,status_box);
         global_pane.setCenter(info_box);
         aircraft.addPrivateObserver(this);
@@ -103,16 +125,16 @@ public class StatusContainer extends Parent implements Observer {
         System.out.println(aircraft.getCurrent_status());
         double battery_level = (aircraft.getBatteryLevel());
 
-        if (battery_level < Aircraft.MAX_BATTERY_VOLTAGE / 5) {
-            this.batterie_image.setImage(new Image("src\\resources\\bitmaps\\bat5.png"));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (2 / 5)) {
-            this.batterie_image.setImage(new Image("src\\resources\\bitmaps\\bat4.png"));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (3 / 5)) {
-            this.batterie_image.setImage(new Image("src\\resources\\bitmaps\\bat3.png"));
-        }else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (4 / 5)) {
-            this.batterie_image.setImage(new Image("src\\resources\\bitmaps\\bat2.png"));
+        if (battery_level < Aircraft.MAX_BATTERY_VOLTAGE / NB_BITMAPS_BATTERIES) {
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat5.png").toExternalForm()));
+        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (2.0 / NB_BITMAPS_BATTERIES)) {
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat4.png").toExternalForm()));
+        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (3.0 / NB_BITMAPS_BATTERIES)) {
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat3.png").toExternalForm()));
+        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (4.0 / NB_BITMAPS_BATTERIES)) {
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat2.png").toExternalForm()));
         } else {
-            this.batterie_image.setImage(new Image("src\\resources\\bitmaps\\bat1.png"));
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat1.png").toExternalForm()));
         }
     }
 }

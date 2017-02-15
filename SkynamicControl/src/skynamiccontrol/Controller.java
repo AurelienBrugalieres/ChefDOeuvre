@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.model.Status;
+import java.awt.*;
 import skynamiccontrol.view.status.StatusListContainer;
 
 import java.io.IOException;
@@ -24,8 +25,8 @@ public class Controller implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
          /* test */
-        Aircraft aircraft = new Aircraft(1, "microJet", 80.0, 102.0, 30.0, Status.AUTO);
-        Aircraft aircraft2 = new Aircraft(1, "Alpha1", 20.0, 50.0, 30.0, Status.AUTO);
+        Aircraft aircraft = new Aircraft(1, "microJet", 80.0, 102.0, 30.0, Status.AUTO, Color.decode("#8EF183"));
+        Aircraft aircraft2 = new Aircraft(1, "Alpha1", 20.0, 50.0, 30.0, Status.AUTO, Color.decode("#94B7EA"));
         StatusListContainer statusListContainer = new StatusListContainer();
         model = new GCSModel(2, statusListContainer);
         model.addAircraft(aircraft);
