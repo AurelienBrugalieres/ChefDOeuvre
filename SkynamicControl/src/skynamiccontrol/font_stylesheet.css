@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'OpenSans';
+    src: url('resources/font/OpenSans-Regular.ttf');
+}
+
+.text {
+    -fx-font-family: 'OpenSans';
+    -fx-font-size: 14;
+}

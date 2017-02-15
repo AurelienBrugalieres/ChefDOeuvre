@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Aircraft;
@@ -31,7 +32,8 @@ public class Main extends Application {
             primaryStage.setMaximized(true);
         }
         primaryStage.setTitle("Skynamic Control");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        Scene scene = new Scene(root, 300, 275);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

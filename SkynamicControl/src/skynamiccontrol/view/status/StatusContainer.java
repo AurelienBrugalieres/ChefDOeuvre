@@ -3,13 +3,17 @@ package skynamiccontrol.view.status;/**
  */
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import skynamiccontrol.model.Aircraft;
 
@@ -37,16 +41,23 @@ public class StatusContainer extends Parent implements Observer {
 
     public StatusContainer(Aircraft air) {
         System.out.println("construct status container");
+        Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), 14);
+        this.setStyle("-fx-font-family: OpenSans-Regular;");
         global_pane = new BorderPane();
-        global_pane.setPrefSize(380,270);
+        global_pane.setPrefSize(250,250);
         info_box = new VBox();
 
         aircraft_name = new Text(air.getName());
 
+        aircraft_name.setTextAlignment(TextAlignment.CENTER);
+        aircraft_name.setTranslateX(50);
+        aircraft_name.setStyle("-fx-font-size: 18");
         this.batterie_image = new ImageView();
         aircraft = air;
         altitude = new Text(String.valueOf(air.getAltitude()));
         speed = new Text(String.valueOf(air.getSpeed()));
+
+
         status = new Text(String.valueOf(air.getCurrent_status()));
         double battery_level = (aircraft.getBatteryLevel());
 
@@ -63,7 +74,21 @@ public class StatusContainer extends Parent implements Observer {
         }
         global_pane.setTop(aircraft_name);
         global_pane.setLeft(batterie_image);
-        info_box.getChildren().addAll(altitude,speed,status);
+
+        HBox alt_box = new HBox();
+        alt_box.getChildren().addAll(new Text("Altitude: "),altitude);
+        alt_box.setSpacing(10.0);
+        HBox speed_box = new HBox();
+
+        speed_box.getChildren().addAll(new Text("Speed: "),speed);
+        speed_box.setSpacing(18.0);
+        HBox status_box = new HBox();
+        status_box.getChildren().addAll(new Text("Status: "),status);
+        status_box.setSpacing(20.0);
+
+        info_box.setSpacing(20);
+        info_box.setPadding(new Insets(20,10,10,10));
+        info_box.getChildren().addAll(alt_box,speed_box,status_box);
         global_pane.setCenter(info_box);
         aircraft.addPrivateObserver(this);
         this.getChildren().add(global_pane);
