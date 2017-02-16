@@ -6,22 +6,22 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="56.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.view.palette.PaletteController">
    <children>
-      <ImageView fx:id="buttun_waypoint" fitHeight="70.0" fitWidth="56.0" onMouseClicked="#onMouseClicWaypointButtun" onMouseEntered="#onMouseEnteredWaypointButtun" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="buttun_waypoint" fitHeight="70.0" fitWidth="56.0" onMouseClicked="#onMouseClicWaypointButtun" onMouseEntered="#onMouseEnteredWaypointButtun" onMouseExited="#onMouseExitedWaypointButtun" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/bitmaps/waypoint.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="buttun_circle" fitHeight="70.0" fitWidth="56.0" onMouseClicked="#onMouseClicCircleButtun" onMouseEntered="#onMouseEnteredCircleButtun" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="buttun_circle" fitHeight="70.0" fitWidth="56.0" onMouseClicked="#onMouseClicCircleButtun" onMouseEntered="#onMouseEnteredCircleButtun" onMouseExited="#onMouseExitedCircleButtun" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/bitmaps/CircleButton.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="buttun_line" fitHeight="70.0" fitWidth="56.0" onMouseClicked="#onMouseClicLineButtun" onMouseEntered="#onMouseEnteredLineButtun" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="buttun_goto" fitHeight="70.0" fitWidth="56.0" onMouseClicked="#onMouseClicGoToButtun" onMouseEntered="#onMouseEnteredGoToButtun" onMouseExited="#onMouseExitedGoToButtun" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/bitmaps/gotoWpButton.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="buttun_path" fitHeight="70.0" fitWidth="56.0" onMouseClicked="#onMouseClicPathButtun" onMouseEntered="#onMouseEnteredPathButtun" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="buttun_path" fitHeight="70.0" fitWidth="56.0" onMouseClicked="#onMouseClicPathButtun" onMouseEntered="#onMouseEnteredPathButtun" onMouseExited="#onMouseExitedPathButtun" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/bitmaps/pathButton.png" />
          </image>
