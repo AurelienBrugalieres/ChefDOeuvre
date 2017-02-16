@@ -3,7 +3,6 @@ package skynamiccontrol;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
@@ -12,7 +11,6 @@ import java.awt.*;
 
 import skynamiccontrol.view.map.MapController;
 import skynamiccontrol.view.map.events.MapListener;
-import skynamiccontrol.view.map.events.MapPoint;
 import skynamiccontrol.view.status.StatusListContainer;
 
 import java.io.IOException;
@@ -49,7 +47,7 @@ public class Controller implements Initializable{
 
     /**
      * Set a map listener to handle map events
-     * @param listener
+     * @param listener the map event listener
      */
     public void setMapListener(MapListener listener) {
         this.mapListener = listener;

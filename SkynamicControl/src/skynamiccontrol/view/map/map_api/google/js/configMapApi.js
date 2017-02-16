@@ -60,11 +60,63 @@ function initialize() {
     };
 
     document.map.addListener('click', onMapClick);
+    document.map.addListener('dblclick', onMapDoubleClick);
+    document.map.addListener('rightclick', onMapRightClick);
+    document.map.addListener('drag', onMapDrag);
+    document.map.addListener('dragend', onMapDragEnd);
+    document.map.addListener('dragstart', onMapDragStart);
+    document.map.addListener('maptypeid_changed', onMapTypeChanged);
+    document.map.addListener('mousemove', onMapMouseMove);
+    document.map.addListener('mouseout', onMapMouseOut);
+    document.map.addListener('mouseover', onMapMouseOver);
+    document.map.addListener('tilesloaded', onMapTilesChanged);
+    document.map.addListener('zoom_changed', onMapZoomChanged);
 
 }
 
 function onMapClick(event) {
     java.onMapClick(event.latLng);
+}
+
+function onMapDoubleClick(event) {
+    java.onMapDoubleClick(event.latLng);
+}
+
+function onMapRightClick(event) {
+    java.onMapRighClick(event.latLng);
+}
+
+function onMapDrag() {
+    java.onMapDrag();
+}
+function onMapDragEnd() {
+    java.onMapDragEnd();
+}
+
+function onMapDragStart() {
+    java.onMapDragStart();
+}
+function onMapTypeChanged() {
+    java.onMapTypeChanged(document.map.getMapTypeId());
+}
+
+function onMapMouseMove(event) {
+    java.onMapMouseMove(event.latLng);
+}
+function onMapMouseOut(event) {
+    java.onMapMouseOut(event.latLng);
+}
+
+function onMapMouseOver(event) {
+    java.onMapMouseOver(event.latLng);
+}
+
+function onMapTilesChanged() {
+    java.onMapTilesChanged();
+}
+
+function onMapZoomChanged() {
+    java.onMapZoomChanged(document.map.getZoom());
 }
 
 function createMarker() {

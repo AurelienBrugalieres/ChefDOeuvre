@@ -1,17 +1,18 @@
 package skynamiccontrol.view.map.events;
 
 /**
- * Created by aurelien on 16/02/17.
+ * MapEvent class encapsulates the map event information
+ * @author Aurelien Brugalieres
  */
-public class MapPoint {
+public class MapEvent {
     private double latitude;
     private double longitude;
 
-    public MapPoint() {
+    public MapEvent() {
         this(0, 0);
     }
 
-    public MapPoint(double lat, double lng) {
+    public MapEvent(double lat, double lng) {
         this.latitude = lat;
         this.longitude = lng;
     }

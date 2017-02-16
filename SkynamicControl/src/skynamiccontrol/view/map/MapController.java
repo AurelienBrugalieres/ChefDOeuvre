@@ -15,8 +15,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
+import skynamiccontrol.view.map.events.JavaBridge;
 import skynamiccontrol.view.map.events.MapListener;
-import skynamiccontrol.view.map.events.MapPoint;
+import skynamiccontrol.view.map.events.MapEvent;
 
 
 /**
@@ -40,11 +41,9 @@ public class MapController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         WebEngine webEngine = webView.getEngine();
         webEngine.getLoadWorker().stateProperty().addListener(
-                new ChangeListener<Worker.State>() {
-                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
-                            final JSObject jsobj = (JSObject) webView.getEngine().executeScript("window");
-                            jsobj.setMember("java", bridge);
-                    }
+                (ov, oldState, newState) -> {
+                        final JSObject jsobj = (JSObject) webView.getEngine().executeScript("window");
+                        jsobj.setMember("java", bridge);
                 });
 
         File file = new File("SkynamicControl/src/skynamiccontrol/view/map/map_api/google/index.html");
@@ -61,25 +60,6 @@ public class MapController implements Initializable {
 
     public void setMapListener(MapListener listener) {
         this.mapListener = listener;
+        bridge.setMapListener(mapListener);
     }
-
-    public class JavaBridge {
-        public void onMapClick(JSObject point) {
-            Pattern locationPattern = Pattern.compile("\\(([0-9]+.?[0-9]*), *([0-9]+.?[0-9]*)\\)");
-            Matcher m = locationPattern.matcher(point.toString());
-            double lat = 0;
-            double lng = 0;
-            if (m.matches()) {
-                lat = Double.parseDouble(m.group(1));
-                lng = Double.parseDouble(m.group(2));
-            }
-            if (mapListener != null)
-                mapListener.onMapClickListener(new MapPoint(lat, lng));
-        }
-
-        public void log(String message) {
-            System.out.println(message);
-        }
-    }
-
 }

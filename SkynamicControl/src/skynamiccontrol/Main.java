@@ -2,20 +2,11 @@ package skynamiccontrol;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import skynamiccontrol.communication.IvyManager;
-import skynamiccontrol.model.Aircraft;
-import skynamiccontrol.model.GCSModel;
-import skynamiccontrol.model.Status;
-import skynamiccontrol.textview.TextView;
-import skynamiccontrol.view.map.events.MapListener;
-import skynamiccontrol.view.map.events.MapPoint;
+import skynamiccontrol.view.map.events.MapAdapter;
+import skynamiccontrol.view.map.events.MapEvent;
 
 public class Main extends Application {
 
@@ -28,15 +19,20 @@ public class Main extends Application {
         loader = new FXMLLoader(getClass().getResource("skynamicControlMain.fxml"));
         Parent root = loader.load();
 
-
         //Test map listener
         //Access to controller
         Controller controller = loader.getController();
         //Add map listener
-        controller.setMapListener(new MapListener() {
+        controller.setMapListener(new MapAdapter() {
             @Override
-            public void onMapClickListener(MapPoint pt) {
+            public void onMapClick(MapEvent pt) {
                 System.out.println("Test (lat="+pt.getLatitude()+"; lng="+pt.getLongitude()+")");
+                // Add waypoint in model for example
+            }
+
+            @Override
+            public void onMapZoomChanged(int zoomValue) {
+                System.out.println("Zoom value = "+zoomValue);
             }
         });
 
