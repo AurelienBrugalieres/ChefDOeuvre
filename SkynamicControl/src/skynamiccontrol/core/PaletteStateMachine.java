@@ -215,14 +215,20 @@ public class PaletteStateMachine {
             case IDLE:
                 break;
             case CIRCLE_CLIC:
+                pressWaypoint();
+                state = PalettesStates.WAYPOINT_CLIC;
                 break;
             case CIRCLE_HOVER:
                 break;
             case GOTO_CLIC:
+                pressWaypoint();
+                state = PalettesStates.WAYPOINT_CLIC;
                 break;
             case GOTO_HOVER:
                 break;
             case PATH_CLIC:
+                pressWaypoint();
+                state = PalettesStates.WAYPOINT_CLIC;
                 break;
             case PATH_HOVER:
                 break;
@@ -252,14 +258,20 @@ public class PaletteStateMachine {
                 state = PalettesStates.CIRCLE_CLIC;
                 break;
             case GOTO_CLIC:
+                pressCircle();
+                state = PalettesStates.CIRCLE_CLIC;
                 break;
             case GOTO_HOVER:
                 break;
             case PATH_CLIC:
+                pressCircle();
+                state = PalettesStates.CIRCLE_CLIC;
                 break;
             case PATH_HOVER:
                 break;
             case WAYPOINT_CLIC:
+                pressCircle();
+                state = PalettesStates.CIRCLE_CLIC;
                 break;
             case WAYPOINT_HOVER:
                 break;
@@ -271,10 +283,14 @@ public class PaletteStateMachine {
             case IDLE:
                 break;
             case CIRCLE_CLIC:
+                pressPath();
+                state = PalettesStates.PATH_CLIC;
                 break;
             case CIRCLE_HOVER:
                 break;
             case GOTO_CLIC:
+                pressPath();
+                state = PalettesStates.PATH_CLIC;
                 break;
             case GOTO_HOVER:
                 break;
@@ -288,6 +304,8 @@ public class PaletteStateMachine {
                 state = PalettesStates.PATH_CLIC;
                 break;
             case WAYPOINT_CLIC:
+                pressPath();
+                state = PalettesStates.PATH_CLIC;
                 break;
             case WAYPOINT_HOVER:
                 break;
@@ -299,6 +317,8 @@ public class PaletteStateMachine {
             case IDLE:
                 break;
             case CIRCLE_CLIC:
+                pressGoTo();
+                state = PalettesStates.GOTO_CLIC;
                 break;
             case CIRCLE_HOVER:
                 break;
@@ -312,10 +332,14 @@ public class PaletteStateMachine {
                 state = PalettesStates.GOTO_CLIC;
                 break;
             case PATH_CLIC:
+                pressGoTo();
+                state = PalettesStates.GOTO_CLIC;
                 break;
             case PATH_HOVER:
                 break;
             case WAYPOINT_CLIC:
+                pressGoTo();
+                state = PalettesStates.GOTO_CLIC;
                 break;
             case WAYPOINT_HOVER:
                 break;
@@ -449,4 +473,38 @@ public class PaletteStateMachine {
         }
     }
 
+    //Fin du dessin de l'instruction
+    public void endDraw() {
+        switch (state) {
+            case IDLE:
+                break;
+            case CIRCLE_CLIC:
+                defaultButtuns();
+                state = PalettesStates.IDLE;
+                break;
+            case CIRCLE_HOVER:
+                break;
+            case GOTO_CLIC:
+                defaultButtuns();
+                state = PalettesStates.IDLE;
+                break;
+            case GOTO_HOVER:
+                break;
+            case PATH_CLIC:
+                defaultButtuns();
+                state = PalettesStates.IDLE;
+                break;
+            case PATH_HOVER:
+                defaultButtuns();
+                state = PalettesStates.IDLE;
+                break;
+            case WAYPOINT_CLIC:
+                defaultButtuns();
+                state = PalettesStates.IDLE;
+                break;
+            case WAYPOINT_HOVER:
+
+                break;
+        }
+    }
 }

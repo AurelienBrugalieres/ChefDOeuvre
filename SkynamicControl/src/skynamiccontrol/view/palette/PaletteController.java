@@ -29,6 +29,10 @@ public class PaletteController {
         paletteStateMachine = new PaletteStateMachine(this);
     }
 
+    public PaletteStateMachine getPaletteStateMachine() {
+        return paletteStateMachine;
+    }
+
     public void setHooverButtunWaypoint() {
         buttun_waypoint.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/WaypointHover.png").toExternalForm()));
     }
