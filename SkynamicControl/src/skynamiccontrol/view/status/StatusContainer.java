@@ -58,11 +58,12 @@ public class StatusContainer extends Parent implements Observer {
     private javafx.scene.image.ImageView batterie_image;
 
     private Aircraft aircraft;
-    private StatusStateMachine statusStateMachine;
+  // private StatusStateMachine statusStateMachine;
+    public boolean isSelected = false;
 
     public StatusContainer(Aircraft air) {
         System.out.println("construct status container");
-        statusStateMachine = new StatusStateMachine(air.getColor());
+     //  statusStateMachine = new StatusStateMachine();
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), StatusListContainer.FONT_SIZE_BODY);
         this.setStyle("-fx-font-family: OpenSans-Regular;");
         global_pane = new BorderPane();
@@ -122,12 +123,16 @@ public class StatusContainer extends Parent implements Observer {
         aircraft.addPrivateObserver(this);
         this.getChildren().add(global_pane);
 
-        this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                statusStateMachine.onMouseClick(global_pane);
-            }
-        });
+
+    }
+
+
+    public void setDeselected() {
+        global_pane.setStyle("-fx-background-color: null");
+    }
+
+    public void setSelected() {
+        global_pane.setStyle("-fx-background-color: rgba("+aircraft.getColor().getRed()+","+aircraft.getColor().getGreen()+","+aircraft.getColor().getBlue()+",0.7);");
     }
 
     @Override
@@ -150,5 +155,16 @@ public class StatusContainer extends Parent implements Observer {
         } else {
             batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat1.png").toExternalForm()));
         }
+    }
+
+    public void handle(java.util.List<StatusContainer> list) {
+       // statusStateMachine.onMouseClick(this);
+    }
+    public BorderPane getGlobal_pane() {
+        return global_pane;
+    }
+
+    public Aircraft getAircraft() {
+        return aircraft;
     }
 }

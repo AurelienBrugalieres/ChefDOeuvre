@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import skynamiccontrol.Timeline.Timeline;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
@@ -30,11 +31,17 @@ public class Controller implements Initializable{
     private MapListener mapListener = null;
     private Timeline timelineController = null;
 
+    private HBox pane_timeline_palette;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // initialize map
-        initMapPane();
+        System.out.println(borderPane);
+        borderPane.setPrefSize(800.0,1000.0);
+
+        pane_timeline_palette = new HBox();
+        borderPane.setBottom(pane_timeline_palette);
+
 
 
          /* test */
@@ -44,10 +51,20 @@ public class Controller implements Initializable{
         model = new GCSModel(2, statusListContainer);
         model.addAircraft(aircraft);
         model.addAircraft(aircraft2);
+
+        // initialize map
+        initMapPane();
+
+        //intialize timeline
         initTimeline();
-        System.out.println(borderPane);
-        borderPane.setPrefSize(800.0,1000.0);
+
+        //initialize palette
+        initPalette();
+
+
         borderPane.getChildren().add(statusListContainer);
+
+
 
     }
 
@@ -82,15 +99,29 @@ public class Controller implements Initializable{
         }
     }
 
+    /**
+     * Load palette in scene
+     */
+    private void initPalette(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("palette.fxml"));
+        try {
+            pane_timeline_palette.getChildren().add(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void initTimeline(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Timeline/TimelineUI.fxml"));
         timelineController = loader.getController();
         if(timelineController == null){
             timelineController = new Timeline(model);
             loader.setController(timelineController);
+
         }
         try {
-            borderPane.setBottom(loader.load());
+            pane_timeline_palette.getChildren().add(loader.load());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,35 +1,47 @@
 package skynamiccontrol.core;
 
 import javafx.scene.layout.BorderPane;
+import skynamiccontrol.view.status.StatusContainer;
 
 import java.awt.*;
+import java.util.*;
 
 /**
  * Created by Elodie on 15/02/2017.
  */
 public class StatusStateMachine {
 
-    private Color color;
 
+    private java.util.List<StatusContainer> list;
     private enum States {
-        IDLE, PRESSED
+        PRESSED
     }
 
-    private States state = States.IDLE;
+    private States state = States.PRESSED;
 
-    public StatusStateMachine(Color aircraft_color) {
-        color = aircraft_color;
+    public StatusStateMachine(java.util.List<StatusContainer> l) {
+        list = l;
     }
 
-    public void onMouseClick(BorderPane pane) {
+    public void addStatus(StatusContainer status) {
+        list.add(status);
+    }
+    public void onMouseClick(StatusContainer statusContainer) {
         switch (state) {
-            case IDLE:
-                state = States.PRESSED;
-                pane.setStyle("-fx-background-color: rgba("+color.getRed()+","+color.getGreen()+","+color.getBlue()+",0.7);");
-                break;
+
             case PRESSED:
-                state = States.IDLE;
-                pane.setStyle("-fx-background-color: null");
+                for(StatusContainer s : list) {
+                    s.setDeselected();
+                }
+                if(statusContainer.isSelected) {
+                    state = States.PRESSED;
+                    statusContainer.setDeselected();
+                } else {
+                    statusContainer.setSelected();
+                    state = States.PRESSED;
+                }
+
+                //pane.setStyle("-fx-background-color: null");
                 break;
         }
     }
