@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -65,10 +67,17 @@ public class MapController implements Initializable {
     }
 
     public class JavaBridge {
-        public void onMapClick(JSObject marker) {
-            JSObject lat = (JSObject)marker.getMember("position");
+        public void onMapClick(JSObject point) {
+            Pattern locationPattern = Pattern.compile("\\(([0-9]+.?[0-9]*), *([0-9]+.?[0-9]*)\\)");
+            Matcher m = locationPattern.matcher(point.toString());
+            double lat = 0;
+            double lng = 0;
+            if (m.matches()) {
+                lat = Double.parseDouble(m.group(1));
+                lng = Double.parseDouble(m.group(2));
+            }
             if (mapListener != null)
-                mapListener.onMapClickListener(new MapPoint());
+                mapListener.onMapClickListener(new MapPoint(lat, lng));
         }
 
         public void log(String message) {

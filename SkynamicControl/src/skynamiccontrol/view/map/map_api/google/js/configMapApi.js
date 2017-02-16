@@ -64,15 +64,17 @@ function initialize() {
 }
 
 function onMapClick(event) {
-    mapObj = document.map;
-    var latitude = event.latLng;
+    java.onMapClick(event.latLng);
+}
+
+function createMarker() {
     var marker = new google.maps.Marker({
-       position: event.latLng,
-       map: mapObj,
-       title: "New waypoint",
-       icon: {
-           url: "/home/aurelien/IdeaProjects/ChefDOeuvre/SkynamicControl/src/resources/bitmaps/waypoint32x32.png"
-       }
+        position: event.latLng,
+        map: document.map,
+        draggable: true,
+        title: "New waypoint",
+        icon: {
+            url: "../../../../../resources/bitmaps/waypoint32x32.png"
+        }
     });
-    java.onMapClick(marker);
 }
