@@ -6,10 +6,10 @@ function initialize() {
         center: latlng,
         mapTypeId: google.maps.MapTypeId.SATELLITE,
         disableDoubleClickZoom: true,
-        keyboardShortcuts: true,
+        keyboardShortcuts: false,
         scrollwheel: true,
         draggable: true,
-        disableDefaultUI: false, // Completly disable all controls.
+        disableDefaultUI: true, // Completly disable all controls.
         mapTypeControl: false, // Allow to change map type.
         overviewMapControl: false, // Small window of overview.
         panControl: false, // Disc used to pan the map.
@@ -23,6 +23,19 @@ function initialize() {
 
     document.geocoder = new google.maps.Geocoder();
     document.map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+    document.drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: google.maps.drawing.OverlayType.MARKER,
+        drawingControl: false,
+        markerOptions: {
+            label: "New waypoint",
+            clickable: true,
+            draggable: true,
+            icon: '../../../../../resources/bitmaps/waypoint32x32.png'
+        }
+    });
+    document.drawingManager.setMap(document.map);
+    document.drawingManager.setDrawingMode(null);
 
     document.zoomIn = function zoomIn() {
         var zoomLevel = document.map.getZoom();
@@ -117,16 +130,4 @@ function onMapTilesChanged() {
 
 function onMapZoomChanged() {
     java.onMapZoomChanged(document.map.getZoom());
-}
-
-function createMarker() {
-    var marker = new google.maps.Marker({
-        position: event.latLng,
-        map: document.map,
-        draggable: true,
-        title: "New waypoint",
-        icon: {
-            url: "../../../../../resources/bitmaps/waypoint32x32.png"
-        }
-    });
 }

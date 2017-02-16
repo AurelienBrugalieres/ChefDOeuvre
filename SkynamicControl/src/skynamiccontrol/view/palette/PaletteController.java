@@ -11,6 +11,14 @@ import skynamiccontrol.core.PaletteStateMachine;
  */
 public class PaletteController {
 
+    public interface PaletteListener {
+        void onWaypointButtonClick();
+        void onPathButtonClick();
+        void onGoToButtonClick();
+        void onCircleButtonClick();
+    }
+    private PaletteListener paletteListener = null;
+
     @FXML
     private ImageView buttun_waypoint;
 
@@ -77,22 +85,30 @@ public class PaletteController {
     @FXML
     public void onMouseClicWaypointButtun(MouseEvent mouseEvent) {
         paletteStateMachine.mouseClicWaypoint();
+        if (paletteListener != null)
+            paletteListener.onWaypointButtonClick();
     }
 
     @FXML
     public void onMouseClicCircleButtun(MouseEvent mouseEvent) {
         paletteStateMachine.mouseClicCircle();
+        if (paletteListener != null)
+            paletteListener.onCircleButtonClick();
     }
 
     @FXML
     public void onMouseClicGoToButtun(MouseEvent mouseEvent) {
         paletteStateMachine.mouseClicGoTo();
+        if (paletteListener != null)
+            paletteListener.onGoToButtonClick();
     }
 
 
     @FXML
     public void onMouseClicPathButtun(MouseEvent mouseEvent) {
         paletteStateMachine.mouseClicPath();
+        if (paletteListener != null)
+            paletteListener.onPathButtonClick();
     }
 
     @FXML
@@ -133,5 +149,9 @@ public class PaletteController {
     @FXML
     public void onMouseExitedPathButtun(MouseEvent mouseEvent) {
         paletteStateMachine.mouseExitedPath();
+    }
+
+    public void setPaletteListener(PaletteListener paletteListener) {
+        this.paletteListener = paletteListener;
     }
 }

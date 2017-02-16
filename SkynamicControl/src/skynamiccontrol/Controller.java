@@ -16,6 +16,7 @@ import java.awt.*;
 
 import skynamiccontrol.view.map.MapController;
 import skynamiccontrol.view.map.events.MapListener;
+import skynamiccontrol.view.palette.PaletteController;
 import skynamiccontrol.view.status.StatusListContainer;
 
 import java.io.IOException;
@@ -31,9 +32,11 @@ public class Controller implements Initializable{
 
     private MapController mapController = null;
     private MapListener mapListener = null;
-    private Timeline timelineController = null;
 
+    private Timeline timelineController = null;
     private HBox pane_timeline_palette;
+
+    private PaletteController paletteController = null;
 
 
     @Override
@@ -113,6 +116,41 @@ public class Controller implements Initializable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        paletteController = loader.getController();
+        if(paletteController == null){
+            paletteController = new PaletteController();
+            loader.setController(paletteController);
+        }
+        paletteController.setPaletteListener(new PaletteController.PaletteListener() {
+            @Override
+            public void onWaypointButtonClick() {
+                if (mapController != null) {
+                    mapController.activeMarkerOption();
+                }
+            }
+
+            @Override
+            public void onPathButtonClick() {
+                if (mapController != null) {
+                    mapController.activePathOption();
+                }
+            }
+
+            @Override
+            public void onGoToButtonClick() {
+                if (mapController != null) {
+                    mapController.activeGoToOption();
+                }
+            }
+
+            @Override
+            public void onCircleButtonClick() {
+                if (mapController != null) {
+                    mapController.activeCircleOption();
+                }
+            }
+        });
+
 
     }
 
@@ -122,7 +160,6 @@ public class Controller implements Initializable{
         if(timelineController == null){
             timelineController = new Timeline(model);
             loader.setController(timelineController);
-
         }
         try {
             Node timeline = loader.load();
