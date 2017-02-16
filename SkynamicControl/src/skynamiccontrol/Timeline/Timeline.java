@@ -40,7 +40,6 @@ public class Timeline implements Initializable{
                 loader.setController(mb);
                 try {
                     tab.setContent(loader.load());
-                    System.out.println("Je suis la et je créé une tab");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -132,7 +131,6 @@ public class Timeline implements Initializable{
             tab.setText(model.getAircrafts().get(i).getName());
             tab.setStyle(styleTab);
             initBlockMission(tab);
-            System.out.println("bouh");
             tabPane.getTabs().add(tab);
         }
     }
