@@ -6,6 +6,7 @@ package skynamiccontrol.Timeline;
  *
  **/
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -19,41 +20,39 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import skynamiccontrol.model.Aircraft;
+import skynamiccontrol.model.GCSModel;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Timeline implements Initializable{
     MissionBlock mb;
-    ArrayList<Aircraft> listAircraft;
+    @FXML
+    TabPane tabPane;
+    GCSModel model;
 
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("TimelineUI.fxml"));
-        primaryStage.setTitle("TimelineUI Control");
-        Scene scene = new Scene(root, 1080, 225, Color.WHITE);
-
-        TabPane tabPane = new TabPane();
-
-        BorderPane borderPane = new BorderPane();
-        for (int i = 0; i < listAircraft.size(); i++) {
-            Tab tab = new Tab();
-            tab.setText(listAircraft.get(i).getName());
-
-            tabPane.getTabs().add(tab);
-        }
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
+    public Timeline(GCSModel model_) {
+        model = model_;
     }
 
-    public void initBlockMission(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("TimelineUI.fxml"));
-        mb = loader.getController();
-        if (mb == null) {
-            mb = new MissionBlock(listAircraft.get(0));
-            loader.setController(mb);
+    public void initBlockMission(Tab tab){
+        for ( int i = 0 ;  i < model.getAircrafts().size();i++) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MissionBlockUI.fxml"));
+            mb = loader.getController();
+            if (mb == null) {
+                mb = new MissionBlock(model.getAircrafts().get(i));
+                loader.setController(mb);
+                try {
+                    tab.setContent(loader.load());
+                    System.out.println("Je suis la et je créé une tab");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -132,6 +131,12 @@ public class Timeline implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        for (int i = 0; i < model.getAircrafts().size(); i++) {
+            Tab tab = new Tab();
+            tab.setText(model.getAircrafts().get(i).getName());
+            initBlockMission(tab);
+            System.out.println("bouh");
+            tabPane.getTabs().add(tab);
+        }
     }
 }
