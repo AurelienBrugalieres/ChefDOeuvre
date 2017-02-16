@@ -3,9 +3,11 @@ package skynamiccontrol;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import skynamiccontrol.Timeline.Timeline;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
@@ -105,7 +107,9 @@ public class Controller implements Initializable{
     private void initPalette(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("palette.fxml"));
         try {
-            pane_timeline_palette.getChildren().add(loader.load());
+            Node palette = loader.load();
+            HBox.setHgrow(palette, Priority.ALWAYS);
+            pane_timeline_palette.getChildren().add(palette);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -121,7 +125,9 @@ public class Controller implements Initializable{
 
         }
         try {
-            pane_timeline_palette.getChildren().add(loader.load());
+            Node timeline = loader.load();
+            HBox.setHgrow(timeline, Priority.ALWAYS);
+            pane_timeline_palette.getChildren().add(timeline);
         } catch (IOException e) {
             e.printStackTrace();
         }
