@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
+import skynamiccontrol.Timeline.Timeline;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.model.Status;
@@ -27,10 +28,13 @@ public class Controller implements Initializable{
     private MapController mapController = null;
     private MapListener mapListener = null;
 
+    private Timeline timelineController = null;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // initialize map
         initMapPane();
+        initTimeline();
 
          /* test */
         Aircraft aircraft = new Aircraft(1, "microJet", 80.0, 102.0, 30.0, Status.AUTO, Color.decode("#8EF183"));
@@ -71,6 +75,20 @@ public class Controller implements Initializable{
         }
         try {
             borderPane.setCenter(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initTimeline(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Timeline/TimelineUI.fxml"));
+        timelineController = loader.getController();
+        if(timelineController == null){
+            timelineController = new Timeline();
+            loader.setController(timelineController);
+        }
+        try {
+            borderPane.setBottom(loader.load());
         } catch (IOException e) {
             e.printStackTrace();
         }
