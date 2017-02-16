@@ -9,6 +9,10 @@ import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.model.Status;
 import java.awt.*;
+
+import skynamiccontrol.view.map.MapController;
+import skynamiccontrol.view.map.events.MapListener;
+import skynamiccontrol.view.map.events.MapPoint;
 import skynamiccontrol.view.status.StatusListContainer;
 
 import java.io.IOException;
@@ -22,8 +26,14 @@ public class Controller implements Initializable{
 
     private GCSModel model ;
 
+    private MapController mapController = null;
+    private MapListener mapListener = null;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // initialize map
+        initMapPane();
+
          /* test */
         Aircraft aircraft = new Aircraft(1, "microJet", 80.0, 102.0, 30.0, Status.AUTO, Color.decode("#8EF183"));
         Aircraft aircraft2 = new Aircraft(1, "Alpha1", 20.0, 50.0, 30.0, Status.AUTO, Color.decode("#94B7EA"));
@@ -34,5 +44,41 @@ public class Controller implements Initializable{
         System.out.println(borderPane);
         borderPane.setPrefSize(800.0,1000.0);
         borderPane.getChildren().add(statusListContainer);
+
+    }
+
+    /**
+     * Set a map listener to handle map events
+     * @param listener
+     */
+    public void setMapListener(MapListener listener) {
+        this.mapListener = listener;
+        if (mapController != null) {
+            mapController.setMapListener(mapListener);
+        }
+    }
+
+    /**
+     * Initialize the map on the interface
+     */
+    private void initMapPane() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/map/Map.fxml"));
+        mapController = loader.getController();
+        if (mapController == null) {
+            mapController = new MapController();
+            loader.setController(mapController);
+        }
+        if (mapListener != null) {
+            mapController.setMapListener(mapListener);
+        }
+        try {
+            borderPane.setCenter(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public MapController getMapController() {
+        return mapController;
     }
 }

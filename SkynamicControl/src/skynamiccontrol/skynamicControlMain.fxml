@@ -5,7 +5,4 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.Controller">
-    <center>
-        <fx:include source="view/map/Map.fxml" />
-    </center>
 </BorderPane>

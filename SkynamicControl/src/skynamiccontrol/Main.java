@@ -14,14 +14,32 @@ import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.model.Status;
 import skynamiccontrol.textview.TextView;
+import skynamiccontrol.view.map.events.MapListener;
+import skynamiccontrol.view.map.events.MapPoint;
 
 public class Main extends Application {
 
     public static final boolean DEBUG = true;
+    private FXMLLoader loader;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("skynamicControlMain.fxml"));
+
+        loader = new FXMLLoader(getClass().getResource("skynamicControlMain.fxml"));
+        Parent root = loader.load();
+
+
+        //Test map listener
+        //Access to controller
+        Controller controller = loader.getController();
+        //Add map listener
+        controller.setMapListener(new MapListener() {
+            @Override
+            public void onMapClickListener(MapPoint pt) {
+                System.out.println("Test (lat="+pt.getLatitude()+"; lng="+pt.getLongitude()+")");
+            }
+        });
+
 
 
         /* test */

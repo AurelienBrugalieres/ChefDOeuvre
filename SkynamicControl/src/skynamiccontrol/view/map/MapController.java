@@ -15,6 +15,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
+import skynamiccontrol.view.map.events.MapListener;
+import skynamiccontrol.view.map.events.MapPoint;
 
 
 /**
@@ -23,11 +25,6 @@ import netscape.javascript.JSObject;
  * @author Aurelien Brugalieres
  */
 public class MapController implements Initializable {
-
-    // Expose interface
-    public interface MapListener {
-        void onMapClickListener(MapPoint pt);
-    }
 
     private MapListener mapListener = null;
 
@@ -84,36 +81,5 @@ public class MapController implements Initializable {
             System.out.println(message);
         }
     }
-
-    public class MapPoint {
-        private double latitude;
-        private double longitude;
-
-        public MapPoint() {
-            this(0, 0);
-        }
-
-        public MapPoint(double lat, double lng) {
-            this.latitude = lat;
-            this.longitude = lng;
-        }
-
-        public void setLatitude(double latitude) {
-            this.latitude = latitude;
-        }
-
-        public void setLongitude(double longitude) {
-            this.longitude = longitude;
-        }
-
-        public double getLatitude() {
-            return latitude;
-        }
-
-        public double getLongitude() {
-            return longitude;
-        }
-    }
-
 
 }
