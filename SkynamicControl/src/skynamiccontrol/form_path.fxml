@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane fx:id="form_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="288.0" style="-fx-background-color: C7D5EA; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="form_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="288.0" style="-fx-background-color: C7D5EA; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.view.forms.FormPathController">
    <children>
       <ImageView fx:id="btn_ok" fitHeight="61.0" fitWidth="100.0" layoutX="14.0" layoutY="592.0" onMouseEntered="#onMouseEnteredOK" onMouseExited="#onMouseExitedOK" onMousePressed="#onMousePressOK" onMouseReleased="#onMoueReleasedOK" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -35,10 +35,10 @@
          </font>
       </Text>
       <TextField fx:id="field_name" layoutX="100.0" layoutY="9.0" prefHeight="31.0" prefWidth="174.0" />
-      <TextField fx:id="field_east_source" layoutX="100.0" layoutY="65.0" prefHeight="31.0" prefWidth="174.0" />
-      <TextField fx:id="field_north_source" layoutX="100.0" layoutY="117.0" prefHeight="31.0" prefWidth="174.0" />
-      <TextField fx:id="field_north_destination" layoutX="97.0" layoutY="228.0" prefHeight="31.0" prefWidth="174.0" />
-      <TextField fx:id="field_east_destination" layoutX="97.0" layoutY="176.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_north_p1" layoutX="100.0" layoutY="65.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_east_p1" layoutX="100.0" layoutY="117.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_east_p2" layoutX="97.0" layoutY="228.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_north_p2" layoutX="97.0" layoutY="176.0" prefHeight="31.0" prefWidth="174.0" />
       <Text layoutX="20.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Second Point East" wrappingWidth="75.943359375">
          <font>
             <Font size="14.0" />
@@ -59,10 +59,10 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <TextField fx:id="field_east_destination1" layoutX="94.0" layoutY="392.0" prefHeight="31.0" prefWidth="174.0" />
-      <TextField fx:id="field_north_destination1" layoutX="94.0" layoutY="444.0" prefHeight="31.0" prefWidth="174.0" />
-      <TextField fx:id="field_north_source1" layoutX="97.0" layoutY="333.0" prefHeight="31.0" prefWidth="174.0" />
-      <TextField fx:id="field_east_source1" layoutX="97.0" layoutY="281.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_north_p4" layoutX="94.0" layoutY="392.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_east_p4" layoutX="94.0" layoutY="444.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_east_p3" layoutX="97.0" layoutY="333.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_north_p3" layoutX="97.0" layoutY="281.0" prefHeight="31.0" prefWidth="174.0" />
       <Text layoutX="17.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Third Point East" wrappingWidth="75.943359375">
          <font>
             <Font size="14.0" />
@@ -73,8 +73,8 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <TextField fx:id="field_north_destination11" layoutX="96.0" layoutY="543.0" prefHeight="31.0" prefWidth="174.0" />
-      <TextField fx:id="field_east_destination11" layoutX="96.0" layoutY="491.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_east_p5" layoutX="96.0" layoutY="543.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_north_p5" layoutX="96.0" layoutY="491.0" prefHeight="31.0" prefWidth="174.0" />
       <Text layoutX="17.0" layoutY="554.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fifth Point East" wrappingWidth="75.943359375">
          <font>
             <Font size="14.0" />
