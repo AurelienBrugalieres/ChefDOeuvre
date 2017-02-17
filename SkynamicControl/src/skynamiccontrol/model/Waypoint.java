@@ -4,24 +4,36 @@ package skynamiccontrol.model;
  * Created by fabien on 13/02/17.
  */
 public class Waypoint {
-    private double latitude;
-    private double longitude;
-    private double east;
-    private double north;
-    private double altitude;
-    private CoordinateSystem coordinateSystem;
+    private final double latitude;
+    private final double longitude;
+    private final double east;
+    private final double north;
+    private final double altitude;
+    private final CoordinateSystem coordinateSystem;
 
     public Waypoint(double latEast, double lonNorth, double altitude, CoordinateSystem coordinateSystem) {
         this.coordinateSystem = coordinateSystem;
         this.altitude = altitude;
+
         switch (coordinateSystem) {
             case LOCAL:
                 this.east = latEast;
                 this.north = lonNorth;
+                this.latitude = 0;
+                this.longitude = 0;
                 break;
             case LLA:
+                this.east = 0;
+                this.north = 0;
                 this.latitude = latEast;
                 this.longitude = lonNorth;
+
+                break;
+            default:
+                this.east = 0;
+                this.north = 0;
+                this.latitude = 0;
+                this.longitude = 0;
                 break;
         }
     }

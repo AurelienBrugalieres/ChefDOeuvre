@@ -62,4 +62,26 @@ public class MapController implements Initializable {
         this.mapListener = listener;
         bridge.setMapListener(mapListener);
     }
+
+    public void activeMarkerOption() {
+        WebEngine webEngine = webView.getEngine();
+        webEngine.executeScript("document.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.MARKER);");
+
+    }
+
+    public void activeCircleOption() {
+        WebEngine webEngine = webView.getEngine();
+        webEngine.executeScript("document.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.CIRCLE);");
+    }
+
+    public void activePathOption() {
+        WebEngine webEngine = webView.getEngine();
+        webEngine.executeScript("document.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYLINE);");
+    }
+
+    public void activeGoToOption() {
+        WebEngine webEngine = webView.getEngine();
+        webEngine.executeScript("document.drawingManager.setDrawingMode(null);");
+    }
+
 }
