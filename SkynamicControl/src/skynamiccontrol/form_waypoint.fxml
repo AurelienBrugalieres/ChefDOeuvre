@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="form_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="288.0" style="-fx-background-color: C7D5EA; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="btn_ok" fitHeight="61.0" fitWidth="100.0" layoutX="21.0" layoutY="172.0" onMouseEntered="#onMouseEnteredOK" onMouseExited="#onMouseExitedOK" onMousePressed="#onMousePressOK" onMouseReleased="#onMoueReleasedOK" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/bitmaps/btn_ok_form.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="btn_next" fitHeight="61.0" fitWidth="100.0" layoutX="174.0" layoutY="172.0" onMouseEntered="#onMouseEnteredNext" onMouseExited="#onMouseExitedNext" onMousePressed="#onMousePressedNext" onMouseReleased="#onMouseReleasedNext" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/bitmaps/btn_next_form.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="21.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="21.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="North " wrappingWidth="55.943359375">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="21.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="East " wrappingWidth="55.943359375">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <TextField fx:id="field_name" layoutX="100.0" layoutY="9.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_north_source" layoutX="100.0" layoutY="65.0" prefHeight="31.0" prefWidth="174.0" />
+      <TextField fx:id="field_east_source" layoutX="100.0" layoutY="117.0" prefHeight="31.0" prefWidth="174.0" />
+   </children>
+</AnchorPane>
