@@ -2,6 +2,7 @@ package skynamiccontrol.model.mission;
 
 import skynamiccontrol.communication.IncomeMessage;
 import skynamiccontrol.communication.IvyManager;
+import skynamiccontrol.model.Constants;
 import skynamiccontrol.model.Waypoint;
 
 import java.util.*;
@@ -10,19 +11,6 @@ import java.util.*;
  * Created by fabien on 13/02/17.
  */
 public class MissionManager implements Observer{
-    private static String MISSION_CIRCLE_LOCAL = "MISSION_CIRCLE";
-    private static String MISSION_CIRCLE_LLA = "MISSION_CIRCLE_LLA";
-    private static String MISSION_GOTOWP_LOCAL = "MISSION_GOTO_WP";
-    private static String MISSION_GOTOWP_LLA = "MISSION_GOTO_WP_LLA";
-    private static String MISSION_SURVEY_LOCAL = "MISSION_SURVEY";
-    private static String MISSION_SURVEY_LLA = "MISSION_SURVEY_LLA";
-    private static String MISSION_PATH_LOCAL = "MISSION_PATH";
-    private static String MISSION_PATH_LLA = "MISSION_PATH_LLA";
-    private static String MISSION_SEGMENT_LOCAL = "MISSION_SEGMENT";
-    private static String MISSION_SEGMENT_LLA = "MISSION_SEGMENT_LLA";
-    private static int INDEX_BIT_LENGTH = 8;
-    private static long delayBetweenSend = 500;
-    private static long sendTimeout = 4000;
     private int missionStatusMessageId;
     private int aircraftId;
     private ArrayList<Instruction> pastInstructions;
@@ -32,10 +20,8 @@ public class MissionManager implements Observer{
     private ArrayList<Instruction> pendingInstructions;
     private Instruction travelingInstruction;
     private long timeSinceSent;
-    private Timer instructionsSenderTimer;
     private InstructionsSender instructionsSender;
-    private static int NB_MAX_INSTRUCTIONS = 18;
-    private int nbInstructionsInAircarft;
+    private int nbInstructionsInAircraft;
 
     public MissionManager(int aircraftId) {
         this.aircraftId = aircraftId;
@@ -44,13 +30,13 @@ public class MissionManager implements Observer{
         travelingInstruction = null;
         instructionsToSend = new LinkedList<>();
         pendingInstructions = new ArrayList<>();
-        nbInstructionsInAircarft = 0;
+        nbInstructionsInAircraft = 0;
         nextIndex = 1;              //start at 1 to discriminate from "no instruction" case
         IvyManager.getInstance().addObserver(this);
         missionStatusMessageId = IvyManager.getInstance().registerRegex(aircraftId + " MISSION_STATUS " + "(.*) (.*)");
-        instructionsSenderTimer = new Timer();
+        Timer instructionsSenderTimer = new Timer();
         instructionsSender = new InstructionsSender();
-        instructionsSenderTimer.scheduleAtFixedRate(instructionsSender, 0, delayBetweenSend);
+        instructionsSenderTimer.scheduleAtFixedRate(instructionsSender, 0, Constants.getInstance().DELAY_BETWEEN_SEND);
     }
 
 
@@ -58,9 +44,12 @@ public class MissionManager implements Observer{
         instructionsToSend.add(instruction);
     }
 
-    public String getMessage(Instruction instruction) {
+    private String getMessage(Instruction instruction) {
         String msg;
         int index = nextIndex++;
+        if(getAircraftIndex(index) == 0) {    //if aircraftIndex = 0, it cannot be discriminate from the "no instruction" case.
+            index = nextIndex ++;
+        }
         instruction.setIndex(index);
         try {
             if(instruction instanceof Circle) {
@@ -90,6 +79,10 @@ public class MissionManager implements Observer{
         return pastInstructions;
     }
 
+    public ArrayList<Instruction> getPendingInstructions() {
+        return pendingInstructions;
+    }
+
     public int getCurrentInstructionAircraftIndex() {
         return currentInstructionAircraftIndex;
     }
@@ -104,8 +97,7 @@ public class MissionManager implements Observer{
 
     private void replaceAllInstructions(Instruction instruction) {
         ArrayList<Instruction> removeList = new ArrayList<>();
-        for (int i = 0; i < pendingInstructions.size(); i++) {
-            Instruction ins = pendingInstructions.get(i);
+        for (Instruction ins : pendingInstructions) {
             switch (ins.getState()) {
                 case NOT_SENT:
                     removeList.add(ins);
@@ -181,9 +173,9 @@ public class MissionManager implements Observer{
     private String forgeCircleMessage(Circle circle, int index) {
         String msg = "";
         if(circle.getCenter().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg += MISSION_CIRCLE_LLA;
+            msg += Constants.getInstance().MISSION_CIRCLE_LLA;
         } else {
-            msg += MISSION_CIRCLE_LOCAL;
+            msg += Constants.getInstance().MISSION_CIRCLE_LOCAL;
         }
 
         msg += " " +
@@ -201,9 +193,9 @@ public class MissionManager implements Observer{
     private String forgeGoToWPMessage(GoToWP goToWP, int index) {
         String msg = "";
         if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg += MISSION_GOTOWP_LLA;
+            msg += Constants.getInstance().MISSION_GOTOWP_LLA;
         } else {
-            msg += MISSION_GOTOWP_LOCAL;
+            msg += Constants.getInstance().MISSION_GOTOWP_LOCAL;
         }
 
         msg += " " +
@@ -226,15 +218,15 @@ public class MissionManager implements Observer{
         String msg = "";
         if(path.getWaypoint(0).getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
             if(nbPoints == 2) {
-                msg += MISSION_SEGMENT_LLA;
+                msg += Constants.getInstance().MISSION_SEGMENT_LLA;
             } else {
-                msg += MISSION_PATH_LLA;
+                msg += Constants.getInstance().MISSION_PATH_LLA;
             }
         } else {
             if(nbPoints == 2) {
-                msg += MISSION_SEGMENT_LOCAL;
+                msg += Constants.getInstance().MISSION_SEGMENT_LOCAL;
             } else {
-                msg += MISSION_PATH_LOCAL;
+                msg += Constants.getInstance().MISSION_PATH_LOCAL;
             }
         }
 
@@ -261,9 +253,9 @@ public class MissionManager implements Observer{
     private String forgeSurveyMessage(Survey survey, int index) {
         String msg = "";
         if(survey.getWpStart().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg += MISSION_SURVEY_LLA;
+            msg += Constants.getInstance().MISSION_SURVEY_LLA;
         } else {
-            msg += MISSION_SURVEY_LOCAL;
+            msg += Constants.getInstance().MISSION_SURVEY_LOCAL;
         }
 
         msg += " " +
@@ -303,7 +295,7 @@ public class MissionManager implements Observer{
                 System.out.println(aircraftId + " MISSION_STATUS " + incomeMessage.getPayload()[0] + " " + incomeMessage.getPayload()[1]);
                 double time = Double.parseDouble(incomeMessage.getPayload()[0]);
                 Integer[] indexes = parseIndexes(incomeMessage.getPayload()[1]);
-                nbInstructionsInAircarft = indexes.length;
+                nbInstructionsInAircraft = indexes.length;
                 currentInstructionAircraftIndex = indexes[0];
                 updatePendingInstructions(indexes);
 
@@ -366,7 +358,7 @@ public class MissionManager implements Observer{
     }
 
     private Integer getAircraftIndex(int index) {
-        return index % (1<<INDEX_BIT_LENGTH);
+        return index % Constants.getInstance().MAX_INDEX_VALUE;
     }
 
     private Integer[] parseIndexes(String s) {
@@ -378,7 +370,7 @@ public class MissionManager implements Observer{
         return indexes;
     }
 
-    public static <T> boolean  contains(T[] array, T object) {
+    private static <T> boolean  contains(T[] array, T object) {
         for(T t : array) {
             if(t.equals(object)) {
                 return true;
@@ -399,14 +391,14 @@ public class MissionManager implements Observer{
         @Override
         public void run() {
             if(travelingInstruction != null){       //last instruction sent not yet acknowledged
-                timeSinceSent += delayBetweenSend;
-                if(timeSinceSent > sendTimeout) {
+                timeSinceSent += Constants.getInstance().DELAY_BETWEEN_SEND;
+                if(timeSinceSent > Constants.getInstance().SEND_TIMEOUT) {
                     System.out.println("too long !!!");     //TODO: notify user
                 }
                 return;
             }
             Instruction instructionToSend = instructionsToSend.peek();
-            if(instructionToSend == null || nbInstructionsInAircarft >= NB_MAX_INSTRUCTIONS) {
+            if(instructionToSend == null || nbInstructionsInAircraft >= Constants.getInstance().NB_MAX_INSTRUCTIONS) {
                 return;
             }
             sendMessage(instructionToSend);
@@ -414,7 +406,9 @@ public class MissionManager implements Observer{
         }
 
         public void sendMessage(Instruction instructionToSend) {
-            IvyManager.getInstance().sendMessage(getMessage(instructionToSend));
+            String message = getMessage(instructionToSend);
+            System.out.println(message);
+            IvyManager.getInstance().sendMessage(message);
             instructionToSend.setState(Instruction.State.SENT);
             travelingInstruction = instructionToSend;
             switch(instructionToSend.getInsertMode()) {
