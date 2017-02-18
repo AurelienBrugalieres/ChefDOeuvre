@@ -16,6 +16,7 @@ import javafx.scene.input.*;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 
+import java.awt.*;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.URL;
@@ -122,6 +123,8 @@ public class Timeline implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        tabPane.getStylesheets().add("/resources/css/timelineTab.css");
+
         for (int i = 0; i < model.getAircrafts().size(); i++) {
             String backgroundColor = "("+model.getAircrafts().get(i).getColor().getRed()+","+
                     model.getAircrafts().get(i).getColor().getGreen()+","+
@@ -132,6 +135,7 @@ public class Timeline implements Initializable{
             tab.setStyle(styleTab);
             initBlockMission(tab);
             tabPane.getTabs().add(tab);
+            tab.getContent().setStyle(styleTab);
         }
     }
 

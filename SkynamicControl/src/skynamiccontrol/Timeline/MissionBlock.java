@@ -32,6 +32,9 @@ public class MissionBlock implements Initializable {
 
     }
 
+    public Pane getPane(){
+        return pane;
+    }
     public void addInstruction( Aircraft aircraft, Instruction instruction){
 
     }
