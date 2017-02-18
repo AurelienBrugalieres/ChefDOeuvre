@@ -16,19 +16,19 @@ public class Circle extends Instruction {
     }
 
     public void setAltitude(Double altitude) {
-        if(getCommunicationState() == CommunicationState.NOT_SENT) {
+        if(getState() == State.NOT_SENT) {
             this.altitude = altitude;
         }
     }
 
     public void setCenter(Waypoint center) {
-        if(getCommunicationState() == CommunicationState.NOT_SENT) {
+        if(getState() == State.NOT_SENT) {
             this.center = center;
         }
     }
 
     public void setRadius(double radius) {
-        if(getCommunicationState() == CommunicationState.NOT_SENT) {
+        if(getState() == State.NOT_SENT) {
             this.radius = radius;
         }
     }

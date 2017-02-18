@@ -7,20 +7,26 @@ public class Instruction {
     private String name;
     private int index;          //index as in the aircraft
     private double duration;
-    private CommunicationState communicationState = CommunicationState.NOT_SENT;
-    private Status status = Status.PENDING;
+    private State state = State.NOT_SENT;
 
-    public enum CommunicationState {
-        NOT_SENT,
-        SENT,
-        ACKNOWLEDGED,
-        CANCELED        //the instruction has been acknowledged by the aircraft, then canceled by the user, but the cancellation has not been acknowledged (so the aircaft can still run this instruction)
-    }
+    public enum State {
+        NOT_SENT(0),
+        SENT(1),
+        ACKNOWLEDGED(2),   //pending
+        CANCELED(3),       //the instruction has been acknowledged by the aircraft, then canceled by the user, but the cancellation has not been acknowledged yet (so the aircraft can still run this instruction) ;
+        RUNNING(4),        //acknowledged and running
+        ABORTED(5),        //the instruction was aborted during it was running. Can happen if "next instruction" was called, or if other instruction was sent with REPLACE_ALL or REPLACE_CURRENT insertion mode.
+        DONE(6);
 
-    public enum Status {
-        PENDING,
-        RUNNING,
-        DONE
+        private int nb;
+
+        State(int nb) {
+            this.nb = nb;
+        }
+
+        public int getNb() {
+            return nb;
+        }
     }
 
     public String getName() {
@@ -47,19 +53,11 @@ public class Instruction {
         this.duration = duration;
     }
 
-    public CommunicationState getCommunicationState() {
-        return communicationState;
+    public State getState() {
+        return state;
     }
 
-    public void setCommunicationState(CommunicationState communicationState) {
-        this.communicationState = communicationState;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setState(State state) {
+        this.state = state;
     }
 }
