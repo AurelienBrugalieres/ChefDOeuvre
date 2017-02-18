@@ -21,61 +21,64 @@ public class MissionManager implements Observer{
     private static String MISSION_SEGMENT_LOCAL = "MISSION_SEGMENT";
     private static String MISSION_SEGMENT_LLA = "MISSION_SEGMENT_LLA";
     private static int INDEX_BIT_LENGTH = 8;
+    private static long delayBetweenSend = 500;
+    private static long sendTimeout = 4000;
     private int missionStatusMessageId;
     private int aircraftId;
-    private ArrayList<Instruction> instructions;
+    private ArrayList<Instruction> pastInstructions;
     private int currentInstructionAircraftIndex;
+    private Queue<Instruction> instructionsToSend;
     private int nextIndex;
     private ArrayList<Instruction> pendingInstructions;
+    private Instruction travelingInstruction;
+    private long timeSinceSent;
+    private Timer instructionsSenderTimer;
+    private InstructionsSender instructionsSender;
+    private static int NB_MAX_INSTRUCTIONS = 18;
+    private int nbInstructionsInAircarft;
 
     public MissionManager(int aircraftId) {
         this.aircraftId = aircraftId;
-        instructions = new ArrayList<>();
+        pastInstructions = new ArrayList<>();
         currentInstructionAircraftIndex = 0;
-        nextIndex = 1;              //start at 1 to discrimine from "no instruction" case
+        travelingInstruction = null;
+        instructionsToSend = new LinkedList<>();
+        pendingInstructions = new ArrayList<>();
+        nbInstructionsInAircarft = 0;
+        nextIndex = 1;              //start at 1 to discriminate from "no instruction" case
         IvyManager.getInstance().addObserver(this);
         missionStatusMessageId = IvyManager.getInstance().registerRegex(aircraftId + " MISSION_STATUS " + "(.*) (.*)");
+        instructionsSenderTimer = new Timer();
+        instructionsSender = new InstructionsSender();
+        instructionsSenderTimer.scheduleAtFixedRate(instructionsSender, 0, delayBetweenSend);
     }
 
-    public void insertInstruction(Instruction instruction, InsertMode insertMode) {
+
+    public void addInstruction(Instruction instruction) {
+        instructionsToSend.add(instruction);
+    }
+
+    public String getMessage(Instruction instruction) {
         String msg;
+        int index = nextIndex++;
+        instruction.setIndex(index);
         try {
             if(instruction instanceof Circle) {
-                msg = forgeCircleMessage((Circle) instruction, insertMode);
+                msg = forgeCircleMessage((Circle) instruction, index);
             } else if(instruction instanceof GoToWP) {
-                msg = forgeGoToWPMessage((GoToWP) instruction, insertMode);
+                msg = forgeGoToWPMessage((GoToWP) instruction, index);
             } else if(instruction instanceof Path) {
-                msg = forgePathMessage((Path) instruction, insertMode);
+                msg = forgePathMessage((Path) instruction, index);
             } else if(instruction instanceof Survey) {
-                msg = forgeSurveyMessage((Survey) instruction, insertMode);
+                msg = forgeSurveyMessage((Survey) instruction, index);
             } else {
-                System.out.println("Type not known.");
-                return;
+                msg = "";
             }
         } catch (Exception e) {
-            return;
+            msg = "";
         }
 
-
-        if(IvyManager.getInstance().sendMessage(msg)) {     //if message sent
-            switch(insertMode) {
-                case APPEND:
-                    appendInstruction(instruction);
-                    break;
-                case PREPEND:
-                    //prependInstruction(instruction);
-                    break;
-                case REPLACE_CURRENT:
-                    replaceCurrentInstruction(instruction);
-                    break;
-                case REPLACE_ALL:
-                    replaceAllInstructions(instruction);
-                    break;
-                case REPLACE_NEXTS:
-                    replaceNextsInstructions(instruction);
-                    break;
-            }
-        }
+        return msg;
     }
 
     public void goToNextInstruction() {
@@ -83,8 +86,8 @@ public class MissionManager implements Observer{
         IvyManager.getInstance().sendMessage(msg);
     }
 
-    public ArrayList<Instruction> getInstructions() {
-        return instructions;
+    public ArrayList<Instruction> getPastInstructions() {
+        return pastInstructions;
     }
 
     public int getCurrentInstructionAircraftIndex() {
@@ -92,18 +95,14 @@ public class MissionManager implements Observer{
     }
 
     private void appendInstruction(Instruction instruction) {
-        instruction.setState(Instruction.State.NOT_SENT);
         pendingInstructions.add(instruction);
     }
 
     private void replaceCurrentInstruction(Instruction instruction) {
-        instruction.setState(Instruction.State.SENT);
         pendingInstructions.add(getInsertIndex(), instruction);
     }
 
     private void replaceAllInstructions(Instruction instruction) {
-        instruction.setState(Instruction.State.SENT);
-
         ArrayList<Instruction> removeList = new ArrayList<>();
         for (int i = 0; i < pendingInstructions.size(); i++) {
             Instruction ins = pendingInstructions.get(i);
@@ -136,11 +135,8 @@ public class MissionManager implements Observer{
     }
 
     private void replaceNextsInstructions(Instruction instruction) {
-        instruction.setState(Instruction.State.SENT);
-
         ArrayList<Instruction> removeList = new ArrayList<>();
-        for (int i = 0; i < pendingInstructions.size(); i++) {
-            Instruction ins = pendingInstructions.get(i);
+        for (Instruction ins : pendingInstructions) {
             switch (ins.getState()) {
                 case NOT_SENT:
                     removeList.add(ins);
@@ -182,7 +178,7 @@ public class MissionManager implements Observer{
         return insertIndex;
     }
 
-    private String forgeCircleMessage(Circle circle, InsertMode insertMode) {
+    private String forgeCircleMessage(Circle circle, int index) {
         String msg = "";
         if(circle.getCenter().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
             msg += MISSION_CIRCLE_LLA;
@@ -192,17 +188,17 @@ public class MissionManager implements Observer{
 
         msg += " " +
                 aircraftId + " " +
-                insertMode.getValue() + " " +
+                circle.getInsertMode().getValue() + " " +
                 extractLatEast(circle.getCenter()) + " " +
                 extractLonNorth(circle.getCenter()) + " " +
                 circle.getAltitude().intValue() + " " +
                 circle.getRadius() + " " +
                 circle.getDuration() + " " +
-                getNextIndex();
+                getAircraftIndex(index);
         return msg;
     }
 
-    private String forgeGoToWPMessage(GoToWP goToWP, InsertMode insertMode) {
+    private String forgeGoToWPMessage(GoToWP goToWP, int index) {
         String msg = "";
         if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
             msg += MISSION_GOTOWP_LLA;
@@ -212,16 +208,16 @@ public class MissionManager implements Observer{
 
         msg += " " +
                 aircraftId + " " +
-                insertMode.getValue() + " " +
+                goToWP.getInsertMode().getValue() + " " +
                 extractLatEast(goToWP.getWaypoint()) + " " +
                 extractLonNorth(goToWP.getWaypoint()) + " " +
                 goToWP.getAltitude().intValue() + " " +
                 goToWP.getDuration() + " " +
-                getNextIndex();
+                getAircraftIndex(index);
         return msg;
     }
 
-    private String forgePathMessage(Path path, InsertMode insertMode) throws Exception {
+    private String forgePathMessage(Path path, int index) throws Exception {
         int nbPoints = path.getNbWaypoints();
         if(nbPoints < 2) {
             throw new Exception("Path with less than 2 points.");
@@ -244,7 +240,7 @@ public class MissionManager implements Observer{
 
         msg += " " +
                 aircraftId + " " +
-                insertMode.getValue() + " ";
+                path.getInsertMode().getValue() + " ";
         for(int i=0; i<Path.NB_WAYPOINTS_MAX; i++) {
             if(i<nbPoints) {
                 msg += extractLatEast(path.getWaypoint(i)) + " " +
@@ -257,12 +253,12 @@ public class MissionManager implements Observer{
         msg +=path.getAltitude().intValue() + " " +
                 path.getDuration() + " " +
                 nbPoints + " " +
-                getNextIndex();
+                getAircraftIndex(index);
 
         return msg;
     }
 
-    private String forgeSurveyMessage(Survey survey, InsertMode insertMode) {
+    private String forgeSurveyMessage(Survey survey, int index) {
         String msg = "";
         if(survey.getWpStart().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
             msg += MISSION_SURVEY_LLA;
@@ -272,14 +268,14 @@ public class MissionManager implements Observer{
 
         msg += " " +
                 aircraftId + " " +
-                insertMode.getValue() + " " +
+                survey.getInsertMode().getValue() + " " +
                 extractLatEast(survey.getWpStart()) + " " +
                 extractLonNorth(survey.getWpStart()) + " " +
                 extractLatEast(survey.getWpEnd()) + " " +
                 extractLonNorth(survey.getWpEnd()) + " " +
                 survey.getAltitude().intValue() + " " +
                 survey.getDuration() + " " +
-                getNextIndex();
+                getAircraftIndex(index);
         return msg;
     }
 
@@ -299,18 +295,15 @@ public class MissionManager implements Observer{
         }
     }
 
-    private int getNextIndex() {
-        return getAircraftIndex(nextIndex++);
-    }
-
     @Override
     public void update(Observable observable, Object o) {
         if(o instanceof IncomeMessage) {
             IncomeMessage incomeMessage = (IncomeMessage) o;
             if(incomeMessage.getId() == missionStatusMessageId) {
                 System.out.println(aircraftId + " MISSION_STATUS " + incomeMessage.getPayload()[0] + " " + incomeMessage.getPayload()[1]);
-                double time = Double.parseDouble(incomeMessage.getPayload()[0].replace(".", ","));
+                double time = Double.parseDouble(incomeMessage.getPayload()[0]);
                 Integer[] indexes = parseIndexes(incomeMessage.getPayload()[1]);
+                nbInstructionsInAircarft = indexes.length;
                 currentInstructionAircraftIndex = indexes[0];
                 updatePendingInstructions(indexes);
 
@@ -330,15 +323,16 @@ public class MissionManager implements Observer{
                 case SENT:
                     if(contains(indexes, aircraftIndex)) {      //the instruction sent is acknowledged by the aircraft
                         instruction.setState(Instruction.State.ACKNOWLEDGED);
+                        travelingInstruction = null;            //so we can allow any operation (not only APPEND)
                     }
                     //break;
                 case ACKNOWLEDGED:
                     if(indexes[0].equals(aircraftIndex)) {                  //the first instruction in the aircraft list is the running one
                         instruction.setState(Instruction.State.RUNNING);
                     } else if(!contains(indexes, aircraftIndex)){           //this index disappear without being first in the aircraft list
-                        System.out.println("Suspicious: instruction DONE without being RUNNING.");
+                        System.out.println("Suspicious: instruction DONE without being RUNNING : Instruction " + aircraftIndex);
                         instruction.setState(Instruction.State.DONE);
-                        instructions.add(instruction);
+                        pastInstructions.add(instruction);
                         removeList.add(instruction);
                     }
                     break;
@@ -353,13 +347,13 @@ public class MissionManager implements Observer{
                 case RUNNING:
                     if(!contains(indexes, aircraftIndex)) {     //the running instruction is no longer in the aircraft list : it is done.
                         instruction.setState(Instruction.State.DONE);
-                        instructions.add(instruction);
+                        pastInstructions.add(instruction);
                         removeList.add(instruction);
                     }
                     break;
                 case ABORTED:
                     if(!contains(indexes, aircraftIndex)) {     //the aborted instruction is no longer in the aircraft list : it is well aborted.
-                        instructions.add(instruction);
+                        pastInstructions.add(instruction);
                         removeList.add(instruction);
                     }
                     break;
@@ -393,20 +387,53 @@ public class MissionManager implements Observer{
         return false;
     }
 
-    public enum InsertMode {
-        APPEND(0),
-        PREPEND(1),
-        REPLACE_CURRENT(2),
-        REPLACE_ALL(3),
-        REPLACE_NEXTS(4);
+    public void sendAgain() {
+        instructionsSender.sendMessage(travelingInstruction);
+    }
 
-        private int value;
-        InsertMode(int value) {
-            this.value = value;
+    /**
+     * Check if the previous sent instruction was acknowledged and if so, send the next instruction.
+     */
+    private class InstructionsSender extends TimerTask {
+
+        @Override
+        public void run() {
+            if(travelingInstruction != null){       //last instruction sent not yet acknowledged
+                timeSinceSent += delayBetweenSend;
+                if(timeSinceSent > sendTimeout) {
+                    System.out.println("too long !!!");     //TODO: notify user
+                }
+                return;
+            }
+            Instruction instructionToSend = instructionsToSend.peek();
+            if(instructionToSend == null || nbInstructionsInAircarft >= NB_MAX_INSTRUCTIONS) {
+                return;
+            }
+            sendMessage(instructionToSend);
+            instructionsToSend.poll();
         }
 
-        public int getValue() {
-            return value;
+        public void sendMessage(Instruction instructionToSend) {
+            IvyManager.getInstance().sendMessage(getMessage(instructionToSend));
+            instructionToSend.setState(Instruction.State.SENT);
+            travelingInstruction = instructionToSend;
+            switch(instructionToSend.getInsertMode()) {
+                case APPEND:
+                    appendInstruction(instructionToSend);
+                    break;
+                case PREPEND:
+                    //prependInstruction(instruction);
+                    break;
+                case REPLACE_CURRENT:
+                    replaceCurrentInstruction(instructionToSend);
+                    break;
+                case REPLACE_ALL:
+                    replaceAllInstructions(instructionToSend);
+                    break;
+                case REPLACE_NEXTS:
+                    replaceNextsInstructions(instructionToSend);
+                    break;
+            }
         }
     }
 }
