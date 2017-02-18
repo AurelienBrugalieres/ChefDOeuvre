@@ -4,9 +4,7 @@ import skynamiccontrol.communication.IncomeMessage;
 import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Waypoint;
 
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 /**
  * Created by fabien on 13/02/17.
@@ -26,16 +24,17 @@ public class MissionManager implements Observer{
     private int missionStatusMessageId;
     private int aircraftId;
     private ArrayList<Instruction> instructions;
-    private int currentInstructionId;
+    private int currentInstructionAircraftIndex;
     private int nextIndex;
+    private ArrayList<Instruction> pendingInstructions;
 
     public MissionManager(int aircraftId) {
         this.aircraftId = aircraftId;
         instructions = new ArrayList<>();
-        currentInstructionId = 0;
+        currentInstructionAircraftIndex = 0;
         nextIndex = 1;              //start at 1 to discrimine from "no instruction" case
         IvyManager.getInstance().addObserver(this);
-        missionStatusMessageId = IvyManager.getInstance().registerRegex(aircraftId + " MISSION_STATUS " + "(.*)");
+        missionStatusMessageId = IvyManager.getInstance().registerRegex(aircraftId + " MISSION_STATUS " + "(.*) (.*)");
     }
 
     public void insertInstruction(Instruction instruction, InsertMode insertMode) {
@@ -64,13 +63,16 @@ public class MissionManager implements Observer{
                     appendInstruction(instruction);
                     break;
                 case PREPEND:
-                    prependInstruction(instruction);
+                    //prependInstruction(instruction);
                     break;
                 case REPLACE_CURRENT:
                     replaceCurrentInstruction(instruction);
                     break;
                 case REPLACE_ALL:
                     replaceAllInstructions(instruction);
+                    break;
+                case REPLACE_NEXTS:
+                    replaceNextsInstructions(instruction);
                     break;
             }
         }
@@ -85,24 +87,99 @@ public class MissionManager implements Observer{
         return instructions;
     }
 
-    public int getCurrentInstructionId() {
-        return currentInstructionId;
+    public int getCurrentInstructionAircraftIndex() {
+        return currentInstructionAircraftIndex;
     }
 
     private void appendInstruction(Instruction instruction) {
-        instructions.add(instruction);
+        instruction.setState(Instruction.State.NOT_SENT);
+        pendingInstructions.add(instruction);
     }
 
     private void replaceCurrentInstruction(Instruction instruction) {
-
+        instruction.setState(Instruction.State.SENT);
+        pendingInstructions.add(getInsertIndex(), instruction);
     }
 
     private void replaceAllInstructions(Instruction instruction) {
+        instruction.setState(Instruction.State.SENT);
 
+        ArrayList<Instruction> removeList = new ArrayList<>();
+        for (int i = 0; i < pendingInstructions.size(); i++) {
+            Instruction ins = pendingInstructions.get(i);
+            switch (ins.getState()) {
+                case NOT_SENT:
+                    removeList.add(ins);
+                    break;
+                case SENT:
+                    //don't know what to do
+                    break;
+                case ACKNOWLEDGED:
+                    ins.setState(Instruction.State.CANCELED);
+                    break;
+                case CANCELED:
+                    //already in CANCELED state
+                    break;
+                case RUNNING:
+                    ins.setState(Instruction.State.ABORTED);
+                    break;
+                case ABORTED:
+                    //already in ABORTED state
+                    break;
+                case DONE:
+                    //should not be here
+                    break;
+            }
+        }
+        pendingInstructions.removeAll(removeList);
+        pendingInstructions.add(getInsertIndex(), instruction);
     }
 
-    private void prependInstruction(Instruction instruction) {
+    private void replaceNextsInstructions(Instruction instruction) {
+        instruction.setState(Instruction.State.SENT);
 
+        ArrayList<Instruction> removeList = new ArrayList<>();
+        for (int i = 0; i < pendingInstructions.size(); i++) {
+            Instruction ins = pendingInstructions.get(i);
+            switch (ins.getState()) {
+                case NOT_SENT:
+                    removeList.add(ins);
+                    break;
+                case SENT:
+                    //don't know what to do
+                    break;
+                case ACKNOWLEDGED:
+                    ins.setState(Instruction.State.CANCELED);
+                    break;
+                case CANCELED:
+                    //already in CANCELED state
+                    break;
+                case RUNNING:
+                    //do nothing
+                    break;
+                case ABORTED:
+                    //already in ABORTED state
+                    break;
+                case DONE:
+                    //should not be here
+                    break;
+            }
+        }
+        pendingInstructions.removeAll(removeList);
+        pendingInstructions.add(getInsertIndex(), instruction);
+    }
+
+
+    private int getInsertIndex() {
+        int insertIndex = 0;
+        for (int i = 0; i < pendingInstructions.size(); i++) {  //get index of first instruction which is not ABORTED or RUNNING
+            if(pendingInstructions.get(i).getState() != Instruction.State.ABORTED &&
+                    pendingInstructions.get(i).getState() != Instruction.State.RUNNING) {
+                insertIndex = i;
+                break;
+            }
+        }
+        return insertIndex;
     }
 
     private String forgeCircleMessage(Circle circle, InsertMode insertMode) {
@@ -223,7 +300,7 @@ public class MissionManager implements Observer{
     }
 
     private int getNextIndex() {
-        return nextIndex++ % (1<<INDEX_BIT_LENGTH);
+        return getAircraftIndex(nextIndex++);
     }
 
     @Override
@@ -231,17 +308,97 @@ public class MissionManager implements Observer{
         if(o instanceof IncomeMessage) {
             IncomeMessage incomeMessage = (IncomeMessage) o;
             if(incomeMessage.getId() == missionStatusMessageId) {
-                System.out.println(aircraftId + " MISSION_STATUS " + incomeMessage.getPayload()[0]);
+                System.out.println(aircraftId + " MISSION_STATUS " + incomeMessage.getPayload()[0] + " " + incomeMessage.getPayload()[1]);
+                double time = Double.parseDouble(incomeMessage.getPayload()[0].replace(".", ","));
+                Integer[] indexes = parseIndexes(incomeMessage.getPayload()[1]);
+                currentInstructionAircraftIndex = indexes[0];
+                updatePendingInstructions(indexes);
+
             }
         }
 
+    }
+
+    private void updatePendingInstructions(Integer[] indexes) {
+        ArrayList<Instruction> removeList = new ArrayList<>();
+        for(Instruction instruction : pendingInstructions) {
+            Integer aircraftIndex = getAircraftIndex(instruction.getIndex());
+            switch (instruction.getState()) {
+                case NOT_SENT:
+                    //do not expect to be acknowledged by the aircraft if it was not sent
+                    break;
+                case SENT:
+                    if(contains(indexes, aircraftIndex)) {      //the instruction sent is acknowledged by the aircraft
+                        instruction.setState(Instruction.State.ACKNOWLEDGED);
+                    }
+                    //break;
+                case ACKNOWLEDGED:
+                    if(indexes[0].equals(aircraftIndex)) {                  //the first instruction in the aircraft list is the running one
+                        instruction.setState(Instruction.State.RUNNING);
+                    } else if(!contains(indexes, aircraftIndex)){           //this index disappear without being first in the aircraft list
+                        System.out.println("Suspicious: instruction DONE without being RUNNING.");
+                        instruction.setState(Instruction.State.DONE);
+                        instructions.add(instruction);
+                        removeList.add(instruction);
+                    }
+                    break;
+                case CANCELED:
+                    if(!contains(indexes, aircraftIndex)) {     //an acknowledged instruction disappear from the aircraft list : well canceled.
+                        removeList.add(instruction);
+                    }
+                    if(indexes[0].equals(aircraftIndex)) {      //despite the cancellation, this instruction is running !
+                        instruction.setState(Instruction.State.ABORTED);
+                    }
+                    break;
+                case RUNNING:
+                    if(!contains(indexes, aircraftIndex)) {     //the running instruction is no longer in the aircraft list : it is done.
+                        instruction.setState(Instruction.State.DONE);
+                        instructions.add(instruction);
+                        removeList.add(instruction);
+                    }
+                    break;
+                case ABORTED:
+                    if(!contains(indexes, aircraftIndex)) {     //the aborted instruction is no longer in the aircraft list : it is well aborted.
+                        instructions.add(instruction);
+                        removeList.add(instruction);
+                    }
+                    break;
+                case DONE:                                      // a done instruction should not be here !
+                    System.out.println("DONE instruction should not be in pendingInstructions List !");
+                    break;
+            }
+        }
+        pendingInstructions.removeAll(removeList);
+    }
+
+    private Integer getAircraftIndex(int index) {
+        return index % (1<<INDEX_BIT_LENGTH);
+    }
+
+    private Integer[] parseIndexes(String s) {
+        String[] items = (s.substring(0, s.length()-1)).split(",");
+        Integer[] indexes = new Integer[items.length];
+        for (int i = 0; i < items.length; i++) {
+            indexes[i] = Integer.parseInt(items[i]);
+        }
+        return indexes;
+    }
+
+    public static <T> boolean  contains(T[] array, T object) {
+        for(T t : array) {
+            if(t.equals(object)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public enum InsertMode {
         APPEND(0),
         PREPEND(1),
         REPLACE_CURRENT(2),
-        REPLACE_ALL(3);
+        REPLACE_ALL(3),
+        REPLACE_NEXTS(4);
 
         private int value;
         InsertMode(int value) {
