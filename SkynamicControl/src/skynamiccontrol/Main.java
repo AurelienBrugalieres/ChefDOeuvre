@@ -46,9 +46,15 @@ public class Main extends Application {
             }
         });
 
+        primaryStage.widthProperty().addListener(((observable, oldValue, newValue) -> {
+            double container_width = controller.getNotificationContainer().getWidth();
+            controller.getNotificationContainer().setTranslateX((double)newValue - container_width);
+        }));
+
         controller.setModel(model);
         model.setStatusListContainer(controller.getStatusListContainer());
         model.setTimeline(controller.getTimelineController());
+        model.setNotificationManager(controller.getNotificationContainer());
 
         Aircraft aircraft = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/microjet.conf");
         aircraft.setBatteryLevel(15.6);
@@ -62,6 +68,10 @@ public class Main extends Application {
         /* test */
      //  Aircraft aircraft = new Aircraft(1,"microJet",80.0,102.0,30.0, Status.AUTO);
      //   model.addAircraft(aircraft);
+
+
+
+
 
         if (DEBUG) {
             primaryStage.setMaximized(true);

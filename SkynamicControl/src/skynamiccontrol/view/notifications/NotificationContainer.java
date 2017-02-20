@@ -4,13 +4,16 @@ import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import skynamiccontrol.model.Aircraft;
 
 import java.awt.*;
-import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,37 @@ public class NotificationContainer extends Parent {
 
     private TabPane tabPane;
     private Map<Aircraft, ScrollPane> tab_pane;
+
+    public NotificationContainer() {
+        this.aircrafts = new ArrayList<>();
+        this.tab_pane = new HashMap<>();
+        this.tabPane = new TabPane();
+        this.getChildren().add(this.tabPane);
+    }
+
+    public void AddTab(Aircraft air) {
+        String backgroundColor = "("+air.getColor().getRed()+","+
+                air.getColor().getGreen()+","+
+                air.getColor().getBlue()+",0.7)";
+        String styleTab = "-fx-background-color: rgba"+backgroundColor;
+
+        Tab tab = new Tab();
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+        VBox vbox = new VBox();
+        tab.setText(air.getName());
+        tab.setStyle(styleTab);
+
+
+        scrollPane.setContent(vbox);
+        tab.setContent(scrollPane);
+
+        this.tabPane.getTabs().add(tab);
+        ((ScrollPane)tab.getContent()).setStyle(styleTab);
+        ((ScrollPane)tab.getContent()).getContent().setStyle(styleTab);
+        this.tab_pane.put(air,scrollPane);
+    }
 
     public NotificationContainer(List<Aircraft> aircraftList) {
         this.aircrafts = aircraftList;
@@ -49,13 +83,15 @@ public class NotificationContainer extends Parent {
 
     public void addInfo(Aircraft aircraft, String text) {
         Text notif = new Text(text);
+        VBox.setVgrow(notif, Priority.ALWAYS);
         ((VBox)tab_pane.get(aircraft).getContent()).getChildren().add(notif);
         tab_pane.get(aircraft).setVvalue(1.0);
     }
 
     public void addWarning(Aircraft aircraft, String text) {
         Text notif = new Text(text);
-        Color color = Color.decode("#FFB12D");
+        VBox.setVgrow(notif, Priority.ALWAYS);
+        Color color = Color.web("#FFB12D");
         javafx.scene.paint.Paint paint = new javafx.scene.paint.Color(color.getRed(),color.getGreen(),color.getBlue(),0.7);
         notif.setFill(paint);
         ((VBox)tab_pane.get(aircraft).getContent()).getChildren().add(notif);
@@ -64,7 +100,8 @@ public class NotificationContainer extends Parent {
 
     public void addError(Aircraft aircraft, String text) {
         Text notif = new Text(text);
-        Color color = Color.decode("#FC2C36");
+        VBox.setVgrow(notif, Priority.ALWAYS);
+        Color color = Color.web("#FC2C36");
         javafx.scene.paint.Paint paint = new javafx.scene.paint.Color(color.getRed(),color.getGreen(),color.getBlue(),0.7);
         notif.setFill(paint);
         ((VBox)tab_pane.get(aircraft).getContent()).getChildren().add(notif);
@@ -73,10 +110,15 @@ public class NotificationContainer extends Parent {
 
     public void addSuccess(Aircraft aircraft, String text) {
         Text notif = new Text(text);
-        Color color = Color.decode("#3AE428");
+        VBox.setVgrow(notif, Priority.ALWAYS);
+        Color color = Color.web("#3AE428");
         javafx.scene.paint.Paint paint = new javafx.scene.paint.Color(color.getRed(),color.getGreen(),color.getBlue(),0.7);
         notif.setFill(paint);
         ((VBox)tab_pane.get(aircraft).getContent()).getChildren().add(notif);
         tab_pane.get(aircraft).setVvalue(1.0);
+    }
+
+    public double getWidth() {
+        return tabPane.getWidth();
     }
 }
