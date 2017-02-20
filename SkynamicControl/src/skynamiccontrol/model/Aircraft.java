@@ -4,6 +4,9 @@ import javafx.beans.InvalidationListener;
 import skynamiccontrol.model.mission.MissionManager;
 
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -15,8 +18,8 @@ import java.util.Observer;
 public class Aircraft extends Observable{
 
     public final static String AIRCRAFT_STATUS_PROPERTY = "aircraft_status";
-    public static final double MAX_BATTERY_VOLTAGE = 100.0;
-    public static final double MIN_BATTERY_VOLTAGE = 0;
+    private double maxBatteryVoltage;
+    private double minBatteryVoltage;
     private int id;
     private String name;
     private MissionManager missionManager;
@@ -31,6 +34,19 @@ public class Aircraft extends Observable{
     public Aircraft() {
        // this.observers = new ArrayList<>();
 
+    }
+
+    public Aircraft(String name, int id, double minBatteryVoltage, double maxBatteryVoltage) {
+        this.maxBatteryVoltage = maxBatteryVoltage;
+        this.minBatteryVoltage = minBatteryVoltage;
+        this.id = id;
+        this.name = name;
+        this.missionManager = new MissionManager(id);
+        this.batteryLevel = maxBatteryVoltage;
+        this.altitude = 0;
+        this.speed = 0;
+        this.current_status = Status.AUTO;
+        this.color = Color.decode(Constants.getInstance().DEFAULT_AIRCRAFT_COLOR);
     }
 
     public Aircraft(int id, String name, double batteryLevel, double altitude, double speed, Status current_status, Color color_aircraft) {
@@ -122,4 +138,69 @@ public class Aircraft extends Observable{
         this.current_status = current_status;
         notifyObservers();
     }
+
+    public double getMaxBatteryVoltage() {
+        return maxBatteryVoltage;
+    }
+
+    public double getMinBatteryVoltage() {
+        return minBatteryVoltage;
+    }
+
+    public double getBatteryPercentage() {
+        return (batteryLevel - minBatteryVoltage)/(maxBatteryVoltage - minBatteryVoltage);
+    }
+
+    @SuppressWarnings("Duplicates")
+    public static Aircraft loadAircraft(String filename) {
+            BufferedReader br = null;
+            FileReader fr = null;
+            Aircraft aircraft = null;
+
+            try {
+                String sCurrentLine;
+                fr = new FileReader(filename);
+                br = new BufferedReader(fr);
+
+                String name = "";
+                double minVoltage = -1, maxVoltage = -1;
+                int id = -1;
+
+                while ((sCurrentLine = br.readLine()) != null) {
+                    String items[] = sCurrentLine.split(" : ");
+                    switch(items[0]) {
+                        case "NAME":
+                            name = items[1];
+                            break;
+                        case "BATTERY_VOLTAGE_MAX":
+                            maxVoltage = Double.parseDouble(items[1]);
+                            break;
+                        case "BATTERY_VOLTAGE_MIN":
+                            minVoltage = Double.parseDouble(items[1]);
+                            break;
+                        case "ID":
+                            id = Integer.parseInt(items[1]);
+                    }
+                }
+                aircraft = new Aircraft(name, id, minVoltage, maxVoltage);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            finally {
+
+                try {
+                    if (br != null){
+                        br.close();
+                    }
+                    if (fr != null){
+                        fr.close();
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            return aircraft;
+        }
 }
