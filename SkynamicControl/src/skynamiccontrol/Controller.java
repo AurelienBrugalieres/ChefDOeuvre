@@ -16,6 +16,7 @@ import java.awt.*;
 
 import skynamiccontrol.view.map.MapController;
 import skynamiccontrol.view.map.events.MapListener;
+import skynamiccontrol.view.notifications.NotificationContainer;
 import skynamiccontrol.view.palette.PaletteController;
 import skynamiccontrol.view.status.StatusListContainer;
 
@@ -30,6 +31,8 @@ public class Controller implements Initializable{
 
     private GCSModel model ;
     private StatusListContainer statusListContainer;
+
+    private NotificationContainer notificationContainer;
 
     private MapController mapController = null;
     private MapListener mapListener = null;
@@ -54,6 +57,9 @@ public class Controller implements Initializable{
         //Aircraft aircraft = new Aircraft(1, "microJet", 80.0, 102.0, 30.0, Status.AUTO, Color.decode("#8EF183"));
 
         statusListContainer = new StatusListContainer();
+        notificationContainer = new NotificationContainer();
+        notificationContainer.setTranslateX(borderPane.getWidth());
+
 
         // initialize map
         initMapPane();
@@ -66,7 +72,7 @@ public class Controller implements Initializable{
 
 
         borderPane.getChildren().add(statusListContainer);
-
+        borderPane.getChildren().add(notificationContainer);
 
 
     }
@@ -184,5 +190,9 @@ public class Controller implements Initializable{
 
     public MapController getMapController() {
         return mapController;
+    }
+
+    public NotificationContainer getNotificationContainer() {
+        return notificationContainer;
     }
 }

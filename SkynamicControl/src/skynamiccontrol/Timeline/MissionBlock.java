@@ -41,17 +41,45 @@ public class MissionBlock implements Initializable {
     }
 
     public void updateAircraftMissionBlock(Aircraft aircraft) {
+        double x = 40;
+        double y = 151;
         for (int i = 0; i < model.getAircrafts().size(); i++) {
             if (model.getAircrafts().get(i) == aircraft) {
-                /*if (!aircraft.getMissionManager().getPendingInstructions().isEmpty()) {
-                    for (int j = 0; j < aircraft.getMissionManager().getPendingInstructions().size(); j++) {*/
-                pane.getChildren().add(new Rectangle(40,151, 50,20));
-                pane.getChildren().add(new Rectangle(40,29,50,20));
+                if (!aircraft.getMissionManager().getPendingInstructions().isEmpty()) {
+                    for (int j = 0; j < aircraft.getMissionManager().getPendingInstructions().size(); j++) {
+                        Rectangle rect;
+                        double yi = y - (aircraft.getAltitude()*0.244);
+                        switch(aircraft.getMissionManager().getPendingInstructions().get(i).getState()){
+                            case NOT_SENT:
+                                rect = new Rectangle(x,yi,40,20);
+                                break;
+                            case SENT:
+                                rect = new Rectangle(x,yi,40,20);
+                                break;
+                            case ACKNOWLEDGED:
+                                rect = new Rectangle(x,yi,40,20);
+                                break;
+                            case ABORTED:
+                                rect = new Rectangle(x,yi,40,20);
+                                break;
+                            case CANCELED:
+                                rect = new Rectangle(x,yi,40,20);
+                                break;
+                            case RUNNING:
+                                rect = new Rectangle(x,yi,40,20);
+                                break;
+                            case DONE:
+                                rect = new Rectangle(x,yi,40,20);
+                                break;
+                        }
+                        x += 50;
+                    }
+                }
             }
-
-
-            //System.out.println(aircraft.getMissionManager().getPendingInstructions().isEmpty());
         }
+
+        pane.getChildren().add(new Rectangle(x,y, 50, 20));
+        pane.getChildren().add(new Rectangle(x+50,y-(500*0.244),50,20));
     }
 
 
