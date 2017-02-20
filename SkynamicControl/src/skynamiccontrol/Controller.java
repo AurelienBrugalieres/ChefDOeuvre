@@ -50,8 +50,12 @@ public class Controller implements Initializable{
 
 
          /* test */
-        Aircraft aircraft = new Aircraft(1, "microJet", 80.0, 102.0, 30.0, Status.AUTO, Color.decode("#8EF183"));
-        Aircraft aircraft2 = new Aircraft(1, "Alpha1", 20.0, 50.0, 30.0, Status.AUTO, Color.decode("#94B7EA"));
+        //Aircraft aircraft = new Aircraft(1, "microJet", 80.0, 102.0, 30.0, Status.AUTO, Color.decode("#8EF183"));
+        Aircraft aircraft = Aircraft.loadAircraft("../aircrafts/microjet.conf");
+        aircraft.setBatteryLevel(15.6);
+        Aircraft aircraft2 = Aircraft.loadAircraft("../aircrafts/ardrone2.conf");
+        aircraft2.setColor(Color.decode("#94B7EA"));
+        aircraft2.setBatteryLevel(13.1);
         StatusListContainer statusListContainer = new StatusListContainer();
         model = new GCSModel(2, statusListContainer);
         model.addAircraft(aircraft);
