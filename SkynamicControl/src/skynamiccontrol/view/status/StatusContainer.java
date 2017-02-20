@@ -2,20 +2,14 @@ package skynamiccontrol.view.status;/**
  * Created by Elodie on 15/02/2017.
  */
 
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-import skynamiccontrol.core.StatusStateMachine;
 import skynamiccontrol.model.Aircraft;
 
 
@@ -86,19 +80,8 @@ public class StatusContainer extends Parent implements Observer {
 
 
         status = new Text(String.valueOf(air.getCurrent_status()));
-        double battery_level = (aircraft.getBatteryLevel());
 
-        if (battery_level < Aircraft.MAX_BATTERY_VOLTAGE / NB_BITMAPS_BATTERIES) {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat5.png").toExternalForm()));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (2.0 / NB_BITMAPS_BATTERIES)) {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat4.png").toExternalForm()));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (3.0 / NB_BITMAPS_BATTERIES)) {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat3.png").toExternalForm()));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (4.0 / NB_BITMAPS_BATTERIES)) {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat2.png").toExternalForm()));
-        } else {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat1.png").toExternalForm()));
-        }
+        setBatteryImage();
         batterie_image.setSmooth(true);
         batterie_image.setTranslateY(TRANSLATE_BATTERY);
         title_pane.getChildren().add(aircraft_name);
@@ -126,6 +109,20 @@ public class StatusContainer extends Parent implements Observer {
 
     }
 
+    public void setBatteryImage() {
+        double batteryPercentage = aircraft.getBatteryPercentage();
+        if (batteryPercentage < 1.0/NB_BITMAPS_BATTERIES) {
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat5.png").toExternalForm()));
+        } else if (batteryPercentage <  (2.0 / NB_BITMAPS_BATTERIES)) {
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat4.png").toExternalForm()));
+        } else if (batteryPercentage <  (3.0 / NB_BITMAPS_BATTERIES)) {
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat3.png").toExternalForm()));
+        } else if (batteryPercentage < (4.0 / NB_BITMAPS_BATTERIES)) {
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat2.png").toExternalForm()));
+        } else {
+            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat1.png").toExternalForm()));
+        }
+    }
 
     public void setDeselected() {
         global_pane.setStyle("-fx-background-color: null");
@@ -142,19 +139,7 @@ public class StatusContainer extends Parent implements Observer {
         this.status.setText(String.valueOf(aircraft.getCurrent_status()));
         System.out.println("update");
         System.out.println(aircraft.getCurrent_status());
-        double battery_level = (aircraft.getBatteryLevel());
-
-        if (battery_level < Aircraft.MAX_BATTERY_VOLTAGE / NB_BITMAPS_BATTERIES) {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat5.png").toExternalForm()));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (2.0 / NB_BITMAPS_BATTERIES)) {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat4.png").toExternalForm()));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (3.0 / NB_BITMAPS_BATTERIES)) {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat3.png").toExternalForm()));
-        } else if (battery_level <= Aircraft.MAX_BATTERY_VOLTAGE * (4.0 / NB_BITMAPS_BATTERIES)) {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat2.png").toExternalForm()));
-        } else {
-            batterie_image.setImage(new Image(getClass().getClassLoader().getResource("resources/bitmaps/bat1.png").toExternalForm()));
-        }
+        setBatteryImage();
     }
 
     public void handle(java.util.List<StatusContainer> list) {
