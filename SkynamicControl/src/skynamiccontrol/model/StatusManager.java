@@ -7,20 +7,23 @@ import java.util.*;
 /**
  * Created by Elodie on 14/02/2017.
  */
-public class StatusManager extends Observable{
+public class StatusManager implements Observer{
 
 
    // private StatusListController statusListController;
     private StatusListContainer statusListContainer;
     private GCSModel model;
 
-    public StatusManager(GCSModel model1, StatusListContainer s) {
-        this.model = model1;
-        statusListContainer = s;
+    public StatusManager(GCSModel model) {
+        this.model = model;
     }
 
     public void updateView(Aircraft aircraft) {
 
+    }
+
+    public void setStatusListContainer(StatusListContainer statusListContainer) {
+        this.statusListContainer = statusListContainer;
     }
 
     public void createView(Aircraft aircraft) {
@@ -28,4 +31,8 @@ public class StatusManager extends Observable{
     }
 
 
+    @Override
+    public void update(Observable observable, Object o) {
+
+    }
 }
