@@ -21,6 +21,7 @@ public class MissionManager implements Observer{
     private Instruction travelingInstruction;
     private long timeSinceSent;
     private InstructionsSender instructionsSender;
+    private Timer instructionsSenderTimer;
     private int nbInstructionsInAircraft;
 
     public MissionManager(int aircraftId) {
@@ -34,7 +35,7 @@ public class MissionManager implements Observer{
         nextIndex = 1;              //start at 1 to discriminate from "no instruction" case
         IvyManager.getInstance().addObserver(this);
         missionStatusMessageId = IvyManager.getInstance().registerRegex(aircraftId + " MISSION_STATUS " + "(.*) (.*)");
-        Timer instructionsSenderTimer = new Timer();
+        instructionsSenderTimer = new Timer();
         instructionsSender = new InstructionsSender();
         instructionsSenderTimer.scheduleAtFixedRate(instructionsSender, 0, Constants.getInstance().DELAY_BETWEEN_SEND);
     }
@@ -381,6 +382,10 @@ public class MissionManager implements Observer{
 
     public void sendAgain() {
         instructionsSender.sendMessage(travelingInstruction);
+    }
+
+    public void stop() {
+        instructionsSenderTimer.cancel();
     }
 
     /**
