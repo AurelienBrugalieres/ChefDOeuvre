@@ -29,6 +29,7 @@ public class Controller implements Initializable{
     private BorderPane borderPane;
 
     private GCSModel model ;
+    private StatusListContainer statusListContainer;
 
     private MapController mapController = null;
     private MapListener mapListener = null;
@@ -51,15 +52,8 @@ public class Controller implements Initializable{
 
          /* test */
         //Aircraft aircraft = new Aircraft(1, "microJet", 80.0, 102.0, 30.0, Status.AUTO, Color.decode("#8EF183"));
-        Aircraft aircraft = Aircraft.loadAircraft("../aircrafts/microjet.conf");
-        aircraft.setBatteryLevel(15.6);
-        Aircraft aircraft2 = Aircraft.loadAircraft("../aircrafts/ardrone2.conf");
-        aircraft2.setColor(Color.decode("#94B7EA"));
-        aircraft2.setBatteryLevel(13.1);
-        StatusListContainer statusListContainer = new StatusListContainer();
-        model = new GCSModel(2, statusListContainer);
-        model.addAircraft(aircraft);
-        model.addAircraft(aircraft2);
+
+        statusListContainer = new StatusListContainer();
 
         // initialize map
         initMapPane();
@@ -162,7 +156,7 @@ public class Controller implements Initializable{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Timeline/TimelineUI.fxml"));
         timelineController = loader.getController();
         if(timelineController == null){
-            timelineController = new Timeline(model);
+            timelineController = new Timeline();
             loader.setController(timelineController);
         }
         try {
@@ -173,6 +167,19 @@ public class Controller implements Initializable{
             e.printStackTrace();
         }
 
+    }
+
+    public StatusListContainer getStatusListContainer() {
+        return statusListContainer;
+    }
+
+    public Timeline getTimelineController() {
+        return timelineController;
+    }
+
+    public void setModel(GCSModel model) {
+        this.model = model;
+        this.timelineController.setModel(model);
     }
 
     public MapController getMapController() {
