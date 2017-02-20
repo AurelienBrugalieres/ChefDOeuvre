@@ -6,10 +6,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import skynamiccontrol.communication.IvyManager;
+import skynamiccontrol.model.Aircraft;
+import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.view.map.events.MapAdapter;
 import skynamiccontrol.view.map.events.MapEvent;
 
+import java.awt.Color;
+
 public class Main extends Application {
+    private Controller controller;
+    private GCSModel model;
 
     public static final boolean DEBUG = true;
     private FXMLLoader loader;
@@ -17,12 +23,14 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         IvyManager.getInstance().initIvyBus("SkynamicControl", "SkynamicControl Ready", "127.255.255.255:2010");
+        model = new GCSModel();
+
         loader = new FXMLLoader(getClass().getResource("skynamicControlMain.fxml"));
         Parent root = loader.load();
 
         //Test map listener
         //Access to controller
-        Controller controller = loader.getController();
+        controller = loader.getController();
         //Add map listener
         controller.setMapListener(new MapAdapter() {
             @Override
@@ -37,7 +45,18 @@ public class Main extends Application {
             }
         });
 
+        controller.setModel(model);
+        model.setStatusListContainer(controller.getStatusListContainer());
+        model.setTimeline(controller.getTimelineController());
 
+        Aircraft aircraft = Aircraft.loadAircraft("../aircrafts/microjet.conf");
+        aircraft.setBatteryLevel(15.6);
+        Aircraft aircraft2 = Aircraft.loadAircraft("../aircrafts/ardrone2.conf");
+        aircraft2.setColor(Color.decode("#94B7EA"));
+        aircraft2.setBatteryLevel(13.1);
+
+        model.addAircraft(aircraft);
+        model.addAircraft(aircraft2);
 
         /* test */
      //  Aircraft aircraft = new Aircraft(1,"microJet",80.0,102.0,30.0, Status.AUTO);
@@ -56,6 +75,9 @@ public class Main extends Application {
     public void stop() throws Exception {
         super.stop();
         IvyManager.getInstance().stop();
+        for(Aircraft aircraft : model.getAircrafts()) {
+            aircraft.getMissionManager().stop();
+        }
     }
 
     public static void main(String[] args) {
