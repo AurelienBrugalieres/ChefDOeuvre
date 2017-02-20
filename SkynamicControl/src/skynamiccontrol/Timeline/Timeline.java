@@ -30,17 +30,20 @@ public class Timeline implements Initializable{
 
     public void initBlockMission(Tab tab){
         for ( int i = 0 ;  i < model.getAircrafts().size();i++) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MissionBlockUI.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("./MissionBlockUI.fxml"));
             mb = loader.getController();
             if (mb == null) {
                 mb = new MissionBlock(model.getAircrafts().get(i),model);
                 loader.setController(mb);
-                try {
-                    tab.setContent(loader.load());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
             }
+            try {
+                tab.setContent(loader.load());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
         }
     }
 
