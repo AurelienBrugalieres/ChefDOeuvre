@@ -4,7 +4,6 @@
 .tab {
     -fx-border-radius: 10 10 0 0;
     -fx-background-radius: 10 10 0 0;
-    -fx-background-color-opacity : 50;
 }
 .tab-pane {
     -fx-background-color: transparent;
