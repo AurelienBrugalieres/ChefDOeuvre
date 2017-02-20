@@ -95,6 +95,6 @@ public class Constants {
     }
 
     private Constants() {
-        loadConstants("./src/resources/constants.conf");
+        loadConstants("./SkynamicControl/src/resources/constants.conf");
     }
 }

@@ -49,9 +49,9 @@ public class Main extends Application {
         model.setStatusListContainer(controller.getStatusListContainer());
         model.setTimeline(controller.getTimelineController());
 
-        Aircraft aircraft = Aircraft.loadAircraft("../aircrafts/microjet.conf");
+        Aircraft aircraft = Aircraft.loadAircraft("./aircrafts/microjet.conf");
         aircraft.setBatteryLevel(15.6);
-        Aircraft aircraft2 = Aircraft.loadAircraft("../aircrafts/ardrone2.conf");
+        Aircraft aircraft2 = Aircraft.loadAircraft("./aircrafts/ardrone2.conf");
         aircraft2.setColor(Color.decode("#94B7EA"));
         aircraft2.setBatteryLevel(13.1);
 
