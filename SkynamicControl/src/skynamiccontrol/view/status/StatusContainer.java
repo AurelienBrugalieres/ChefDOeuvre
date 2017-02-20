@@ -18,7 +18,11 @@ import java.util.Observer;
 
 public class StatusContainer extends Parent implements Observer {
 
-    private final static int SIZE = 250;
+    private final static int SIZE = 150;
+
+    private final static int BAT_HEIGHT = 70;
+
+    private final static int BAT_WIDTH = 30;
 
     private final static int TRANSLATE_X = 50;
 
@@ -32,7 +36,7 @@ public class StatusContainer extends Parent implements Observer {
 
     private final static double SPACING_STATUS = 20.0;
 
-    private final static double SPACING = 20.0;
+    private final static double SPACING = 10.0;
 
     private final static double NB_BITMAPS_BATTERIES = 5.0;
 
@@ -84,6 +88,8 @@ public class StatusContainer extends Parent implements Observer {
         setBatteryImage();
         batterie_image.setSmooth(true);
         batterie_image.setTranslateY(TRANSLATE_BATTERY);
+        batterie_image.setFitWidth(BAT_WIDTH);
+        batterie_image.setFitHeight(BAT_HEIGHT);
         title_pane.getChildren().add(aircraft_name);
         global_pane.setTop(title_pane);
         global_pane.setLeft(batterie_image);
