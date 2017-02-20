@@ -154,11 +154,6 @@ public class Controller implements Initializable{
 
     private void initTimeline(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Timeline/TimelineUI.fxml"));
-        timelineController = loader.getController();
-        if(timelineController == null){
-            timelineController = new Timeline();
-            loader.setController(timelineController);
-        }
         try {
             Node timeline = loader.load();
             HBox.setHgrow(timeline, Priority.ALWAYS);
@@ -166,6 +161,11 @@ public class Controller implements Initializable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if((timelineController = loader.getController()) == null){
+            timelineController = new Timeline();
+            loader.setController(timelineController);
+        }
+
 
     }
 

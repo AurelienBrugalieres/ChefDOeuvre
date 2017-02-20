@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -44,11 +45,17 @@ public class MissionBlock implements Initializable {
             if (model.getAircrafts().get(i) == aircraft) {
                 /*if (!aircraft.getMissionManager().getPendingInstructions().isEmpty()) {
                     for (int j = 0; j < aircraft.getMissionManager().getPendingInstructions().size(); j++) {*/
-                pane.getChildren().add(new Rectangle(50, 20, Color.BEIGE));
+                pane.getChildren().add(new Rectangle(40,151, 50,20));
+                pane.getChildren().add(new Rectangle(40,29,50,20));
             }
 
 
             //System.out.println(aircraft.getMissionManager().getPendingInstructions().isEmpty());
         }
+    }
+
+
+    public void getCoordinate(MouseEvent mouseEvent) {
+        System.out.println("x : "+mouseEvent.getX() + "y : "+mouseEvent.getY());
     }
 }
