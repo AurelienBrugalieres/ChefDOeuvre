@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Aircraft;
+import skynamiccontrol.model.Constants;
 import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.view.map.events.MapAdapter;
 import skynamiccontrol.view.map.events.MapEvent;
@@ -49,9 +50,9 @@ public class Main extends Application {
         model.setStatusListContainer(controller.getStatusListContainer());
         model.setTimeline(controller.getTimelineController());
 
-        Aircraft aircraft = Aircraft.loadAircraft("./aircrafts/microjet.conf");
+        Aircraft aircraft = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/microjet.conf");
         aircraft.setBatteryLevel(15.6);
-        Aircraft aircraft2 = Aircraft.loadAircraft("./aircrafts/ardrone2.conf");
+        Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/ardrone2.conf");
         aircraft2.setColor(Color.decode("#94B7EA"));
         aircraft2.setBatteryLevel(13.1);
 
@@ -81,6 +82,10 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        if(args.length >= 2 && (args[0].equals("-p") || args[0].equals("--path"))) {
+            Constants.USER_DIR = args[1];
+        }
+        Constants.loadConstants(Constants.USER_DIR + "conf/constants.conf");
         launch(args);
         ///Uncomment these two lines (and comment the others) to test in text mode
 //        TextView textView = new TextView();

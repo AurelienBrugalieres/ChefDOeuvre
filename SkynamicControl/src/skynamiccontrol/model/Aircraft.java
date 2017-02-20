@@ -46,7 +46,7 @@ public class Aircraft extends Observable{
         this.altitude = 0;
         this.speed = 0;
         this.current_status = Status.AUTO;
-        this.color = Color.decode(Constants.getInstance().DEFAULT_AIRCRAFT_COLOR);
+        this.color = Color.decode(Constants.DEFAULT_AIRCRAFT_COLOR);
     }
 
     public Aircraft(int id, String name, double batteryLevel, double altitude, double speed, Status current_status, Color color_aircraft) {

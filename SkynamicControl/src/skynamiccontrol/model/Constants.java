@@ -8,30 +8,24 @@ import java.io.IOException;
  * Created by fabien on 18/02/17.
  */
 public class Constants {
-    public int MAX_INDEX_VALUE;
-    public int DELAY_BETWEEN_SEND;
-    public int SEND_TIMEOUT;
-    public int NB_MAX_INSTRUCTIONS;
-    public String MISSION_CIRCLE_LOCAL;
-    public String MISSION_CIRCLE_LLA;
-    public String MISSION_GOTOWP_LOCAL;
-    public String MISSION_GOTOWP_LLA;
-    public String MISSION_SURVEY_LOCAL;
-    public String MISSION_SURVEY_LLA;
-    public String MISSION_PATH_LOCAL;
-    public String MISSION_PATH_LLA;
-    public String MISSION_SEGMENT_LOCAL;
-    public String MISSION_SEGMENT_LLA;
+    public static String USER_DIR = "./";
+    public static int MAX_INDEX_VALUE;
+    public static int DELAY_BETWEEN_SEND;
+    public static int SEND_TIMEOUT;
+    public static int NB_MAX_INSTRUCTIONS;
+    public static String MISSION_CIRCLE_LOCAL;
+    public static String MISSION_CIRCLE_LLA;
+    public static String MISSION_GOTOWP_LOCAL;
+    public static String MISSION_GOTOWP_LLA;
+    public static String MISSION_SURVEY_LOCAL;
+    public static String MISSION_SURVEY_LLA;
+    public static String MISSION_PATH_LOCAL;
+    public static String MISSION_PATH_LLA;
+    public static String MISSION_SEGMENT_LOCAL;
+    public static String MISSION_SEGMENT_LLA;
+    public static String DEFAULT_AIRCRAFT_COLOR;
 
-    public String DEFAULT_AIRCRAFT_COLOR;
-
-    private static Constants ourInstance = new Constants();
-
-    public static Constants getInstance() {
-        return ourInstance;
-    }
-
-    public void loadConstants(String filename) {
+    public static void loadConstants(String filename) {
         BufferedReader br = null;
         FileReader fr = null;
 
@@ -92,9 +86,5 @@ public class Constants {
                 ex.printStackTrace();
             }
         }
-    }
-
-    private Constants() {
-        loadConstants("./SkynamicControl/src/resources/constants.conf");
     }
 }

@@ -37,7 +37,7 @@ public class MissionManager implements Observer{
         missionStatusMessageId = IvyManager.getInstance().registerRegex(aircraftId + " MISSION_STATUS " + "(.*) (.*)");
         instructionsSenderTimer = new Timer();
         instructionsSender = new InstructionsSender();
-        instructionsSenderTimer.scheduleAtFixedRate(instructionsSender, 0, Constants.getInstance().DELAY_BETWEEN_SEND);
+        instructionsSenderTimer.scheduleAtFixedRate(instructionsSender, 0, Constants.DELAY_BETWEEN_SEND);
     }
 
 
@@ -174,9 +174,9 @@ public class MissionManager implements Observer{
     private String forgeCircleMessage(Circle circle, int index) {
         String msg = "";
         if(circle.getCenter().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg += Constants.getInstance().MISSION_CIRCLE_LLA;
+            msg += Constants.MISSION_CIRCLE_LLA;
         } else {
-            msg += Constants.getInstance().MISSION_CIRCLE_LOCAL;
+            msg += Constants.MISSION_CIRCLE_LOCAL;
         }
 
         msg += " " +
@@ -194,9 +194,9 @@ public class MissionManager implements Observer{
     private String forgeGoToWPMessage(GoToWP goToWP, int index) {
         String msg = "";
         if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg += Constants.getInstance().MISSION_GOTOWP_LLA;
+            msg += Constants.MISSION_GOTOWP_LLA;
         } else {
-            msg += Constants.getInstance().MISSION_GOTOWP_LOCAL;
+            msg += Constants.MISSION_GOTOWP_LOCAL;
         }
 
         msg += " " +
@@ -219,15 +219,15 @@ public class MissionManager implements Observer{
         String msg = "";
         if(path.getWaypoint(0).getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
             if(nbPoints == 2) {
-                msg += Constants.getInstance().MISSION_SEGMENT_LLA;
+                msg += Constants.MISSION_SEGMENT_LLA;
             } else {
-                msg += Constants.getInstance().MISSION_PATH_LLA;
+                msg += Constants.MISSION_PATH_LLA;
             }
         } else {
             if(nbPoints == 2) {
-                msg += Constants.getInstance().MISSION_SEGMENT_LOCAL;
+                msg += Constants.MISSION_SEGMENT_LOCAL;
             } else {
-                msg += Constants.getInstance().MISSION_PATH_LOCAL;
+                msg += Constants.MISSION_PATH_LOCAL;
             }
         }
 
@@ -254,9 +254,9 @@ public class MissionManager implements Observer{
     private String forgeSurveyMessage(Survey survey, int index) {
         String msg = "";
         if(survey.getWpStart().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
-            msg += Constants.getInstance().MISSION_SURVEY_LLA;
+            msg += Constants.MISSION_SURVEY_LLA;
         } else {
-            msg += Constants.getInstance().MISSION_SURVEY_LOCAL;
+            msg += Constants.MISSION_SURVEY_LOCAL;
         }
 
         msg += " " +
@@ -359,7 +359,7 @@ public class MissionManager implements Observer{
     }
 
     private Integer getAircraftIndex(int index) {
-        return index % Constants.getInstance().MAX_INDEX_VALUE;
+        return index % Constants.MAX_INDEX_VALUE;
     }
 
     private Integer[] parseIndexes(String s) {
@@ -396,14 +396,14 @@ public class MissionManager implements Observer{
         @Override
         public void run() {
             if(travelingInstruction != null){       //last instruction sent not yet acknowledged
-                timeSinceSent += Constants.getInstance().DELAY_BETWEEN_SEND;
-                if(timeSinceSent > Constants.getInstance().SEND_TIMEOUT) {
+                timeSinceSent += Constants.DELAY_BETWEEN_SEND;
+                if(timeSinceSent > Constants.SEND_TIMEOUT) {
                     System.out.println("too long !!!");     //TODO: notify user
                 }
                 return;
             }
             Instruction instructionToSend = instructionsToSend.peek();
-            if(instructionToSend == null || nbInstructionsInAircraft >= Constants.getInstance().NB_MAX_INSTRUCTIONS) {
+            if(instructionToSend == null || nbInstructionsInAircraft >= Constants.NB_MAX_INSTRUCTIONS) {
                 return;
             }
             sendMessage(instructionToSend);
