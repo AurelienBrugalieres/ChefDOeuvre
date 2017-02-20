@@ -37,7 +37,7 @@ public class Timeline implements Initializable{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MissionBlockUI.fxml"));
             mb = loader.getController();
             if (mb == null) {
-                mb = new MissionBlock(model.getAircrafts().get(i));
+                mb = new MissionBlock(model.getAircrafts().get(i),model);
                 loader.setController(mb);
                 try {
                     tab.setContent(loader.load());
@@ -123,7 +123,7 @@ public class Timeline implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tabPane.getStylesheets().add("/resources/css/timelineTab.css");
+
 
         for (int i = 0; i < model.getAircrafts().size(); i++) {
             String backgroundColor = "("+model.getAircrafts().get(i).getColor().getRed()+","+
@@ -137,6 +137,7 @@ public class Timeline implements Initializable{
             tabPane.getTabs().add(tab);
             tab.getContent().setStyle(styleTab);
         }
+        tabPane.getStylesheets().add("/resources/css/timelineTab.css");
     }
 
 }
