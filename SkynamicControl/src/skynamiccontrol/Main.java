@@ -82,9 +82,19 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        if(args.length >= 2 && (args[0].equals("-p") || args[0].equals("--path"))) {
-            Constants.USER_DIR = args[1];
+        int i = 0;
+        while (i < args.length) {
+            if(args[i].equals("-d") || args[i].equals("--user-directory")) {
+                Constants.USER_DIR = args[i+1];
+                i+=2;
+            } else if(args[i].equals("-p") || args[i].equals("--proxy")) {
+                System.setProperty("http.proxyHost", args[i+1]);
+                System.setProperty("http.proxyPort", args[i+2]);
+                i+=3;
+            }
         }
+
+
         Constants.loadConstants(Constants.USER_DIR + "conf/constants.conf");
         launch(args);
         ///Uncomment these two lines (and comment the others) to test in text mode
