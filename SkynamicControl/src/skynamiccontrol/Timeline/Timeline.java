@@ -28,10 +28,6 @@ public class Timeline implements Initializable{
     TabPane tabPane;
     GCSModel model;
 
-    public Timeline(GCSModel model_) {
-        model = model_;
-    }
-
     public void initBlockMission(Tab tab){
         for ( int i = 0 ;  i < model.getAircrafts().size();i++) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MissionBlockUI.fxml"));
@@ -123,21 +119,23 @@ public class Timeline implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
-        for (int i = 0; i < model.getAircrafts().size(); i++) {
-            String backgroundColor = "("+model.getAircrafts().get(i).getColor().getRed()+","+
-                    model.getAircrafts().get(i).getColor().getGreen()+","+
-                    model.getAircrafts().get(i).getColor().getBlue()+",0.7)";
-            String styleTab = "-fx-background-color: rgba"+backgroundColor;
-            Tab tab = new Tab();
-            tab.setText(model.getAircrafts().get(i).getName());
-            tab.setStyle(styleTab);
-            initBlockMission(tab);
-            tabPane.getTabs().add(tab);
-            tab.getContent().setStyle(styleTab);
-        }
         tabPane.getStylesheets().add("/resources/css/timelineTab.css");
     }
 
+    public void addAircraft(Aircraft aircraft) {
+        String backgroundColor = "("+aircraft.getColor().getRed()+","+
+                aircraft.getColor().getGreen()+","+
+                aircraft.getColor().getBlue()+",0.7)";
+        String styleTab = "-fx-background-color: rgba"+backgroundColor;
+        Tab tab = new Tab();
+        tab.setText(aircraft.getName());
+        tab.setStyle(styleTab);
+        initBlockMission(tab);
+        tabPane.getTabs().add(tab);
+        tab.getContent().setStyle(styleTab);
+    }
+
+    public void setModel(GCSModel model) {
+        this.model = model;
+    }
 }
