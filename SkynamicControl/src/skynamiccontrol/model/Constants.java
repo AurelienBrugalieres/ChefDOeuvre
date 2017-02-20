@@ -23,6 +23,8 @@ public class Constants {
     public String MISSION_SEGMENT_LOCAL;
     public String MISSION_SEGMENT_LLA;
 
+    public String DEFAULT_AIRCRAFT_COLOR;
+
     private static Constants ourInstance = new Constants();
 
     public static Constants getInstance() {
@@ -69,6 +71,8 @@ public class Constants {
                         MISSION_SEGMENT_LOCAL = elts[1];
                     case "MISSION_SEGMENT_LLA":
                         MISSION_SEGMENT_LLA = elts[1];
+                    case "DEFAULT_AIRCRAFT_COLOR":
+                        DEFAULT_AIRCRAFT_COLOR = elts[1];
                 }
 
             }
