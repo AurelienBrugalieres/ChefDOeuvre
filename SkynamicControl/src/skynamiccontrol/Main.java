@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.view.map.events.MapAdapter;
 import skynamiccontrol.view.map.events.MapEvent;
 
@@ -15,7 +16,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
+        IvyManager.getInstance().initIvyBus("SkynamicControl", "SkynamicControl Ready", "127.255.255.255:2010");
         loader = new FXMLLoader(getClass().getResource("skynamicControlMain.fxml"));
         Parent root = loader.load();
 
@@ -51,6 +52,11 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        IvyManager.getInstance().stop();
+    }
 
     public static void main(String[] args) {
         launch(args);
