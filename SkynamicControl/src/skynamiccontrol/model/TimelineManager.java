@@ -1,6 +1,6 @@
 package skynamiccontrol.model;
 
-import skynamiccontrol.timeline.Timeline;
+import skynamiccontrol.Timeline.Timeline;
 import skynamiccontrol.view.status.StatusListContainer;
 
 import java.util.Observable;

@@ -1,4 +1,4 @@
-package skynamiccontrol.timeline;
+package skynamiccontrol.Timeline;
 
 /**
  *
