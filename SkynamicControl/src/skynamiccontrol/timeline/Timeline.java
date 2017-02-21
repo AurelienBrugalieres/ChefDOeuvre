@@ -15,8 +15,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.input.*;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
+import skynamiccontrol.timeline.MissionBlock;
 
-import java.awt.*;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.URL;
@@ -30,7 +30,7 @@ public class Timeline implements Initializable{
 
     public void initBlockMission(Tab tab){
         for ( int i = 0 ;  i < model.getAircrafts().size();i++) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("./MissionBlockUI.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/timeline/MissionBlockUI.fxml"));
             mb = loader.getController();
             if (mb == null) {
                 mb = new MissionBlock(model.getAircrafts().get(i),model);
