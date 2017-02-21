@@ -35,7 +35,7 @@ public class NotificationContainer extends Parent {
         this.aircrafts = new ArrayList<>();
         this.tab_pane = new HashMap<>();
         this.tabPane = new TabPane();
-        this.tabPane.setStyle("-fx-background-color: rgba(0,0,0,0)");
+        this.tabPane.getStylesheets().add("skynamiccontrol/view/notifications/pane.css");
         this.getChildren().add(this.tabPane);
     }
 
