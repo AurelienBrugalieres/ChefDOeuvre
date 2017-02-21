@@ -8,15 +8,15 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane fx:id="pane" layoutX="38.0" layoutY="30.0" onMouseClicked="#getCoordinate" prefHeight="191.0" prefWidth="1850.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane fx:id="pane" layoutX="38.0" layoutY="30.0" onMouseClicked="#getCoordinate" prefHeight="191.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Line endX="1730.0" layoutX="111.0" layoutY="170.0" startX="-70.0" />
+            <Line endX="1380.0" layoutX="111.0" layoutY="170.0" startX="-70.0" />
             <Line endX="70.0" layoutX="40.0" layoutY="100.0" rotate="-90.0" startX="-70.0" />
             <Label layoutX="19.0" layoutY="162.0" prefHeight="17.0" prefWidth="11.0" text="0" />
             <Label layoutX="12.0" layoutY="30.0" text="500" />
             <Label layoutX="15.0" layoutY="6.0" text="Altitude" />
+            <ScrollBar layoutX="41.0" layoutY="172.0" prefHeight="14.0" prefWidth="1451.0" />
          </children>
       </Pane>
-      <ScrollBar layoutX="40.0" layoutY="174.0" prefHeight="14.0" prefWidth="1801.0" />
    </children>
 </AnchorPane>

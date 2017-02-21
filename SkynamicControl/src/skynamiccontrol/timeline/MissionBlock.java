@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
@@ -31,6 +32,7 @@ public class MissionBlock implements Initializable {
     @FXML
     Pane pane;
     private GCSModel model;
+    Screen screen = Screen.getPrimary();
 
     public MissionBlock(Aircraft myAircraft_, GCSModel model_){
         this.myAircraft = myAircraft_;
@@ -115,7 +117,7 @@ public class MissionBlock implements Initializable {
             }
         }
         System.out.println(model.getAircrafts().get(0).getName());
-        if (model.getAircrafts().get(0).getName().equals("Microjet")) {
+        if (aircraft.getName().equals("Microjet")) {
             // Adding Instructions on the timeline ( TEST SECTION )
             Rectangle rect = new Rectangle(120, 30, Color.BLUEVIOLET);
             rect.setStroke(Color.BLACK);
@@ -140,4 +142,5 @@ public class MissionBlock implements Initializable {
         sp.setLayoutY(y);
         return sp;
     }
+
 }
