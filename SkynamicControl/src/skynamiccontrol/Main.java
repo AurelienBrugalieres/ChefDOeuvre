@@ -26,7 +26,7 @@ public class Main extends Application {
         IvyManager.getInstance().initIvyBus("SkynamicControl", "SkynamicControl Ready", "127.255.255.255:2010");
         model = new GCSModel();
 
-        loader = new FXMLLoader(getClass().getResource("skynamicControlMain.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/skynamicControlMain.fxml"));
         Parent root = loader.load();
 
         //Test map listener
@@ -92,15 +92,20 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        System.setProperty("java.net.useSystemProxies", "true");
         int i = 0;
         while (i < args.length) {
-            if(args[i].equals("-d") || args[i].equals("--user-directory")) {
+            if(args[i].equals("-u") || args[i].equals("--user-directory")) {
                 Constants.USER_DIR = args[i+1];
                 i+=2;
             } else if(args[i].equals("-p") || args[i].equals("--proxy")) {
                 System.setProperty("http.proxyHost", args[i+1]);
                 System.setProperty("http.proxyPort", args[i+2]);
+                System.out.println("proxy : " + args[i+1] + ":" + args[i+2]);
                 i+=3;
+            } else {
+                System.out.println("Usage : EXECUTABLE [-d|--user-directory <user directory>] [-p|--proxy <host> <port>]");
+                System.exit(-1);
             }
         }
 
