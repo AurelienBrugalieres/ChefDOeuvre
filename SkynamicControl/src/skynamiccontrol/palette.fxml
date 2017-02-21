@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="56.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.view.palette.PaletteController">
+<VBox fx:id="vbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="56.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.view.palette.PaletteController">
    <children>
       <ImageView fx:id="buttun_waypoint" fitHeight="70.0" fitWidth="56.0" onMouseClicked="#onMouseClicWaypointButtun" onMouseEntered="#onMouseEnteredWaypointButtun" onMouseExited="#onMouseExitedWaypointButtun" pickOnBounds="true" preserveRatio="true">
          <image>

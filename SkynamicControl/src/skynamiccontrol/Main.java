@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.Constants;
@@ -12,7 +13,8 @@ import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.view.map.events.MapAdapter;
 import skynamiccontrol.view.map.events.MapEvent;
 
-import java.awt.Color;
+import java.awt.*;
+
 
 public class Main extends Application {
     private Controller controller;
@@ -51,6 +53,11 @@ public class Main extends Application {
             controller.getNotificationContainer().setTranslateX((double)newValue - container_width);
         }));
 
+      /*  primaryStage.heightProperty().addListener(((observable, oldValue, newValue) -> {
+            controller.getPane_timeline_palette().setTranslateX(1500);
+            controller.getPane_timeline_palette().setTranslateY((double) newValue - (controller.getPaletteController().getHeigth()));
+        }));
+*/
         controller.setModel(model);
         model.setStatusListContainer(controller.getStatusListContainer());
         model.setTimeline(controller.getTimelineController());
@@ -65,19 +72,14 @@ public class Main extends Application {
         model.addAircraft(aircraft);
         model.addAircraft(aircraft2);
 
-        /* test */
-     //  Aircraft aircraft = new Aircraft(1,"microJet",80.0,102.0,30.0, Status.AUTO);
-     //   model.addAircraft(aircraft);
-
-
-
-
 
         if (DEBUG) {
             primaryStage.setMaximized(true);
         }
         primaryStage.setTitle("Skynamic Control");
         Scene scene = new Scene(root, 300, 275);
+       // scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+       // primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

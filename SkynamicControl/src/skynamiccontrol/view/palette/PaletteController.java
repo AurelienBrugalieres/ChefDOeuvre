@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import skynamiccontrol.core.PaletteStateMachine;
 
 /**
@@ -18,6 +19,9 @@ public class PaletteController {
         void onCircleButtonClick();
     }
     private PaletteListener paletteListener = null;
+
+    @FXML
+    VBox vbox;
 
     @FXML
     private ImageView buttun_waypoint;
@@ -153,5 +157,13 @@ public class PaletteController {
 
     public void setPaletteListener(PaletteListener paletteListener) {
         this.paletteListener = paletteListener;
+    }
+
+    public void setTranslateY(double translate) {
+        this.vbox.setTranslateY(translate);
+    }
+
+    public double getHeigth() {
+        return this.vbox.getHeight();
     }
 }

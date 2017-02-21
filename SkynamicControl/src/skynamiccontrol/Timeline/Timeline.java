@@ -123,7 +123,6 @@ public class Timeline implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tabPane.getStylesheets().add("/resources/css/timelineTab.css");
-        System.out.println("initialise");
     }
 
     public void addAircraft(Aircraft aircraft) {
