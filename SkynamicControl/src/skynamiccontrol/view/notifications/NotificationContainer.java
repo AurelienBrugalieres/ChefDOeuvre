@@ -1,9 +1,12 @@
 package skynamiccontrol.view.notifications;
 
+import javafx.collections.FXCollections;
 import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.*;
@@ -32,6 +35,7 @@ public class NotificationContainer extends Parent {
         this.aircrafts = new ArrayList<>();
         this.tab_pane = new HashMap<>();
         this.tabPane = new TabPane();
+        this.tabPane.setStyle("-fx-background-color: rgba(0,0,0,0)");
         this.getChildren().add(this.tabPane);
     }
 
@@ -49,13 +53,31 @@ public class NotificationContainer extends Parent {
         tab.setText(air.getName());
         tab.setStyle(styleTab);
 
-
         scrollPane.setContent(vbox);
-        tab.setContent(scrollPane);
+
+        BorderPane borderPane = new BorderPane();
+        HBox hBox = new HBox();
+
+        javafx.scene.control.TextField searchField= new TextField();
+        searchField.setStyle(styleTab);
+        HBox.setHgrow(searchField,Priority.ALWAYS);
+        hBox.getChildren().add(searchField);
+
+        ChoiceBox choiceBox = new ChoiceBox(FXCollections.observableArrayList(
+                "All", "Info", "Warning", "Error")
+        );
+        choiceBox.getSelectionModel().selectFirst();
+        choiceBox.setStyle(styleTab);
+        HBox.setHgrow(choiceBox,Priority.ALWAYS);
+        hBox.getChildren().add(choiceBox);
+
+        borderPane.setTop(hBox);
+        borderPane.setCenter(scrollPane);
+        tab.setContent(borderPane);
 
         this.tabPane.getTabs().add(tab);
-        ((ScrollPane)tab.getContent()).setStyle(styleTab);
-        ((ScrollPane)tab.getContent()).getContent().setStyle(styleTab);
+        ((BorderPane)tab.getContent()).setStyle(styleTab);
+        ((ScrollPane)((BorderPane)tab.getContent()).getCenter()).getContent().setStyle(styleTab);
         this.tab_pane.put(air,scrollPane);
     }
 
