@@ -3,4 +3,4 @@
 <?import javafx.scene.control.TabPane?>
 
 
-<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.Timeline.Timeline"/>
+<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.timeline.Timeline"/>
