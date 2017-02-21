@@ -7,7 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import skynamiccontrol.Timeline.Timeline;
+import skynamiccontrol.timeline.Timeline;
 import skynamiccontrol.model.GCSModel;
 
 import skynamiccontrol.view.map.MapController;

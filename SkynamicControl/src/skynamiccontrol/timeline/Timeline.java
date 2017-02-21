@@ -1,4 +1,4 @@
-package skynamiccontrol.Timeline;
+package skynamiccontrol.timeline;
 
 /**
  *
@@ -138,7 +138,7 @@ public class Timeline implements Initializable{
         initBlockMission(tab);
         tabPane.getTabs().add(tab);
         tab.getContent().setStyle(styleTab+",0.7)");
-
+        tabPane.getParent().setStyle(styleTab+",0)");
     }
 
     public void setModel(GCSModel model) {

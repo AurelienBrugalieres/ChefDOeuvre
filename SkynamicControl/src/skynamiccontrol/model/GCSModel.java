@@ -1,6 +1,6 @@
 package skynamiccontrol.model;
 
-import skynamiccontrol.Timeline.Timeline;
+import skynamiccontrol.timeline.Timeline;
 import skynamiccontrol.view.notifications.NotificationContainer;
 import skynamiccontrol.view.status.StatusListContainer;
 
