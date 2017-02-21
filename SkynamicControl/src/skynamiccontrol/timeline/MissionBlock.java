@@ -4,21 +4,25 @@ import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotResult;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
-import skynamiccontrol.model.mission.Instruction;
+
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,6 +35,10 @@ public class MissionBlock implements Initializable {
     private Aircraft myAircraft;
     @FXML
     Pane pane;
+    @FXML
+    ScrollBar hScrollBar;
+    @FXML
+    Line line;
     private GCSModel model;
     Screen screen = Screen.getPrimary();
 
@@ -41,6 +49,10 @@ public class MissionBlock implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        pane.setPrefWidth(visualBounds.getWidth()-100);
+        hScrollBar.setPrefWidth(visualBounds.getWidth()-100);
+        line.setEndX(visualBounds.getWidth()-172);
 
     }
 
@@ -81,11 +93,13 @@ public class MissionBlock implements Initializable {
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                             case ABORTED:
+                                // Red Color is generic to each aircraft for aborted instructions
                                 rect = new Rectangle(120,20,new javafx.scene.paint.Color(223,0,11,1));
                                 setLayoutStackPane(sp,x,yi);
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                             case CANCELED:
+                                // Gray Color is generic to each aircraft for canceled instructions
                                 rect = new Rectangle(120,20,new javafx.scene.paint.Color(191,191,191,1));
                                 setLayoutStackPane(sp,x,yi);
                                 sp.getChildren().addAll(rect,instructionTxt);
@@ -98,6 +112,7 @@ public class MissionBlock implements Initializable {
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                             case DONE:
+                                // Gray Color is generic to each aircraft for finished instructions
                                 rect = new Rectangle(120,20,new javafx.scene.paint.Color(191,191,191,1));
                                 setLayoutStackPane(sp,x,yi);
                                 sp.getChildren().addAll(rect,instructionTxt);
@@ -116,7 +131,6 @@ public class MissionBlock implements Initializable {
                 }
             }
         }
-        System.out.println(model.getAircrafts().get(0).getName());
         if (aircraft.getName().equals("Microjet")) {
             // Adding Instructions on the timeline ( TEST SECTION )
             Rectangle rect = new Rectangle(120, 30, Color.BLUEVIOLET);
@@ -125,7 +139,7 @@ public class MissionBlock implements Initializable {
             Text t = new Text("GoToWP                 ");
             t.setStroke(Color.WHITE);
             StackPane s = new StackPane();
-            setLayoutStackPane(s, x + 870, y - 60);
+            setLayoutStackPane(s, Screen.getPrimary().getBounds().getWidth()-180, y - 60);
             s.getChildren().addAll(rect, t);
             pane.getChildren().add(s);
             pane.getChildren().add(new Rectangle(x + 50, y - (500 * 0.244), 50, 20));

@@ -9,10 +9,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.*;
+import javafx.stage.Screen;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.timeline.MissionBlock;
@@ -42,8 +44,6 @@ public class Timeline implements Initializable{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
     }
 
@@ -123,19 +123,21 @@ public class Timeline implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tabPane.getStylesheets().add("/resources/css/timelineTab.css");
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        tabPane.setLayoutX(visualBounds.getWidth());
     }
 
     public void addAircraft(Aircraft aircraft) {
         String backgroundColor = "("+aircraft.getColor().getRed()+","+
                 aircraft.getColor().getGreen()+","+
-                aircraft.getColor().getBlue()+",0.7)";
+                aircraft.getColor().getBlue();
         String styleTab = "-fx-background-color: rgba"+backgroundColor;
         Tab tab = new Tab();
         tab.setText(aircraft.getName());
-        tab.setStyle(styleTab);
+        tab.setStyle(styleTab+",1)");
         initBlockMission(tab);
         tabPane.getTabs().add(tab);
-        tab.getContent().setStyle(styleTab);
+        tab.getContent().setStyle(styleTab+",0.7)");
 
     }
 
