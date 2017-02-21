@@ -4,15 +4,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import skynamiccontrol.Timeline.Timeline;
-import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
-import skynamiccontrol.model.Status;
-import java.awt.*;
 
 import skynamiccontrol.view.map.MapController;
 import skynamiccontrol.view.map.events.MapListener;
@@ -159,7 +155,7 @@ public class Controller implements Initializable{
     }
 
     private void initTimeline(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Timeline/TimelineUI.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("timeline/TimelineUI.fxml"));
         try {
             Node timeline = loader.load();
             HBox.setHgrow(timeline, Priority.ALWAYS);

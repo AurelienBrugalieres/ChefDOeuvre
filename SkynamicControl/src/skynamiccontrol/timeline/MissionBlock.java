@@ -1,4 +1,4 @@
-package skynamiccontrol.Timeline;
+package skynamiccontrol.timeline;
 
 import javafx.application.Application;
 import javafx.fxml.FXML;
