@@ -191,4 +191,5 @@ public class Controller implements Initializable{
     public NotificationContainer getNotificationContainer() {
         return notificationContainer;
     }
+
 }

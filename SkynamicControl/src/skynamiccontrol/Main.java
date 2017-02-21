@@ -53,7 +53,7 @@ public class Main extends Application {
             controller.getNotificationContainer().setTranslateX((double)newValue - container_width);
         }));
 
-      /*  primaryStage.heightProperty().addListener(((observable, oldValue, newValue) -> {
+/*      primaryStage.heightProperty().addListener(((observable, oldValue, newValue) -> {
             controller.getPane_timeline_palette().setTranslateX(1500);
             controller.getPane_timeline_palette().setTranslateY((double) newValue - (controller.getPaletteController().getHeigth()));
         }));

@@ -35,10 +35,10 @@ public class Timeline implements Initializable{
             if (mb == null) {
                 mb = new MissionBlock(model.getAircrafts().get(i),model);
                 loader.setController(mb);
-
             }
             try {
                 tab.setContent(loader.load());
+                mb.updateAircraftMissionBlock(model.getAircrafts().get(i));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -136,6 +136,7 @@ public class Timeline implements Initializable{
         initBlockMission(tab);
         tabPane.getTabs().add(tab);
         tab.getContent().setStyle(styleTab);
+
     }
 
     public void setModel(GCSModel model) {
