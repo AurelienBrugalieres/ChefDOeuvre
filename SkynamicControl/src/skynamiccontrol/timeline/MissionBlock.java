@@ -124,8 +124,6 @@ public class MissionBlock implements Initializable {
                         String styleTab = "-fx-background-color: rgba"+backgroundColor;
                         pane.setStyle(styleTab+",0.7)");
                         pane.getChildren().add(sp);
-
-
                     }
                 }
             }
