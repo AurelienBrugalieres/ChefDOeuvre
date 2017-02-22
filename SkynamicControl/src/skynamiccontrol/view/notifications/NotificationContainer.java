@@ -1,10 +1,13 @@
 package skynamiccontrol.view.notifications;
 
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -13,7 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import skynamiccontrol.model.Aircraft;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by Elodie on 20/02/2017.
@@ -31,6 +36,36 @@ public class NotificationContainer extends Parent implements Observer{
         this.tabPane = new TabPane();
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         this.tabPane.getStylesheets().add("skynamiccontrol/view/notifications/pane.css");
+        final Point dragDelta = new Point();
+        this.tabPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                // record a delta distance for the drag and drop operation.
+                dragDelta.x = (int)( tabPane.getLayoutX() - mouseEvent.getSceneX());
+                dragDelta.y = (int) (tabPane.getLayoutY() - mouseEvent.getSceneY());
+                tabPane.setCursor(Cursor.MOVE);
+            }
+        });
+        this.tabPane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                tabPane.setCursor(Cursor.HAND);
+            }
+        });
+        this.tabPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                tabPane.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+                tabPane.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+            }
+        });
+        this.tabPane.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                tabPane.setCursor(Cursor.HAND);
+            }
+        });
+
         this.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
         this.getChildren().add(this.tabPane);
     }
