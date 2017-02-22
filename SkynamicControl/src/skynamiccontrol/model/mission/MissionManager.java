@@ -293,7 +293,7 @@ public class MissionManager implements Observer{
         if(o instanceof IncomeMessage) {
             IncomeMessage incomeMessage = (IncomeMessage) o;
             if(incomeMessage.getId() == missionStatusMessageId) {
-                System.out.println(aircraftId + " MISSION_STATUS " + incomeMessage.getPayload()[0] + " " + incomeMessage.getPayload()[1]);
+                //System.out.println(aircraftId + " MISSION_STATUS " + incomeMessage.getPayload()[0] + " " + incomeMessage.getPayload()[1]);
                 double time = Double.parseDouble(incomeMessage.getPayload()[0]);
                 Integer[] indexes = parseIndexes(incomeMessage.getPayload()[1]);
                 nbInstructionsInAircraft = indexes.length;
@@ -412,7 +412,7 @@ public class MissionManager implements Observer{
 
         public void sendMessage(Instruction instructionToSend) {
             String message = getMessage(instructionToSend);
-            System.out.println(message);
+            //System.out.println(message);
             IvyManager.getInstance().sendMessage(message);
             instructionToSend.setState(Instruction.State.SENT);
             travelingInstruction = instructionToSend;
