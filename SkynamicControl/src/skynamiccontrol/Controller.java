@@ -69,6 +69,7 @@ public class Controller implements Initializable{
 
         borderPane.getChildren().add(statusListContainer);
         borderPane.getChildren().add(notificationContainer);
+        borderPane.getChildren().add(pane_timeline_palette);
 
 
     }
@@ -113,6 +114,7 @@ public class Controller implements Initializable{
             Node palette = loader.load();
             HBox.setHgrow(palette, Priority.ALWAYS);
             pane_timeline_palette.getChildren().add(palette);
+           // borderPane.setBottom(palette);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -158,8 +160,9 @@ public class Controller implements Initializable{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("timeline/TimelineUI.fxml"));
         try {
             Node timeline = loader.load();
-            HBox.setHgrow(timeline, Priority.ALWAYS);
-            pane_timeline_palette.getChildren().add(timeline);
+            //HBox.setHgrow(timeline, Priority.ALWAYS);
+            //pane_timeline_palette.getChildren().add(timeline);
+            borderPane.setBottom(timeline);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -192,5 +195,7 @@ public class Controller implements Initializable{
         return notificationContainer;
     }
 
+    public HBox getPane_timeline_palette(){ return pane_timeline_palette;}
 
+    public PaletteController getPaletteController(){ return paletteController;}
 }

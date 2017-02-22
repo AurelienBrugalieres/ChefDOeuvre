@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotResult;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -34,7 +35,7 @@ public class MissionBlock implements Initializable {
 
     private Aircraft myAircraft;
     @FXML
-    Pane pane;
+    AnchorPane pane;
     @FXML
     ScrollBar hScrollBar;
     @FXML
@@ -50,10 +51,8 @@ public class MissionBlock implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-        pane.setPrefWidth(visualBounds.getWidth()-100);
-        hScrollBar.setPrefWidth(visualBounds.getWidth()-100);
+        pane.setPrefWidth(visualBounds.getWidth()-58);
         line.setEndX(visualBounds.getWidth()-172);
-
     }
 
     public void updateAircraftMissionBlock(Aircraft aircraft) {
@@ -118,15 +117,15 @@ public class MissionBlock implements Initializable {
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                         }
-                        if ( x < 870 ) {
-                            x += 120;
-                        }
-                        else {
-                            x = 40;
-                            break;
-                        }
-
+                        x += 120;
+                        String backgroundColor = "("+aircraft.getColor().getRed()+","+
+                                aircraft.getColor().getGreen()+","+
+                                aircraft.getColor().getBlue();
+                        String styleTab = "-fx-background-color: rgba"+backgroundColor;
+                        pane.setStyle(styleTab+",0.7)");
                         pane.getChildren().add(sp);
+
+
                     }
                 }
             }
@@ -141,6 +140,11 @@ public class MissionBlock implements Initializable {
             StackPane s = new StackPane();
             setLayoutStackPane(s, Screen.getPrimary().getBounds().getWidth()-180, y - 60);
             s.getChildren().addAll(rect, t);
+            String backgroundColor = "("+aircraft.getColor().getRed()+","+
+                    aircraft.getColor().getGreen()+","+
+                    aircraft.getColor().getBlue();
+            String styleTab = "-fx-background-color: rgba"+backgroundColor;
+            pane.setStyle(styleTab+",0.7)");
             pane.getChildren().add(s);
             pane.getChildren().add(new Rectangle(x + 50, y - (500 * 0.244), 50, 20));
         }

@@ -137,8 +137,7 @@ public class Timeline implements Initializable{
         tab.setStyle(styleTab+",1)");
         initBlockMission(tab);
         tabPane.getTabs().add(tab);
-        tab.getContent().setStyle(styleTab+",0.7)");
-        tabPane.getParent().setStyle(styleTab+",0)");
+        tabPane.setStyle(styleTab+",0)");
     }
 
     public void setModel(GCSModel model) {
