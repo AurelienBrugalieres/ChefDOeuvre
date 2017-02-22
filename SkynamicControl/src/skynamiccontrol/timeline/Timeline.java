@@ -17,7 +17,6 @@ import javafx.scene.input.*;
 import javafx.stage.Screen;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
-import skynamiccontrol.timeline.MissionBlock;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;

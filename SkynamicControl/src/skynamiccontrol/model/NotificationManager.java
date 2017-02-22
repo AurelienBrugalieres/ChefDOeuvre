@@ -8,9 +8,9 @@ import java.util.Observer;
 /**
  * Created by Elodie on 20/02/2017.
  */
-public class NotificationManager implements Observer{
+public class NotificationManager implements Observer {
 
-    // private StatusListController statusListController;
+
     private NotificationContainer notificationContainer;
     private GCSModel model;
 
@@ -22,7 +22,7 @@ public class NotificationManager implements Observer{
 
     }
 
-    public void setStatusListContainer(NotificationContainer notificationContainer) {
+    public void setNotificationContainer(NotificationContainer notificationContainer) {
         this.notificationContainer = notificationContainer;
     }
 

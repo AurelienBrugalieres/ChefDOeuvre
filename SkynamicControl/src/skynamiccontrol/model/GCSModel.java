@@ -4,7 +4,6 @@ import skynamiccontrol.timeline.Timeline;
 import skynamiccontrol.view.notifications.NotificationContainer;
 import skynamiccontrol.view.status.StatusListContainer;
 
-import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 /**
@@ -16,8 +15,6 @@ public class GCSModel extends Observable{
     private StatusManager statusManager;
     private TimelineManager timelineManager;
     private NotificationManager notificationManager;
-  /*  private final Map<EventType, Boolean> eventAvailability;
-    private final PropertyChangeSupport support;*/
 
     public GCSModel() {
         this.nb_aircraft = 0;
@@ -33,7 +30,6 @@ public class GCSModel extends Observable{
 
     public void addAircraft(Aircraft aircraft) {
         this.aircrafts.add(aircraft);
-        //aircraft.addPrivateObserver(this);
         statusManager.createView(aircraft);
         timelineManager.addAircraft(aircraft);
         notificationManager.createView(aircraft);
@@ -42,7 +38,7 @@ public class GCSModel extends Observable{
     }
 
     public void setNotificationManager(NotificationContainer notificationContainer) {
-        this.notificationManager.setStatusListContainer(notificationContainer);
+        this.notificationManager.setNotificationContainer(notificationContainer);
     }
     public void setStatusListContainer(StatusListContainer statusListContainer) {
         this.statusManager.setStatusListContainer(statusListContainer);
@@ -52,9 +48,4 @@ public class GCSModel extends Observable{
         this.timelineManager.setTimeline(timeline);
     }
 
-    /*
-    @Override
-    public void update(Observable o, Object arg) {
-        statusManager.updateView((Aircraft)o);
-    }*/
 }

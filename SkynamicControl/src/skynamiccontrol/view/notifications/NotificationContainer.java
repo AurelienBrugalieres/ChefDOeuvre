@@ -9,13 +9,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import skynamiccontrol.model.Aircraft;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +32,9 @@ public class NotificationContainer extends Parent {
         this.aircrafts = new ArrayList<>();
         this.tab_pane = new HashMap<>();
         this.tabPane = new TabPane();
+        this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         this.tabPane.getStylesheets().add("skynamiccontrol/view/notifications/pane.css");
+        this.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
         this.getChildren().add(this.tabPane);
     }
 
@@ -56,6 +55,7 @@ public class NotificationContainer extends Parent {
         scrollPane.setContent(vbox);
 
         BorderPane borderPane = new BorderPane();
+        borderPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-padding: 30;");
         HBox hBox = new HBox();
 
         javafx.scene.control.TextField searchField= new TextField();

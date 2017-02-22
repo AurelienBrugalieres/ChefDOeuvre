@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import skynamiccontrol.core.StatusStateMachine;
 import skynamiccontrol.model.Aircraft;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +37,12 @@ public class StatusListContainer extends Parent {
 
     public StatusListContainer() {
 
+        Color color = Color.decode("#E1E5FF");
         vbox = new VBox();
         vbox.setPadding(new Insets(PADDING,PADDING,PADDING,PADDING));
-        vbox.setStyle("-fx-background-color: #E1E5FF; -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
+        vbox.setStyle("-fx-background-color: rgba("+color.getRed()+","+color.getGreen()+","+color.getBlue()+",0.7); -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), FONT_SIZE_BODY);
         this.setStyle("-fx-font-family: OpenSans-Regular;");
-        Text title = new Text("Drones' Status");
-        title.setStyle("-fx-font-family: OpenSans-Regular; -fx-font-size: 20;");
-        vbox.getChildren().add(title);
         status = new ArrayList<>();
         statusStateMachine = new StatusStateMachine(status);
         this.getChildren().add(new Group(vbox));
