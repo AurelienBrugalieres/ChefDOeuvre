@@ -13,15 +13,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import skynamiccontrol.model.Aircraft;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Elodie on 20/02/2017.
  */
-public class NotificationContainer extends Parent {
+public class NotificationContainer extends Parent implements Observer{
 
     private List<Aircraft> aircrafts;
 
@@ -78,6 +75,7 @@ public class NotificationContainer extends Parent {
         this.tabPane.getTabs().add(tab);
         ((BorderPane)tab.getContent()).setStyle(styleTab);
         ((ScrollPane)((BorderPane)tab.getContent()).getCenter()).getContent().setStyle(styleTab);
+        air.addPrivateObserver(this);
         this.tab_pane.put(air,scrollPane);
     }
 
@@ -142,5 +140,10 @@ public class NotificationContainer extends Parent {
 
     public double getWidth() {
         return tabPane.getWidth();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

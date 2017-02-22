@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -45,7 +46,8 @@ public class Controller implements Initializable{
         borderPane.setPrefSize(800.0,1000.0);
 
         pane_timeline_palette = new HBox();
-        borderPane.setBottom(pane_timeline_palette);
+        pane_timeline_palette.setBackground(Background.EMPTY);
+       // borderPane.setBottom(pane_timeline_palette);
 
 
 

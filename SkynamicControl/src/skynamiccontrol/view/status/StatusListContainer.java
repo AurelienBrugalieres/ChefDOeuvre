@@ -5,9 +5,10 @@ package skynamiccontrol.view.status;/**
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -41,6 +42,36 @@ public class StatusListContainer extends Parent {
         vbox = new VBox();
         vbox.setPadding(new Insets(PADDING,PADDING,PADDING,PADDING));
         vbox.setStyle("-fx-background-color: rgba("+color.getRed()+","+color.getGreen()+","+color.getBlue()+",0.7); -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
+        final Point dragDelta = new Point();
+        vbox.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                // record a delta distance for the drag and drop operation.
+                dragDelta.x = (int)( vbox.getLayoutX() - mouseEvent.getSceneX());
+                dragDelta.y = (int) (vbox.getLayoutY() - mouseEvent.getSceneY());
+                vbox.setCursor(Cursor.MOVE);
+            }
+        });
+        vbox.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                vbox.setCursor(Cursor.HAND);
+            }
+        });
+        vbox.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                vbox.setLayoutX(mouseEvent.getSceneX() + dragDelta.x);
+                vbox.setLayoutY(mouseEvent.getSceneY() + dragDelta.y);
+            }
+        });
+        vbox.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                vbox.setCursor(Cursor.HAND);
+            }
+        });
+
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), FONT_SIZE_BODY);
         this.setStyle("-fx-font-family: OpenSans-Regular;");
         status = new ArrayList<>();
