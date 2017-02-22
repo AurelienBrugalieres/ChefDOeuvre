@@ -1,35 +1,54 @@
 package skynamiccontrol.model;
 
-import javafx.beans.InvalidationListener;
+import skynamiccontrol.communication.IncomeMessage;
+import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.mission.MissionManager;
 
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 /**
  * Created by fabien on 13/02/17.
  */
-public class Aircraft extends Observable{
-
+public class Aircraft extends Observable implements Observer{
     public final static String AIRCRAFT_STATUS_PROPERTY = "aircraft_status";
     private double maxBatteryVoltage;
     private double minBatteryVoltage;
     private int id;
     private String name;
     private MissionManager missionManager;
-    private double batteryLevel;
-    private double altitude;
-    private double speed;
-    private Status current_status;
     private Color color;
 
-   // private List<Observer> observers;
+
+    ////Flight parameters
+    private double roll;
+    private double pitch;
+    private double heading;
+    private double latitude;
+    private double longitude;
+    private double speed;
+    private double course;
+    private double altitude;
+    private double agl;
+    private double climb;
+    private double airspeed;
+
+    private double throttle;
+    private int flightTime;
+    private double batteryLevel;
+    private String status;
+    private String gpsMode;
+
+    private int apStatusMsgId;
+    private int engineStatusMsgId;
+    private int flightParamsMsgId;
+
+
+    // private List<Observer> observers;
 
     public Aircraft() {
        // this.observers = new ArrayList<>();
@@ -45,19 +64,16 @@ public class Aircraft extends Observable{
         this.batteryLevel = maxBatteryVoltage;
         this.altitude = 0;
         this.speed = 0;
-        this.current_status = Status.AUTO;
+        this.status = "AUTO1";
         this.color = Color.decode(Constants.DEFAULT_AIRCRAFT_COLOR);
-    }
 
-    public Aircraft(int id, String name, double batteryLevel, double altitude, double speed, Status current_status, Color color_aircraft) {
-      //  this.observers = new ArrayList<>();
-        this.id = id;
-        this.name = name;
-        this.batteryLevel = batteryLevel;
-        this.altitude = altitude;
-        this.speed = speed;
-        this.current_status = current_status;
-        this.color = color_aircraft;
+        //FLIGHT_PARAM ac_id roll pitch heading lat long speed course alt climb agl unix_time itow airspeed
+        flightParamsMsgId = IvyManager.getInstance().registerRegex("ground FLIGHT_PARAM " + id + " (.*)");
+        //ENGINE_STATUS ac_id throttle throttle_accu rpm temp bat amp energy
+        engineStatusMsgId = IvyManager.getInstance().registerRegex("ground ENGINE_STATUS " + id + " (.*) (.*) (.*) (.*) (.*) (.*) (.*)");
+        //AP_STATUS ac_id ap_mode lat_mode horiz_mode gaz_mode gps_mode kill_mode flight_time state_filter_mode
+        apStatusMsgId = IvyManager.getInstance().registerRegex("ground AP_STATUS " + id + " (.*) (.*) (.*) (.*) (.*) (.*) (.*) (.*)");
+        IvyManager.getInstance().addObserver(this);
     }
 
     public Color getColor() {
@@ -130,12 +146,12 @@ public class Aircraft extends Observable{
         notifyObservers();
     }
 
-    public Status getCurrent_status() {
-        return current_status;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCurrent_status(Status current_status) {
-        this.current_status = current_status;
+    public void setStatus(String status) {
+        this.status = status;
         notifyObservers();
     }
 
@@ -149,6 +165,14 @@ public class Aircraft extends Observable{
 
     public double getBatteryPercentage() {
         return (batteryLevel - minBatteryVoltage)/(maxBatteryVoltage - minBatteryVoltage);
+    }
+
+    public double getThrottle() {
+        return throttle;
+    }
+
+    public int getFlightTime() {
+        return flightTime;
     }
 
     @SuppressWarnings("Duplicates")
@@ -203,4 +227,51 @@ public class Aircraft extends Observable{
 
             return aircraft;
         }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if(o instanceof IncomeMessage) {
+            IncomeMessage incomeMessage = (IncomeMessage)o;
+            String[] strs = incomeMessage.getPayload();
+            int msgId = incomeMessage.getId();
+            if(msgId== apStatusMsgId) {
+                //ap_mode lat_mode horiz_mode gaz_mode gps_mode kill_mode flight_time state_filter_mode
+                status = strs[0];
+                gpsMode = strs[4];
+                flightTime = Integer.parseInt(strs[6]);
+                setChanged();
+                notifyObservers(AircraftChange.STATUS);
+            } else if (msgId == engineStatusMsgId) {
+                //throttle throttle_accu rpm temp bat amp energy
+                throttle = Double.parseDouble(strs[0]);
+                batteryLevel = Double.parseDouble(strs[4]);
+                setChanged();
+                notifyObservers(AircraftChange.BAT);
+            } else if (msgId == flightParamsMsgId) {
+                //11.883718 1.123226 198.300979 43.462915 1.274396 12.670000 198.7 260.997925 -0.030000 75.997925 1487725470.567468 263086240 12.700000
+                //roll pitch heading lat long speed course alt climb agl unix_time itow airspeed
+                String[] params = strs[0].split(" ");
+                roll = Double.parseDouble(params[0]);
+                pitch = Double.parseDouble(params[1]);
+                heading = Double.parseDouble(params[2]);
+                latitude = Double.parseDouble(params[3]);
+                longitude = Double.parseDouble(params[4]);
+                speed = Double.parseDouble(params[5]);
+                course = Double.parseDouble(params[6]);
+                altitude = Double.parseDouble(params[7]);
+                climb = Double.parseDouble(params[8]);
+                agl = Double.parseDouble(params[9]);
+                airspeed = Double.parseDouble(params[10]);
+
+                setChanged();
+                notifyObservers(AircraftChange.FLIGHT_PARAMS);
+            }
+        }
+    }
+
+    public enum AircraftChange {
+        BAT,
+        FLIGHT_PARAMS,
+        STATUS
+    }
 }

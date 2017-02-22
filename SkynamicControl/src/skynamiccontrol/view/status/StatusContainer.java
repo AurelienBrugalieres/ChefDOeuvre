@@ -83,7 +83,7 @@ public class StatusContainer extends Parent implements Observer {
         speed = new Text(String.valueOf(air.getSpeed()));
 
 
-        status = new Text(String.valueOf(air.getCurrent_status()));
+        status = new Text(air.getStatus());
 
         setBatteryImage();
         batterie_image.setSmooth(true);
@@ -142,9 +142,9 @@ public class StatusContainer extends Parent implements Observer {
     public void update(Observable o, Object arg) {
         this.altitude.setText(String.valueOf(aircraft.getAltitude()));
         this.speed.setText(String.valueOf(aircraft.getSpeed()));
-        this.status.setText(String.valueOf(aircraft.getCurrent_status()));
-        System.out.println("update");
-        System.out.println(aircraft.getCurrent_status());
+        this.status.setText(String.valueOf(aircraft.getStatus()));
+        //System.out.println("update");
+        //System.out.println(aircraft.getStatus());
         setBatteryImage();
     }
 
