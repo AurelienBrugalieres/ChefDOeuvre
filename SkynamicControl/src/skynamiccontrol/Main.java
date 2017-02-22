@@ -55,7 +55,7 @@ public class Main extends Application {
         }));
 
       primaryStage.heightProperty().addListener(((observable, oldValue, newValue) -> {
-            controller.getPane_timeline_palette().setTranslateX(Screen.getPrimary().getVisualBounds().getWidth()-56);
+          //  controller.getPane_timeline_palette().setTranslateX(Screen.getPrimary().getVisualBounds().getWidth()-56);
             controller.getPane_timeline_palette().setTranslateY(Screen.getPrimary().getVisualBounds().getHeight()-252);//(double) newValue - (controller.getPaletteController().getHeigth()+27));
         }));
 
