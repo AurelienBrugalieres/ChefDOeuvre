@@ -8,11 +8,10 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import skynamiccontrol.map.Map;
 import skynamiccontrol.timeline.Timeline;
 import skynamiccontrol.model.GCSModel;
 
-import skynamiccontrol.view.map.MapController;
-import skynamiccontrol.view.map.events.MapListener;
 import skynamiccontrol.view.notifications.NotificationContainer;
 import skynamiccontrol.view.palette.PaletteController;
 import skynamiccontrol.view.status.StatusListContainer;
@@ -31,9 +30,6 @@ public class Controller implements Initializable{
 
     private NotificationContainer notificationContainer;
 
-    private MapController mapController = null;
-    private MapListener mapListener = null;
-
     private Timeline timelineController = null;
     private HBox pane_timeline_palette;
 
@@ -51,16 +47,11 @@ public class Controller implements Initializable{
 
 
 
-         /* test */
         //Aircraft aircraft = new Aircraft(1, "microJet", 80.0, 102.0, 30.0, Status.AUTO, Color.decode("#8EF183"));
 
         statusListContainer = new StatusListContainer();
         notificationContainer = new NotificationContainer();
         notificationContainer.setTranslateX(borderPane.getWidth());
-
-
-        // initialize map
-        initMapPane();
 
         //intialize timeline
         initTimeline();
@@ -76,35 +67,9 @@ public class Controller implements Initializable{
 
     }
 
-    /**
-     * Set a map listener to handle map events
-     * @param listener the map event listener
-     */
-    public void setMapListener(MapListener listener) {
-        this.mapListener = listener;
-        if (mapController != null) {
-            mapController.setMapListener(mapListener);
-        }
-    }
-
-    /**
-     * Initialize the map on the interface
-     */
-    private void initMapPane() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/map/Map.fxml"));
-        mapController = loader.getController();
-        if (mapController == null) {
-            mapController = new MapController();
-            loader.setController(mapController);
-        }
-        if (mapListener != null) {
-            mapController.setMapListener(mapListener);
-        }
-        try {
-            borderPane.setCenter(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void addMap(Map map) {
+        borderPane.getChildren().add(map);
+        map.toBack();
     }
 
     /**
@@ -125,36 +90,6 @@ public class Controller implements Initializable{
             paletteController = new PaletteController();
             loader.setController(paletteController);
         }
-        paletteController.setPaletteListener(new PaletteController.PaletteListener() {
-            @Override
-            public void onWaypointButtonClick() {
-                if (mapController != null) {
-                    mapController.activeMarkerOption();
-                }
-            }
-
-            @Override
-            public void onPathButtonClick() {
-                if (mapController != null) {
-                    mapController.activePathOption();
-                }
-            }
-
-            @Override
-            public void onGoToButtonClick() {
-                if (mapController != null) {
-                    mapController.activeGoToOption();
-                }
-            }
-
-            @Override
-            public void onCircleButtonClick() {
-                if (mapController != null) {
-                    mapController.activeCircleOption();
-                }
-            }
-        });
-
 
     }
 
@@ -189,9 +124,6 @@ public class Controller implements Initializable{
         this.timelineController.setModel(model);
     }
 
-    public MapController getMapController() {
-        return mapController;
-    }
 
     public NotificationContainer getNotificationContainer() {
         return notificationContainer;
