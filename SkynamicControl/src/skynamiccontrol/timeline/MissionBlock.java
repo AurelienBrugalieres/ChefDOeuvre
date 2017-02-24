@@ -104,9 +104,9 @@ public class MissionBlock implements Initializable {
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                             case RUNNING:
-                                rect = new Rectangle(120,30,new javafx.scene.paint.Color(aircraft.getColor().getRed(),
-                                        aircraft.getColor().getGreen(),
-                                        aircraft.getColor().getBlue(),1));
+                                rect = new Rectangle(120,30,new javafx.scene.paint.Color(aircraft.getColor().getRed() / 255.0,
+                                        aircraft.getColor().getGreen() / 255.0,
+                                        aircraft.getColor().getBlue() / 255.0,1));
                                 setLayoutStackPane(sp,x,yi);
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;

@@ -75,6 +75,7 @@ public class Main extends Application {
         aircraft2.setColor(Color.decode("#94B7EA"));
         aircraft2.setBatteryLevel(13.1);
         Instruction instruction = new Circle(new Waypoint(43.46295742217676,1.2733787298202515,125,  Waypoint.CoordinateSystem.LOCAL),25);
+        instruction.setInsertMode(Instruction.InsertMode.APPEND);
         aircraft.getMissionManager().addInstruction(instruction);
 
         model.addAircraft(aircraft);
