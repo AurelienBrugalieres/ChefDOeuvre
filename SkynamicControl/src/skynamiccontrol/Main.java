@@ -11,6 +11,11 @@ import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.Constants;
 import skynamiccontrol.model.GCSModel;
+import skynamiccontrol.model.Waypoint;
+import skynamiccontrol.model.mission.Circle;
+import skynamiccontrol.model.mission.Instruction;
+import skynamiccontrol.model.mission.Path;
+import skynamiccontrol.model.mission.Survey;
 import skynamiccontrol.view.map.events.MapAdapter;
 import skynamiccontrol.view.map.events.MapEvent;
 
@@ -69,6 +74,8 @@ public class Main extends Application {
         Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/ardrone2.conf");
         aircraft2.setColor(Color.decode("#94B7EA"));
         aircraft2.setBatteryLevel(13.1);
+        Instruction instruction = new Circle(new Waypoint(43.46295742217676,1.2733787298202515,125,  Waypoint.CoordinateSystem.LOCAL),25);
+        aircraft.getMissionManager().addInstruction(instruction);
 
         model.addAircraft(aircraft);
         model.addAircraft(aircraft2);

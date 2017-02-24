@@ -118,17 +118,17 @@ public class MissionBlock implements Initializable {
                                 break;
                         }
                         x += 120;
-                        String backgroundColor = "("+aircraft.getColor().getRed()+","+
-                                aircraft.getColor().getGreen()+","+
-                                aircraft.getColor().getBlue();
-                        String styleTab = "-fx-background-color: rgba"+backgroundColor;
-                        pane.setStyle(styleTab+",0.7)");
                         pane.getChildren().add(sp);
                     }
                 }
             }
+            String backgroundColor = "("+aircraft.getColor().getRed()+","+
+                    aircraft.getColor().getGreen()+","+
+                    aircraft.getColor().getBlue();
+            String styleTab = "-fx-background-color: rgba"+backgroundColor;
+            pane.setStyle(styleTab+",0.7)");
         }
-        if (aircraft.getName().equals("Microjet")) {
+       /* if (aircraft.getName().equals("Microjet")) {
             // Adding Instructions on the timeline ( TEST SECTION )
             Rectangle rect = new Rectangle(120, 30, Color.BLUEVIOLET);
             rect.setStroke(Color.BLACK);
@@ -145,7 +145,7 @@ public class MissionBlock implements Initializable {
             pane.setStyle(styleTab+",0.7)");
             pane.getChildren().add(s);
             pane.getChildren().add(new Rectangle(x + 50, y - (500 * 0.244), 50, 20));
-        }
+        }*/
     }
 
 
