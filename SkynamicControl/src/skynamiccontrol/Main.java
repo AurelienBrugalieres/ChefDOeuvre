@@ -4,13 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import skynamiccontrol.communication.IvyManager;
-import skynamiccontrol.map.GPSCoordinate;
 import skynamiccontrol.map.Map;
+import skynamiccontrol.map.GPSCoordinate;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.Constants;
 import skynamiccontrol.model.GCSModel;
@@ -43,7 +41,9 @@ public class Main extends Application {
         //Access to controller
         controller = loader.getController();
 
-        Map map = new Map(new GPSCoordinate(43.465,1.268), 18);
+        Map map = new Map(19);
+        map.setCoordinates(new GPSCoordinate(43.465,1.268));
+        map.setZoomLevel(16);
 
 
 

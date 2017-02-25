@@ -1,21 +1,29 @@
 package skynamiccontrol.map;
+
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 
-public class Map extends StackPane {
-    private int zoom = 12;
-    private BackMap backMap;
+import java.util.ArrayList;
+
+/**
+ * Created by fabien on 25/02/17.
+ */
+public class Map extends StackPane{
+    private ArrayList<MapZoomLayer> zoomLayers;
+    int currentZoom;
     double x, y;
     double width, height;
 
-    public Map(GPSCoordinate gpsCoordinate, int zoom) {
-        super();
-        backMap = new BackMap();
-        this.zoom = zoom;
-        this.getChildren().add(backMap);
-        this.setTranslateX(0);
-        this.setTranslateY(0);
-        setCoordinates(gpsCoordinate, zoom);
+    public Map(int zoomLevelsNumber) {
+        this.zoomLayers = new ArrayList<>();
+        for (int i = 0; i < zoomLevelsNumber; i++) {
+            MapZoomLayer layer = new MapZoomLayer(i);
+            this.zoomLayers.add(layer);
+            this.getChildren().add(layer);
+            layer.setTranslateX(0);
+            layer.setTranslateY(0);
+        }
 
 
         this.addEventHandler(MouseEvent.MOUSE_PRESSED ,(e) -> {
@@ -28,9 +36,28 @@ public class Map extends StackPane {
             this.setTranslateY(this.getTranslateY() + e.getY() - y);
         });
 
+        this.addEventHandler(ScrollEvent.SCROLL, (e) -> {
+
+            System.out.println(e.getDeltaX());
+        });
+
         this.addEventHandler(MouseEvent.MOUSE_RELEASED ,(e) -> this.pave());
 
     }
+
+    public void setZoomLevel(int zoom) {
+        double factor = Math.pow(2, zoom - this.currentZoom);
+        this.setTranslateX(this.getTranslateX() * factor);
+        this.setTranslateY(this.getTranslateY() * factor);
+        this.currentZoom = zoom;
+    }
+
+    public void setCoordinates(GPSCoordinate gpsCoordinate) {
+        XYZCoordinate xyzCoordinate = gpsCoordinate.toXYCoordinates(currentZoom);
+        this.setTranslateX(-xyzCoordinate.getX() * BackMapLayer.TILE_DIMENSION);
+        this.setTranslateY(-xyzCoordinate.getY() * BackMapLayer.TILE_DIMENSION);
+    }
+
 
     public void pave() {
         if(width == Double.NaN || height == Double.NaN) {
@@ -39,19 +66,8 @@ public class Map extends StackPane {
         }
         double xMin = -this.getTranslateX();
         double yMin = -this.getTranslateY();
-        backMap.paveZone(xMin, yMin, xMin + width, yMin + height, this.zoom);
+        zoomLayers.get(currentZoom).getBackMapLayer().paveZone(xMin, yMin, xMin + width, yMin + height);
     }
-
-    public void setCoordinates(GPSCoordinate gpsCoordinate, int zoom) {
-        setCoordinates(gpsCoordinate.toXYCoordinates(zoom));
-    }
-
-    public void setCoordinates(XYZCoordinate xyzCoordinate) {
-        this.zoom = xyzCoordinate.getZoom();
-        this.setTranslateX(-xyzCoordinate.getX() * backMap.TILE_DIMENSION);
-        this.setTranslateY(-xyzCoordinate.getY() * backMap.TILE_DIMENSION);
-    }
-
 
     public void setStageWidth(double stageWidth) {
         this.width = stageWidth;

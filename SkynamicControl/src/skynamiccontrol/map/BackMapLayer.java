@@ -12,21 +12,21 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by fabien on 23/02/17.
  */
-public class BackMap extends Pane{
-    public int TILE_DIMENSION = 256;
+public class BackMapLayer extends Pane{
+    public static int TILE_DIMENSION = 256;
     private static int GOOGLE_VERSION = 716;
-    private ArrayList<QuadTree> imageTrees;
+    private QuadTree imageTree;
+    private int zoom;
     private String DIRECTORY = "pictures/";
 
-    public BackMap() {
+    public BackMapLayer(int zoom) {
         super();
-        imageTrees = new ArrayList<>(Collections.nCopies(19, null));
+        this.zoom = zoom;
+        imageTree = new QuadTree(0, 0, Math.pow(2, zoom), Math.pow(2, zoom));
 
         File pictureDirectory = new File( DIRECTORY);
         if(!pictureDirectory.exists()) {
@@ -39,7 +39,7 @@ public class BackMap extends Pane{
         }
     }
 
-    public void addTile(String filename, int x, int y) {
+    private void addTile(String filename, int x, int y) {
         File file = new File( filename);
         if(file.exists() && !file.isDirectory()) {
             ImageView tile = new ImageView(file.toURI().toString());
@@ -50,33 +50,9 @@ public class BackMap extends Pane{
         }
     }
 
-
-    public void requestTileGPS(double latitude, double longitude, int zoom) {
-        double z = 1<<zoom;
-        double tx = (longitude+180)/360.0;
-        double latrad = latitude * Math.PI / 180.0;
-        double ty = 0.5 - (0.5/Math.PI)*Math.log(Math.tan(latrad) + 1.0/Math.cos(latrad));
-        int X = (int)(tx * z);
-        int Y = (int)(ty * z);
-        //double resX = tx*z - X;
-        //double resY = ty*z - Y;
-        System.out.println(X);
-        System.out.println(Y);
-        System.out.println(zoom);
-        requestTile(X, Y, zoom);
-    }
-
-    public void requestTile(int X, int Y, int zoom) {
-        QuadTree quadTree = imageTrees.get(zoom);
-        if(quadTree == null) {
-            quadTree = new QuadTree(0, 0, 10000, 100000);
-            imageTrees.set(zoom, quadTree);
-        }
-
-
+    private void requestTile(int X, int Y, int zoom) {
         //Is the image in memory ?
-        quadTree = imageTrees.get(zoom);
-        if (quadTree.contains(X, Y)) {
+        if (imageTree.contains(X, Y)) {
             return;
         }
 
@@ -93,12 +69,11 @@ public class BackMap extends Pane{
         String url = String.format("http://khm0.google.com/kh/v=%d&x=%d&s=&y=%d&z=%d", GOOGLE_VERSION, X, Y, zoom);
         //String url = "http://tile.openstreetmap.org/" + zoom + "/" + X + "/" + Y + ".png";
         downloadAsync(url, filename, X, Y, zoom);
-        return;
     }
 
 
 
-    void downloadAsync(String sourceUrl, String filename, int X, int Y, int zoom) {
+    private void downloadAsync(String sourceUrl, String filename, int X, int Y, int zoom) {
         Thread download = new Thread(()->{
             URL url= null;
             try {
@@ -122,7 +97,7 @@ public class BackMap extends Pane{
     }
 
 
-    void downloadFromUrl(URL url, String localFilename) throws IOException {
+    private void downloadFromUrl(URL url, String localFilename) throws IOException {
         InputStream is = null;
         FileOutputStream fos = null;
 
@@ -152,13 +127,12 @@ public class BackMap extends Pane{
         }
     }
 
-    public void paveZone(double xMin, double yMin, double xMax, double yMax, int zoom) {
+    public void paveZone(double xMin, double yMin, double xMax, double yMax) {
         double x0 = xMin/TILE_DIMENSION;
         double y0 = yMin/TILE_DIMENSION;
         double xend = xMax/TILE_DIMENSION;
         double yend = yMax/TILE_DIMENSION;
 
-        QuadTree quadTree = imageTrees.get(zoom);
         for(int x=(int)x0; x<(int)xend+1; x++) {
             for(int y=(int)y0; y<(int)yend+1; y++) {
                 requestTile(x, y, zoom);
