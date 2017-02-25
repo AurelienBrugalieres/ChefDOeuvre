@@ -99,7 +99,11 @@ public class Controller implements Initializable{
             @Override
             public void onWaypointButtonClick() {
                 if (map != null) {
-                    PaletteEvent event = new PaletteEvent(PaletteEventType.WAYPOINT);
+                    PaletteEvent event;
+                    if (!paletteController.isPaletteActive())
+                        event = new PaletteEvent(PaletteEventType.NO_ACTION);
+                    else
+                        event = new PaletteEvent(PaletteEventType.WAYPOINT);
                     map.handleEvent(event);
                 }
             }
@@ -107,7 +111,11 @@ public class Controller implements Initializable{
             @Override
             public void onPathButtonClick() {
                 if (map != null) {
-                    PaletteEvent event = new PaletteEvent(PaletteEventType.PATH);
+                    PaletteEvent event;
+                    if (!paletteController.isPaletteActive())
+                        event = new PaletteEvent(PaletteEventType.NO_ACTION);
+                    else
+                        event = new PaletteEvent(PaletteEventType.PATH);
                     map.handleEvent(event);
                 }
             }
@@ -115,7 +123,11 @@ public class Controller implements Initializable{
             @Override
             public void onGoToButtonClick() {
                 if (map != null) {
-                    PaletteEvent event = new PaletteEvent(PaletteEventType.GOTO);
+                    PaletteEvent event;
+                    if (!paletteController.isPaletteActive())
+                        event = new PaletteEvent(PaletteEventType.NO_ACTION);
+                    else
+                        event = new PaletteEvent(PaletteEventType.GOTO);
                     map.handleEvent(event);
                 }
             }
@@ -123,7 +135,11 @@ public class Controller implements Initializable{
             @Override
             public void onCircleButtonClick() {
                 if (map != null) {
-                    PaletteEvent event = new PaletteEvent(PaletteEventType.CIRCLE);
+                    PaletteEvent event;
+                    if (!paletteController.isPaletteActive())
+                        event = new PaletteEvent(PaletteEventType.NO_ACTION);
+                    else
+                        event = new PaletteEvent(PaletteEventType.CIRCLE);
                     map.handleEvent(event);
                 }
             }
