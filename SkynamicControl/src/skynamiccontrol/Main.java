@@ -41,9 +41,8 @@ public class Main extends Application {
         //Access to controller
         controller = loader.getController();
 
-        Map map = new Map(19);
-        map.setCoordinates(new GPSCoordinate(43.465,1.268));
-        map.setZoomLevel(16);
+        Map map = new Map(20);
+
 
 
 
@@ -84,13 +83,16 @@ public class Main extends Application {
         map.pave();
         controller.addMap(map);
         primaryStage.setTitle("Skynamic Control");
-        Scene scene = new Scene(root, 300, 275);
+        Scene scene = new Scene(root, 800, 500);
 
        // scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
        // primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setScene(scene);
         map.pave();
         primaryStage.show();
+        map.setZoomLevel(18);
+        map.setCoordinates(new GPSCoordinate(43.462344, 1.273044));
+
     }
 
     @Override

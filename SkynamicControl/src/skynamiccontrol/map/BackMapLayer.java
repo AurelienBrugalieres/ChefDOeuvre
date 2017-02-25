@@ -1,6 +1,7 @@
 package skynamiccontrol.map;
 
 import javafx.application.Platform;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import skynamiccontrol.quadtree.QuadTree;
@@ -13,6 +14,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static com.sun.javafx.util.Utils.clamp;
+
 /**
  * Created by fabien on 23/02/17.
  */
@@ -22,6 +25,7 @@ public class BackMapLayer extends Pane{
     private QuadTree imageTree;
     private int zoom;
     private String DIRECTORY = "pictures/";
+    private Image noMap;
 
     public BackMapLayer(int zoom) {
         super();
@@ -37,6 +41,12 @@ public class BackMapLayer extends Pane{
                 System.out.println("Security exception !!!");
             }
         }
+
+        File file = new File( "SkynamicControl/src/resources/bitmaps/nomap.png");
+        if(file.exists() && !file.isDirectory()) {
+            noMap = new Image(file.toURI().toString());
+        }
+
     }
 
     private void addTile(String filename, int x, int y) {
@@ -44,10 +54,18 @@ public class BackMapLayer extends Pane{
         if(file.exists() && !file.isDirectory()) {
             ImageView tile = new ImageView(file.toURI().toString());
             this.getChildren().add(tile);
-
+            imageTree.set(x, y, tile);
             tile.setTranslateX(x * TILE_DIMENSION);
             tile.setTranslateY(y * TILE_DIMENSION);
         }
+    }
+
+    private void setNoTile(int x, int y) {
+        ImageView noTile = new ImageView(noMap);
+        this.getChildren().add(noTile);
+        imageTree.set(x, y, noTile);
+        noTile.setTranslateX(x * TILE_DIMENSION);
+        noTile.setTranslateY(y * TILE_DIMENSION);
     }
 
     private void requestTile(int X, int Y, int zoom) {
@@ -55,6 +73,8 @@ public class BackMapLayer extends Pane{
         if (imageTree.contains(X, Y)) {
             return;
         }
+
+        setNoTile(X, Y);
 
         //Is the image in local directory ?
         String filename = String.format("%s%d,%d,%d",DIRECTORY , zoom, X, Y);
@@ -74,6 +94,7 @@ public class BackMapLayer extends Pane{
 
 
     private void downloadAsync(String sourceUrl, String filename, int X, int Y, int zoom) {
+        System.out.println(sourceUrl);
         Thread download = new Thread(()->{
             URL url= null;
             try {
@@ -128,13 +149,13 @@ public class BackMapLayer extends Pane{
     }
 
     public void paveZone(double xMin, double yMin, double xMax, double yMax) {
-        double x0 = xMin/TILE_DIMENSION;
-        double y0 = yMin/TILE_DIMENSION;
-        double xend = xMax/TILE_DIMENSION;
-        double yend = yMax/TILE_DIMENSION;
+        int x0 = clamp(0,(int) xMin/TILE_DIMENSION, (int)Math.pow(2, zoom));
+        int y0 = clamp(0,(int) yMin/TILE_DIMENSION, (int)Math.pow(2, zoom));
+        int xend = clamp(0,(int) xMax/TILE_DIMENSION, (int)Math.pow(2, zoom));
+        int yend = clamp(0,(int) yMax/TILE_DIMENSION, (int)Math.pow(2, zoom));
 
-        for(int x=(int)x0; x<(int)xend+1; x++) {
-            for(int y=(int)y0; y<(int)yend+1; y++) {
+        for(int x=x0; x<xend+1; x++) {
+            for(int y=y0; y<yend+1; y++) {
                 requestTile(x, y, zoom);
             }
         }
