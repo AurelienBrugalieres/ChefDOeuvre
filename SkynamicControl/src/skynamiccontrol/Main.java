@@ -82,7 +82,7 @@ public class Main extends Application {
             primaryStage.setMaximized(true);
         }
         map.pave();
-        controller.addMap(map);
+        controller.setMap(map);
         primaryStage.setTitle("Skynamic Control");
         Scene scene = new Scene(root, 300, 275);
 

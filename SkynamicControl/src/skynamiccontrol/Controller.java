@@ -9,6 +9,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import skynamiccontrol.map.Map;
+import skynamiccontrol.view.palette.PaletteEvent;
+import skynamiccontrol.view.palette.PaletteEventType;
 import skynamiccontrol.timeline.Timeline;
 import skynamiccontrol.model.GCSModel;
 
@@ -34,6 +36,8 @@ public class Controller implements Initializable{
     private HBox pane_timeline_palette;
 
     private PaletteController paletteController = null;
+
+    private Map map = null;
 
 
     @Override
@@ -67,7 +71,8 @@ public class Controller implements Initializable{
 
     }
 
-    public void addMap(Map map) {
+    public void setMap(Map map) {
+        this.map = map;
         borderPane.getChildren().add(map);
         map.toBack();
     }
@@ -90,6 +95,39 @@ public class Controller implements Initializable{
             paletteController = new PaletteController();
             loader.setController(paletteController);
         }
+        paletteController.setPaletteListener(new PaletteController.PaletteListener() {
+            @Override
+            public void onWaypointButtonClick() {
+                if (map != null) {
+                    PaletteEvent event = new PaletteEvent(PaletteEventType.WAYPOINT);
+                    map.handleEvent(event);
+                }
+            }
+
+            @Override
+            public void onPathButtonClick() {
+                if (map != null) {
+                    PaletteEvent event = new PaletteEvent(PaletteEventType.PATH);
+                    map.handleEvent(event);
+                }
+            }
+
+            @Override
+            public void onGoToButtonClick() {
+                if (map != null) {
+                    PaletteEvent event = new PaletteEvent(PaletteEventType.GOTO);
+                    map.handleEvent(event);
+                }
+            }
+
+            @Override
+            public void onCircleButtonClick() {
+                if (map != null) {
+                    PaletteEvent event = new PaletteEvent(PaletteEventType.CIRCLE);
+                    map.handleEvent(event);
+                }
+            }
+        });
 
     }
 
