@@ -69,7 +69,7 @@ public class MissionBlock implements Initializable {
                         instructionTxt.setStroke(Color.WHITE);
                         switch(aircraft.getMissionManager().getPendingInstructions().get(i).getState()){
                             case NOT_SENT:
-                                rect = new Rectangle(120,20,new javafx.scene.paint.Color(aircraft.getColor().getRed(),
+                                rect = new Rectangle(120,20,myColor(aircraft.getColor().getRed(),
                                         aircraft.getColor().getGreen(),
                                         aircraft.getColor().getBlue(),0.5));
                                 rect.setStroke(Color.BLACK);
@@ -78,14 +78,14 @@ public class MissionBlock implements Initializable {
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                             case SENT:
-                                rect = new Rectangle(120,20,new javafx.scene.paint.Color(aircraft.getColor().getRed(),
+                                rect = new Rectangle(120,20,myColor(aircraft.getColor().getRed(),
                                         aircraft.getColor().getGreen(),
                                         aircraft.getColor().getBlue(),0.6));
                                 setLayoutStackPane(sp,x,yi);
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                             case ACKNOWLEDGED:
-                                rect = new Rectangle(120,20,new javafx.scene.paint.Color(aircraft.getColor().getRed(),
+                                rect = new Rectangle(120,20,myColor(aircraft.getColor().getRed(),
                                         aircraft.getColor().getGreen(),
                                         aircraft.getColor().getBlue(),0.8));
                                 setLayoutStackPane(sp,x,yi);
@@ -93,26 +93,26 @@ public class MissionBlock implements Initializable {
                                 break;
                             case ABORTED:
                                 // Red Color is generic to each aircraft for aborted instructions
-                                rect = new Rectangle(120,20,new javafx.scene.paint.Color(223,0,11,1));
+                                rect = new Rectangle(120,20,myColor(223,0,11,1));
                                 setLayoutStackPane(sp,x,yi);
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                             case CANCELED:
                                 // Gray Color is generic to each aircraft for canceled instructions
-                                rect = new Rectangle(120,20,new javafx.scene.paint.Color(191,191,191,1));
+                                rect = new Rectangle(120,20,myColor(191,191,191,1));
                                 setLayoutStackPane(sp,x,yi);
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                             case RUNNING:
-                                rect = new Rectangle(120,30,new javafx.scene.paint.Color(aircraft.getColor().getRed() / 255.0,
-                                        aircraft.getColor().getGreen() / 255.0,
-                                        aircraft.getColor().getBlue() / 255.0,1));
+                                rect = new Rectangle(120,30,myColor(aircraft.getColor().getRed(),
+                                        aircraft.getColor().getGreen(),
+                                        aircraft.getColor().getBlue(),1));
                                 setLayoutStackPane(sp,x,yi);
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
                             case DONE:
                                 // Gray Color is generic to each aircraft for finished instructions
-                                rect = new Rectangle(120,20,new javafx.scene.paint.Color(191,191,191,1));
+                                rect = new Rectangle(120,20,myColor(191,191,191,1));
                                 setLayoutStackPane(sp,x,yi);
                                 sp.getChildren().addAll(rect,instructionTxt);
                                 break;
@@ -122,12 +122,14 @@ public class MissionBlock implements Initializable {
                     }
                 }
             }
+            // coloring background of the tabContent according to UAV's color
             String backgroundColor = "("+aircraft.getColor().getRed()+","+
                     aircraft.getColor().getGreen()+","+
                     aircraft.getColor().getBlue();
             String styleTab = "-fx-background-color: rgba"+backgroundColor;
             pane.setStyle(styleTab+",0.7)");
         }
+
        /* if (aircraft.getName().equals("Microjet")) {
             // Adding Instructions on the timeline ( TEST SECTION )
             Rectangle rect = new Rectangle(120, 30, Color.BLUEVIOLET);
@@ -157,6 +159,10 @@ public class MissionBlock implements Initializable {
         sp.setLayoutX(x);
         sp.setLayoutY(y);
         return sp;
+    }
+
+    public Color myColor(double red, double green , double blue , double opacity){
+        return new Color(red/255.0,green/255.0,blue/255.0,opacity);
     }
 
 }
