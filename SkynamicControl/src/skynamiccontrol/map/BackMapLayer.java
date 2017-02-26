@@ -94,7 +94,6 @@ public class BackMapLayer extends Pane{
 
 
     private void downloadAsync(String sourceUrl, String filename, int X, int Y, int zoom) {
-        System.out.println(sourceUrl);
         Thread download = new Thread(()->{
             URL url= null;
             try {
