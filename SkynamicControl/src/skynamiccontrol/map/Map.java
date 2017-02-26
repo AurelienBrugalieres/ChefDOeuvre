@@ -3,6 +3,7 @@ package skynamiccontrol.map;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
+import skynamiccontrol.view.palette.PaletteEvent;
 
 import java.util.ArrayList;
 
@@ -19,8 +20,14 @@ public class Map extends StackPane{
     double x, y;
     double width, height;
 
+    private enum PossibleState {
+        IDLE, DRAW_CIRCLE, DRAW_PATH, DRAW_GO_TO, DRAW_WAYPOINT
+    }
+    private PossibleState currentState;
+
     public Map(int zoomLevelsNumber) {
         this.numberZoomLevels = zoomLevelsNumber;
+        currentState = PossibleState.IDLE;
         this.zoomLayers = new ArrayList<>();
         for (int i = 0; i < zoomLevelsNumber; i++) {
             MapZoomLayer layer = new MapZoomLayer(i);
@@ -32,13 +39,11 @@ public class Map extends StackPane{
 
 
         this.addEventHandler(MouseEvent.MOUSE_PRESSED ,(e) -> {
-            x = e.getX();
-            y = e.getY();
+            onMousePressed(e);
         });
 
         this.addEventHandler(MouseEvent.MOUSE_DRAGGED ,(e) -> {
-            this.setTranslateX(this.getTranslateX() + e.getX() - x);
-            this.setTranslateY(this.getTranslateY() + e.getY() - y);
+            onMouseDragged(e);
         });
 
         this.addEventHandler(ScrollEvent.SCROLL, (e) -> {
@@ -46,7 +51,6 @@ public class Map extends StackPane{
             if(e.getDeltaY() < 0) {
                 factor = 1/factor;
             }
-
             double scaleFactor = currentScaleFactor * factor;
 
             if (scaleFactor < 1 || scaleFactor > Math.pow(2, 23)) {
@@ -59,9 +63,12 @@ public class Map extends StackPane{
             this.setTranslateX(this.getTranslateX() + e.getSceneX());
             this.setTranslateY(this.getTranslateY() + e.getSceneY());
             pave();
+            onScrollMap(e);
         });
 
-        this.addEventHandler(MouseEvent.MOUSE_RELEASED ,(e) -> this.pave());
+        this.addEventHandler(MouseEvent.MOUSE_RELEASED ,(e) -> {
+            onMouseReleased(e);
+        });
 
     }
 
@@ -108,5 +115,88 @@ public class Map extends StackPane{
 
     public void setStageHeight(double stageHeight) {
         this.height = stageHeight;
+    }
+
+    private void translateMap(double dx, double dy) {
+        this.setTranslateX(this.getTranslateX() + dx);
+        this.setTranslateY(this.getTranslateY() + dy);
+    }
+
+    private void onMouseDragged(MouseEvent e) {
+        switch (currentState) {
+            case IDLE:
+                translateMap(e.getX()-x, e.getY()-y);
+                break;
+            case DRAW_CIRCLE:
+                break;
+            case DRAW_PATH:
+                break;
+            case DRAW_GO_TO:
+                break;
+            case DRAW_WAYPOINT:
+                break;
+        }
+    }
+
+    private void onMousePressed(MouseEvent e) {
+        switch (currentState) {
+            case IDLE:
+                x = e.getX();
+                y = e.getY();
+                break;
+            case DRAW_CIRCLE:
+                break;
+            case DRAW_PATH:
+                break;
+            case DRAW_GO_TO:
+                break;
+            case DRAW_WAYPOINT:
+                break;
+        }
+    }
+
+    private void onMouseReleased(MouseEvent e) {
+        switch (currentState) {
+            case IDLE:
+                this.pave();
+                break;
+            case DRAW_CIRCLE:
+                break;
+            case DRAW_PATH:
+                break;
+            case DRAW_GO_TO:
+                break;
+            case DRAW_WAYPOINT:
+                break;
+        }
+    }
+
+    private void onScrollMap(ScrollEvent e) {
+        System.out.println(e.getDeltaY());
+    }
+
+    private void goToState(PossibleState state) {
+        currentState = state;
+        System.out.println(currentState);
+    }
+
+    public void handleEvent(PaletteEvent event) {
+        switch (event.getEventType()) {
+            case NO_ACTION:
+                goToState(PossibleState.IDLE);
+                break;
+            case WAYPOINT:
+                goToState(PossibleState.DRAW_WAYPOINT);
+                break;
+            case CIRCLE:
+                goToState(PossibleState.DRAW_CIRCLE);
+                break;
+            case GOTO:
+                goToState(PossibleState.DRAW_GO_TO);
+                break;
+            case PATH:
+                goToState(PossibleState.DRAW_PATH);
+                break;
+        }
     }
 }

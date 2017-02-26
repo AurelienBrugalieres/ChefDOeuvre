@@ -86,8 +86,8 @@ public class BackMapLayer extends Pane{
         }
 
         //Download the image from the internet !
-        String url = String.format("http://khm0.google.com/kh/v=%d&x=%d&s=&y=%d&z=%d", GOOGLE_VERSION, X, Y, zoom);
-        //String url = "http://tile.openstreetmap.org/" + zoom + "/" + X + "/" + Y + ".png";
+        //String url = String.format("http://khm0.google.com/kh/v=%d&x=%d&s=&y=%d&z=%d", GOOGLE_VERSION, X, Y, zoom);
+        String url = "http://tile.openstreetmap.org/" + zoom + "/" + X + "/" + Y + ".png";
         downloadAsync(url, filename, X, Y, zoom);
     }
 

@@ -398,7 +398,7 @@ public class MissionManager implements Observer{
             if(travelingInstruction != null){       //last instruction sent not yet acknowledged
                 timeSinceSent += Constants.DELAY_BETWEEN_SEND;
                 if(timeSinceSent > Constants.SEND_TIMEOUT) {
-                    System.out.println("too long !!!");     //TODO: notify user
+                    //System.out.println("too long !!!");     //TODO: notify user
                 }
                 return;
             }
