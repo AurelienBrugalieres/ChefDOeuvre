@@ -17,6 +17,7 @@ public class StackPaneInstruction extends StackPane {
         this.setLayoutX(x);
         rect = new Rectangle(width,height,myColor(red,green,blue,opacity));
         this.getChildren().addAll(rect,instructionInformation);
+        this.getChildren().get(1).setTranslateX(5);
 
     }
 
