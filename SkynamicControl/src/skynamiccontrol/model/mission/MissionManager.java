@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * Created by fabien on 13/02/17.
  */
-public class MissionManager implements Observer{
+public class MissionManager  extends Observable implements Observer{
     private int missionStatusMessageId;
     private int aircraftId;
     private ArrayList<Instruction> pastInstructions;
@@ -43,6 +43,8 @@ public class MissionManager implements Observer{
 
     public void addInstruction(Instruction instruction) {
         instructionsToSend.add(instruction);
+        setChanged();
+        notifyObservers();
     }
 
     private String getMessage(Instruction instruction) {
@@ -317,24 +319,29 @@ public class MissionManager implements Observer{
                     if(contains(indexes, aircraftIndex)) {      //the instruction sent is acknowledged by the aircraft
                         instruction.setState(Instruction.State.ACKNOWLEDGED);
                         travelingInstruction = null;            //so we can allow any operation (not only APPEND)
+                        setChanged();
                     }
                     //break;
                 case ACKNOWLEDGED:
                     if(indexes[0].equals(aircraftIndex)) {                  //the first instruction in the aircraft list is the running one
                         instruction.setState(Instruction.State.RUNNING);
+                        setChanged();
                     } else if(!contains(indexes, aircraftIndex)){           //this index disappear without being first in the aircraft list
                         System.out.println("Suspicious: instruction DONE without being RUNNING : Instruction " + aircraftIndex);
                         instruction.setState(Instruction.State.DONE);
                         pastInstructions.add(instruction);
                         removeList.add(instruction);
+                        setChanged();
                     }
                     break;
                 case CANCELED:
                     if(!contains(indexes, aircraftIndex)) {     //an acknowledged instruction disappear from the aircraft list : well canceled.
                         removeList.add(instruction);
+                        setChanged();
                     }
                     if(indexes[0].equals(aircraftIndex)) {      //despite the cancellation, this instruction is running !
                         instruction.setState(Instruction.State.ABORTED);
+                        setChanged();
                     }
                     break;
                 case RUNNING:
@@ -342,20 +349,24 @@ public class MissionManager implements Observer{
                         instruction.setState(Instruction.State.DONE);
                         pastInstructions.add(instruction);
                         removeList.add(instruction);
+                        setChanged();
                     }
                     break;
                 case ABORTED:
                     if(!contains(indexes, aircraftIndex)) {     //the aborted instruction is no longer in the aircraft list : it is well aborted.
                         pastInstructions.add(instruction);
                         removeList.add(instruction);
+                        setChanged();
                     }
                     break;
                 case DONE:                                      // a done instruction should not be here !
                     System.out.println("DONE instruction should not be in pendingInstructions List !");
+                    setChanged();
                     break;
             }
         }
         pendingInstructions.removeAll(removeList);
+        notifyObservers();
     }
 
     private Integer getAircraftIndex(int index) {
