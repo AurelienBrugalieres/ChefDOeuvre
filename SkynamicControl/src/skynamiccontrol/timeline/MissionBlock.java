@@ -59,20 +59,17 @@ public class MissionBlock implements Initializable {
     public void updateAircraftMissionBlock(Aircraft aircraft) {
         double x = 40;
         double y = 150;
-        /*for (int i = 0; i < model.getAircrafts().size(); i++) {
+        for (int i = 0; i < model.getAircrafts().size(); i++) {
             if (model.getAircrafts().get(i) == aircraft) {
                 if (!aircraft.getMissionManager().getPendingInstructions().isEmpty()) {
                     for (int j = 0; j < aircraft.getMissionManager().getPendingInstructions().size(); j++) {
                         Rectangle rect;
                         double yi = y - (aircraft.getAltitude()*0.244);
-                        StackPaneInstruction sp;
+                        StackPaneInstruction sp = null;
                         Text instructionTxt = new Text(aircraft.getMissionManager().getPendingInstructions().get(j).getName());
                         instructionTxt.setStroke(Color.WHITE);
                         switch(aircraft.getMissionManager().getPendingInstructions().get(i).getState()){
                             case NOT_SENT:
-                                rect = new Rectangle(120,20,myColor(aircraft.getColor().getRed(),
-                                        aircraft.getColor().getGreen(),
-                                        aircraft.getColor().getBlue(),0.5));
                                 sp = new StackPaneInstruction(x,yi,120,20,aircraft.getColor().getRed(),
                                         aircraft.getColor().getGreen(),
                                         aircraft.getColor().getBlue(),0.5,instructionTxt);
@@ -80,43 +77,31 @@ public class MissionBlock implements Initializable {
                                 sp.getRect().getStrokeDashArray().addAll(2d);
                                 break;
                             case SENT:
-                                rect = new Rectangle(120,20,myColor(aircraft.getColor().getRed(),
+                                sp = new StackPaneInstruction(x,yi,120,20,aircraft.getColor().getRed(),
                                         aircraft.getColor().getGreen(),
-                                        aircraft.getColor().getBlue(),0.6));
-                                setLayoutStackPane(sp,x,yi);
-                                sp.getChildren().addAll(rect,instructionTxt);
+                                        aircraft.getColor().getBlue(),0.6,instructionTxt);
                                 break;
                             case ACKNOWLEDGED:
-                                rect = new Rectangle(120,20,myColor(aircraft.getColor().getRed(),
+                                sp = new StackPaneInstruction(x,yi,120,20,aircraft.getColor().getRed(),
                                         aircraft.getColor().getGreen(),
-                                        aircraft.getColor().getBlue(),0.8));
-                                setLayoutStackPane(sp,x,yi);
-                                sp.getChildren().addAll(rect,instructionTxt);
+                                        aircraft.getColor().getBlue(),0.8,instructionTxt);
                                 break;
                             case ABORTED:
                                 // Red Color is generic to each aircraft for aborted instructions
-                                rect = new Rectangle(120,20,myColor(223,0,11,1));
-                                setLayoutStackPane(sp,x,yi);
-                                sp.getChildren().addAll(rect,instructionTxt);
+                                sp = new StackPaneInstruction(x,yi,120,20,223,0,11,1,instructionTxt);
                                 break;
                             case CANCELED:
                                 // Gray Color is generic to each aircraft for canceled instructions
-                                rect = new Rectangle(120,20,myColor(191,191,191,1));
-                                setLayoutStackPane(sp,x,yi);
-                                sp.getChildren().addAll(rect,instructionTxt);
+                                sp = new StackPaneInstruction(x,yi,120,20,191,191,191,1,instructionTxt);
                                 break;
                             case RUNNING:
-                                rect = new Rectangle(120,30,myColor(aircraft.getColor().getRed(),
+                                sp = new StackPaneInstruction(x,yi,120,30,aircraft.getColor().getRed(),
                                         aircraft.getColor().getGreen(),
-                                        aircraft.getColor().getBlue(),1));
-                                setLayoutStackPane(sp,x,yi);
-                                sp.getChildren().addAll(rect,instructionTxt);
+                                        aircraft.getColor().getBlue(),1,instructionTxt);
                                 break;
                             case DONE:
                                 // Gray Color is generic to each aircraft for finished instructions
-                                rect = new Rectangle(120,20,myColor(191,191,191,1));
-                                setLayoutStackPane(sp,x,yi);
-                                sp.getChildren().addAll(rect,instructionTxt);
+                                sp = new StackPaneInstruction(x,yi,120,20,191,191,191,1,instructionTxt);
                                 break;
                         }
                         x += 120;
@@ -130,8 +115,8 @@ public class MissionBlock implements Initializable {
                     aircraft.getColor().getBlue();
             String styleTab = "-fx-background-color: rgba"+backgroundColor;
             pane.setStyle(styleTab+",0.7)");
-        }*/
-
+        }
+        /*
         if (aircraft.getName().equals("Microjet")) {
             // Adding Instructions on the timeline ( TEST SECTION )
             Text t = new Text("   GoToWP                 ");
@@ -152,7 +137,7 @@ public class MissionBlock implements Initializable {
             pane.setStyle(styleTab+",0.7)");
             pane.getChildren().add(sp);
             pane.getChildren().add(new Rectangle(x + 50, y - (500 * 0.244), 50, 20));
-        }
+        }*/
     }
 
 
