@@ -88,12 +88,11 @@ public class Main extends Application {
        // scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
        // primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setScene(scene);
-        map.pave();
+
         primaryStage.show();
-        map.setZoomLevel(1);
-        //map.setCoordinates(new GPSCoordinate(43.462344, 1.273044));
-
-
+        map.setZoomLevel(18);
+        map.setCoordinates(new GPSCoordinate(43.462344, 1.273044));
+        map.pave();
     }
 
     @Override
