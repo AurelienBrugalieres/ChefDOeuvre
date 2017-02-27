@@ -98,7 +98,6 @@ public class Aircraft extends Observable implements Observer{
 
     public void setId(int id) {
         this.id = id;
-        notifyObservers();
     }
 
     public MissionManager getMissionManager() {
@@ -107,7 +106,6 @@ public class Aircraft extends Observable implements Observer{
 
     public void setMissionManager(MissionManager missionManager) {
         this.missionManager = missionManager;
-        notifyObservers();
     }
 
     public double getBatteryLevel() {
@@ -116,7 +114,6 @@ public class Aircraft extends Observable implements Observer{
 
     public void setBatteryLevel(double batteryLevel) {
         this.batteryLevel = batteryLevel;
-        notifyObservers();
     }
 
     public String getName() {
@@ -125,7 +122,6 @@ public class Aircraft extends Observable implements Observer{
 
     public void setName(String name) {
         this.name = name;
-        notifyObservers();
     }
 
     public double getAltitude() {
@@ -134,7 +130,6 @@ public class Aircraft extends Observable implements Observer{
 
     public void setAltitude(double altitude) {
         this.altitude = altitude;
-        notifyObservers();
     }
 
     public double getSpeed() {
@@ -143,7 +138,6 @@ public class Aircraft extends Observable implements Observer{
 
     public void setSpeed(double speed) {
         this.speed = speed;
-        notifyObservers();
     }
 
     public String getStatus() {
@@ -152,7 +146,6 @@ public class Aircraft extends Observable implements Observer{
 
     public void setStatus(String status) {
         this.status = status;
-        notifyObservers();
     }
 
     public double getMaxBatteryVoltage() {
@@ -240,13 +233,11 @@ public class Aircraft extends Observable implements Observer{
                 gpsMode = strs[4];
                 flightTime = Integer.parseInt(strs[6]);
                 setChanged();
-                notifyObservers(AircraftChange.STATUS);
             } else if (msgId == engineStatusMsgId) {
                 //throttle throttle_accu rpm temp bat amp energy
                 throttle = Double.parseDouble(strs[0]);
                 batteryLevel = Double.parseDouble(strs[4]);
                 setChanged();
-                notifyObservers(AircraftChange.BAT);
             } else if (msgId == flightParamsMsgId) {
                 //11.883718 1.123226 198.300979 43.462915 1.274396 12.670000 198.7 260.997925 -0.030000 75.997925 1487725470.567468 263086240 12.700000
                 //roll pitch heading lat long speed course alt climb agl unix_time itow airspeed
@@ -262,16 +253,10 @@ public class Aircraft extends Observable implements Observer{
                 climb = Double.parseDouble(params[8]);
                 agl = Double.parseDouble(params[9]);
                 airspeed = Double.parseDouble(params[10]);
-
                 setChanged();
-                notifyObservers(AircraftChange.FLIGHT_PARAMS);
-            }
-        }
-    }
 
-    public enum AircraftChange {
-        BAT,
-        FLIGHT_PARAMS,
-        STATUS
+            }
+            notifyObservers();
+        }
     }
 }
