@@ -148,10 +148,10 @@ public class BackMapLayer extends Pane{
     }
 
     public void paveZone(double xMin, double yMin, double xMax, double yMax) {
-        int x0 = clamp(0,(int) xMin/TILE_DIMENSION, (int)Math.pow(2, zoom));
-        int y0 = clamp(0,(int) yMin/TILE_DIMENSION, (int)Math.pow(2, zoom));
-        int xend = clamp(0,(int) xMax/TILE_DIMENSION, (int)Math.pow(2, zoom));
-        int yend = clamp(0,(int) yMax/TILE_DIMENSION, (int)Math.pow(2, zoom));
+        int x0 = clamp(0,(int) xMin/TILE_DIMENSION, (int)Math.pow(2, zoom) - 1);
+        int y0 = clamp(0,(int) yMin/TILE_DIMENSION, (int)Math.pow(2, zoom) - 1);
+        int xend = clamp(0,(int) xMax/TILE_DIMENSION, (int)Math.pow(2, zoom) - 1);
+        int yend = clamp(0,(int) yMax/TILE_DIMENSION, (int)Math.pow(2, zoom) - 1);
 
         for(int x=x0; x<xend+1; x++) {
             for(int y=y0; y<yend+1; y++) {
