@@ -116,33 +116,6 @@ public class MissionBlock implements Initializable {
             String styleTab = "-fx-background-color: rgba"+backgroundColor;
             pane.setStyle(styleTab+",0.7)");
         }
-        /*
-        if (aircraft.getName().equals("Microjet")) {
-            // Adding Instructions on the timeline ( TEST SECTION )
-            Text t = new Text("   GoToWP                 ");
-            t.setStroke(Color.BLACK);
-            StackPaneInstruction sp = new StackPaneInstruction(150,50,120,30,
-                    aircraft.getColor().getRed(),aircraft.getColor().getGreen(),aircraft.getColor().getBlue(),1,t);
-            sp.getRect().setStroke(Color.BLACK);
-            sp.getRect().getStrokeDashArray().addAll(2d);
-
-            Rectangle rect = new Rectangle(120, 30, Color.BLUEVIOLET);
-            rect.setStroke(Color.BLACK);
-            rect.getStrokeDashArray().addAll(2d);
-
-            String backgroundColor = "("+aircraft.getColor().getRed()+","+
-                    aircraft.getColor().getGreen()+","+
-                    aircraft.getColor().getBlue();
-            String styleTab = "-fx-background-color: rgba"+backgroundColor;
-            pane.setStyle(styleTab+",0.7)");
-            pane.getChildren().add(sp);
-            pane.getChildren().add(new Rectangle(x + 50, y - (500 * 0.244), 50, 20));
-        }*/
-    }
-
-
-    public void getCoordinate(MouseEvent mouseEvent) {
-        System.out.println("x : "+mouseEvent.getX() + "y : "+mouseEvent.getY());
     }
 
     public StackPane setLayoutStackPane(StackPane sp,double x ,double y ){

@@ -30,6 +30,6 @@ public class StackPaneInstruction extends StackPane {
     public Rectangle getRect(){return rect;}
 
     public void onMousePressed(MouseEvent mouseEvent){
-        
+
     }
 }
