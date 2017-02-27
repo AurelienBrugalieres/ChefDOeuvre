@@ -90,8 +90,9 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         map.pave();
         primaryStage.show();
-        map.setZoomLevel(18);
-        map.setCoordinates(new GPSCoordinate(43.462344, 1.273044));
+        map.setZoomLevel(1);
+        //map.setCoordinates(new GPSCoordinate(43.462344, 1.273044));
+
 
     }
 

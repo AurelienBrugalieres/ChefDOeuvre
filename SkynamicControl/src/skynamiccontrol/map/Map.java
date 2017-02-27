@@ -85,7 +85,7 @@ public class Map extends StackPane{
             this.zoomLayers.get(currentZoom).setVisible(false);
             currentZoom = newZoom;
             this.zoomLayers.get(currentZoom).setVisible(true);
-        }
+         }
         double remainingScale = scaleFactor / Math.pow(2, currentZoom);
         this.setScaleX(remainingScale);
         this.setScaleY(remainingScale);
@@ -94,6 +94,7 @@ public class Map extends StackPane{
 
     public void setCoordinates(GPSCoordinate gpsCoordinate) {
         XYZCoordinate xyzCoordinate = gpsCoordinate.toXYCoordinates(currentZoom);
+        System.out.println("x " + -xyzCoordinate.getX() * BackMapLayer.TILE_DIMENSION + width/2);
         this.setTranslateX(-xyzCoordinate.getX() * BackMapLayer.TILE_DIMENSION + width/2);
         this.setTranslateY(-xyzCoordinate.getY() * BackMapLayer.TILE_DIMENSION + height/2);
     }

@@ -23,6 +23,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
+import skynamiccontrol.model.mission.StackPaneInstruction;
 
 
 import java.net.URL;
@@ -58,13 +59,13 @@ public class MissionBlock implements Initializable {
     public void updateAircraftMissionBlock(Aircraft aircraft) {
         double x = 40;
         double y = 150;
-        for (int i = 0; i < model.getAircrafts().size(); i++) {
+        /*for (int i = 0; i < model.getAircrafts().size(); i++) {
             if (model.getAircrafts().get(i) == aircraft) {
                 if (!aircraft.getMissionManager().getPendingInstructions().isEmpty()) {
                     for (int j = 0; j < aircraft.getMissionManager().getPendingInstructions().size(); j++) {
                         Rectangle rect;
                         double yi = y - (aircraft.getAltitude()*0.244);
-                        StackPane sp = new StackPane();
+                        StackPaneInstruction sp;
                         Text instructionTxt = new Text(aircraft.getMissionManager().getPendingInstructions().get(j).getName());
                         instructionTxt.setStroke(Color.WHITE);
                         switch(aircraft.getMissionManager().getPendingInstructions().get(i).getState()){
@@ -72,10 +73,11 @@ public class MissionBlock implements Initializable {
                                 rect = new Rectangle(120,20,myColor(aircraft.getColor().getRed(),
                                         aircraft.getColor().getGreen(),
                                         aircraft.getColor().getBlue(),0.5));
-                                rect.setStroke(Color.BLACK);
-                                rect.getStrokeDashArray().addAll(2d);
-                                setLayoutStackPane(sp,x,yi);
-                                sp.getChildren().addAll(rect,instructionTxt);
+                                sp = new StackPaneInstruction(x,yi,120,20,aircraft.getColor().getRed(),
+                                        aircraft.getColor().getGreen(),
+                                        aircraft.getColor().getBlue(),0.5,instructionTxt);
+                                sp.getRect().setStroke(Color.BLACK);
+                                sp.getRect().getStrokeDashArray().addAll(2d);
                                 break;
                             case SENT:
                                 rect = new Rectangle(120,20,myColor(aircraft.getColor().getRed(),
@@ -128,26 +130,29 @@ public class MissionBlock implements Initializable {
                     aircraft.getColor().getBlue();
             String styleTab = "-fx-background-color: rgba"+backgroundColor;
             pane.setStyle(styleTab+",0.7)");
-        }
+        }*/
 
-       /* if (aircraft.getName().equals("Microjet")) {
+        if (aircraft.getName().equals("Microjet")) {
             // Adding Instructions on the timeline ( TEST SECTION )
+            Text t = new Text("   GoToWP                 ");
+            t.setStroke(Color.BLACK);
+            StackPaneInstruction sp = new StackPaneInstruction(150,50,120,30,
+                    aircraft.getColor().getRed(),aircraft.getColor().getGreen(),aircraft.getColor().getBlue(),1,t);
+            sp.getRect().setStroke(Color.BLACK);
+            sp.getRect().getStrokeDashArray().addAll(2d);
+
             Rectangle rect = new Rectangle(120, 30, Color.BLUEVIOLET);
             rect.setStroke(Color.BLACK);
             rect.getStrokeDashArray().addAll(2d);
-            Text t = new Text("GoToWP                 ");
-            t.setStroke(Color.WHITE);
-            StackPane s = new StackPane();
-            setLayoutStackPane(s, Screen.getPrimary().getBounds().getWidth()-180, y - 60);
-            s.getChildren().addAll(rect, t);
+
             String backgroundColor = "("+aircraft.getColor().getRed()+","+
                     aircraft.getColor().getGreen()+","+
                     aircraft.getColor().getBlue();
             String styleTab = "-fx-background-color: rgba"+backgroundColor;
             pane.setStyle(styleTab+",0.7)");
-            pane.getChildren().add(s);
+            pane.getChildren().add(sp);
             pane.getChildren().add(new Rectangle(x + 50, y - (500 * 0.244), 50, 20));
-        }*/
+        }
     }
 
 
@@ -161,8 +166,6 @@ public class MissionBlock implements Initializable {
         return sp;
     }
 
-    public Color myColor(double red, double green , double blue , double opacity){
-        return new Color(red/255.0,green/255.0,blue/255.0,opacity);
-    }
+
 
 }
