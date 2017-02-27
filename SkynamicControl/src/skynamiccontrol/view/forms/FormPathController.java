@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Elodie on 17/02/2017.
  */
-public class FormPathController implements Initializable {
+public class FormPathController extends AbstractForm implements Initializable {
 
     @FXML
     private AnchorPane form_pane;
@@ -59,35 +59,13 @@ public class FormPathController implements Initializable {
     }
 
     @FXML
-    public void onMouseEnteredOK(MouseEvent mouseEvent) {
+    public void onMouseClickedOk(MouseEvent mouseEvent) {
+        hide();
     }
 
     @FXML
-    public void onMouseExitedOK(MouseEvent mouseEvent) {
+    public void onMouseClickedNext(MouseEvent mouseEvent) {
     }
 
-    @FXML
-    public void onMousePressOK(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMoueReleasedOK(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMouseEnteredNext(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMouseExitedNext(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMousePressedNext(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMouseReleasedNext(MouseEvent mouseEvent) {
-    }
 }
 

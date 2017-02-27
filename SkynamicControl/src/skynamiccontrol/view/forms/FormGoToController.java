@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Elodie on 17/02/2017.
  */
-public class FormGoToController implements Initializable{
+public class FormGoToController extends AbstractForm implements Initializable{
 
     @FXML
     private AnchorPane form_pane;
@@ -33,11 +33,6 @@ public class FormGoToController implements Initializable{
     @FXML
     private TextField field_east_destination;
 
-
-    @FXML
-    public void onMouseEnteredOK(MouseEvent mouseEvent) {
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), 14);
@@ -45,30 +40,11 @@ public class FormGoToController implements Initializable{
     }
 
     @FXML
-    public void onMouseExitedOK(MouseEvent mouseEvent) {
+    public void onMouseClickedOk(MouseEvent mouseEvent) {
+        hide();
     }
 
     @FXML
-    public void onMousePressOK(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMoueReleasedOK(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMouseEnteredNext(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMouseExitedNext(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMousePressedNext(MouseEvent mouseEvent) {
-    }
-
-    @FXML
-    public void onMouseReleasedNext(MouseEvent mouseEvent) {
+    public void onMouseClickedNext(MouseEvent mouseEvent) {
     }
 }

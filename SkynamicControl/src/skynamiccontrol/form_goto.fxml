@@ -6,18 +6,19 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
+<?import skynamiccontrol.view.ImageButton?>
 <AnchorPane fx:id="form_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="288.0" style="-fx-background-color: C7D5EA; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.view.forms.FormGoToController">
    <children>
-      <ImageView fx:id="btn_ok" fitHeight="61.0" fitWidth="100.0" layoutX="14.0" layoutY="302.0" onMouseEntered="#onMouseEnteredOK" onMouseExited="#onMouseExitedOK" onMousePressed="#onMousePressOK" onMouseReleased="#onMoueReleasedOK" pickOnBounds="true" preserveRatio="true">
+      <ImageButton fx:id="btn_ok" fitHeight="61.0" fitWidth="100.0" layoutX="14.0" layoutY="302.0" onMouseClicked="#onMouseClickedOk" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/bitmaps/btn_ok_form.png" />
          </image>
-      </ImageView>
-      <ImageView fx:id="btn_next" fitHeight="61.0" fitWidth="100.0" layoutX="174.0" layoutY="302.0" onMouseEntered="#onMouseEnteredNext" onMouseExited="#onMouseExitedNext" onMousePressed="#onMousePressedNext" onMouseReleased="#onMouseReleasedNext" pickOnBounds="true" preserveRatio="true">
+      </ImageButton>
+      <ImageButton fx:id="btn_next" fitHeight="61.0" fitWidth="100.0" layoutX="174.0" layoutY="302.0" onMouseClicked="#onMouseClickedOk" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/bitmaps/btn_next_form.png" />
          </image>
-      </ImageView>
+      </ImageButton>
       <Text layoutX="21.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
          <font>
             <Font size="14.0" />
