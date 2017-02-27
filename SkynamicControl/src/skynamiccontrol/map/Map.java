@@ -4,10 +4,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import skynamiccontrol.view.palette.PaletteEvent;
-
 import java.util.ArrayList;
-
-import static com.sun.javafx.util.Utils.clamp;
 
 /**
  * Created by fabien on 25/02/17.
