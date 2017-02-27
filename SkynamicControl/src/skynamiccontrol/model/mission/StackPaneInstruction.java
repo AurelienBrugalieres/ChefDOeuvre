@@ -5,6 +5,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import java.awt.event.MouseEvent;
+
 /**
  * Created by Lioz-MBPR on 27/02/2017.
  */
@@ -27,4 +29,7 @@ public class StackPaneInstruction extends StackPane {
 
     public Rectangle getRect(){return rect;}
 
+    public void onMousePressed(MouseEvent mouseEvent){
+        
+    }
 }
