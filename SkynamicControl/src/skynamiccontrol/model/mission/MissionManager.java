@@ -86,6 +86,13 @@ public class MissionManager  extends Observable implements Observer{
         return pendingInstructions;
     }
 
+    public  ArrayList<Instruction> getFutureInstructions() {
+        ArrayList<Instruction> futures = new ArrayList<>();
+        futures.addAll(pendingInstructions);
+        futures.addAll(instructionsToSend);
+        return futures;
+    }
+
     public int getCurrentInstructionAircraftIndex() {
         return currentInstructionAircraftIndex;
     }
@@ -444,6 +451,8 @@ public class MissionManager  extends Observable implements Observer{
                     replaceNextsInstructions(instructionToSend);
                     break;
             }
+            setChanged();
+            notifyObservers();
         }
     }
 }

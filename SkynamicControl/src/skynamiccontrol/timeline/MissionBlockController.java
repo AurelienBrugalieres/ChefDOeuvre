@@ -74,11 +74,11 @@ public class MissionBlockController implements Initializable, Observer {
         double y = 150;
         group.getChildren().clear();
 
-        if (aircraft.getMissionManager().getPendingInstructions().isEmpty()) {  //TODO add "not sent" list.
+        if (aircraft.getMissionManager().getFutureInstructions().isEmpty()) {
             return;
         }
 
-        for (Instruction instruction : aircraft.getMissionManager().getPendingInstructions()) {
+        for (Instruction instruction : aircraft.getMissionManager().getFutureInstructions()) {
             double yi = y - (aircraft.getAltitude()*0.244);
             StackPaneInstruction sp = new StackPaneInstruction(instruction, aircraft);
             setLayoutStackPane(sp, x, yi);
