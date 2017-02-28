@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import skynamiccontrol.model.Aircraft;
-import skynamiccontrol.model.mission.Instruction;
+import skynamiccontrol.model.mission.*;
 import skynamiccontrol.view.forms.FormCircleController;
 
 import java.io.IOException;
@@ -87,6 +87,16 @@ public class StackPaneInstruction extends StackPane {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
                 popup.getContent().add(loader.load());
                 FormCircleController controller = loader.getController();
+                if(instruction instanceof Circle) {
+                    controller.setCircle((Circle)instruction);
+                } else if(instruction instanceof Path) {
+
+                } else if(instruction instanceof GoToWP) {
+
+                } else if(instruction instanceof Survey) {
+
+                }
+
                 controller.setPopup(popup);
                 //TODO : set better position.
                 popup.show(this, e.getScreenX() - popup.getWidth() / 2, e.getScreenY() - popup.getHeight() - 200);
