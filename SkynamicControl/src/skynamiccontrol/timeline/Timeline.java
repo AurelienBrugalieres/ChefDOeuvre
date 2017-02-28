@@ -51,7 +51,6 @@ public class Timeline implements Initializable{
             //missionBlockController.setModel(model);
             missionBlockController.init(aircraft);
             missionBlockController.setStyle(styleTab+",0.7)");
-            missionBlockController.setAxis(node);
             tab.setContent(node);
             node.toFront();
             missionBlockController.updateAircraftMissionBlock();
