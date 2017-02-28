@@ -34,7 +34,6 @@ public class MissionBlockController implements Initializable, Observer {
     private Aircraft aircraft;
     //private GCSModel model;
 
-    private Node axis;
     private Group group;
 
     @FXML
@@ -46,10 +45,6 @@ public class MissionBlockController implements Initializable, Observer {
 
     public MissionBlockController() {
         group = new Group();
-    }
-
-    public void setAxis(Node axis) {
-        this.axis = axis;
     }
 
     public void setStyle(String style) {
