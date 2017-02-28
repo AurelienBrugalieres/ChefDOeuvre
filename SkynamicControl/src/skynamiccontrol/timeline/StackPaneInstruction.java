@@ -83,21 +83,28 @@ public class StackPaneInstruction extends StackPane {
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             try {
                 Popup popup = new Popup();
+                AbstractForm formController = null;
                 //todo : bind to the right form.
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
-                popup.getContent().add(loader.load());
-                FormCircleController controller = loader.getController();
                 if(instruction instanceof Circle) {
-                    controller.setCircle((Circle)instruction);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
+                    popup.getContent().add(loader.load());
+                    formController = loader.getController();
+                    ((FormCircleController)formController).setCircle((Circle)instruction);
                 } else if(instruction instanceof Path) {
-
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_path.fxml"));
+                    popup.getContent().add(loader.load());
+                    formController = loader.getController();
+                    ((FormPathController)formController).setPath((Path)instruction);
                 } else if(instruction instanceof GoToWP) {
-
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_goto.fxml"));
+                    popup.getContent().add(loader.load());
+                    formController = loader.getController();
+                    ((FormGoToController)formController).setGoTo((GoToWP)instruction);
                 } else if(instruction instanceof Survey) {
 
                 }
 
-                controller.setPopup(popup);
+                formController.setPopup(popup);
                 //TODO : set better position.
                 popup.show(this, e.getScreenX() - popup.getWidth() / 2, e.getScreenY() - popup.getHeight() - 200);
             } catch (IOException e1) {

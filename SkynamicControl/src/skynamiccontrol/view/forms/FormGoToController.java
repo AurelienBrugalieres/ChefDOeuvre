@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import skynamiccontrol.model.mission.GoToWP;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -46,5 +47,8 @@ public class FormGoToController extends AbstractForm implements Initializable{
 
     @FXML
     public void onMouseClickedNext(MouseEvent mouseEvent) {
+    }
+
+    public void setGoTo(GoToWP instruction) {
     }
 }

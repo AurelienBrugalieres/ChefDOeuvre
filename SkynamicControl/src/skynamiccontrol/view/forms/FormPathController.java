@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import skynamiccontrol.model.mission.Path;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -67,5 +68,7 @@ public class FormPathController extends AbstractForm implements Initializable {
     public void onMouseClickedNext(MouseEvent mouseEvent) {
     }
 
+    public void setPath(Path instruction) {
+    }
 }
 
