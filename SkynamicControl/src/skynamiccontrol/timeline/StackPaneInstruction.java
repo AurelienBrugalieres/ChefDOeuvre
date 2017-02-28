@@ -9,7 +9,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.mission.*;
+import skynamiccontrol.view.forms.AbstractForm;
 import skynamiccontrol.view.forms.FormCircleController;
+import skynamiccontrol.view.forms.FormGoToController;
+import skynamiccontrol.view.forms.FormPathController;
 
 import java.io.IOException;
 
@@ -29,51 +32,46 @@ public class StackPaneInstruction extends StackPane {
         this.instruction = instruction;
         this.text = new Text(instruction.getName());
         this.text.setStroke(Color.WHITE);
-
+        rectangle = new Rectangle(width, height);
+        Color color = null;
         switch (instruction.getState()) {
             case NOT_SENT:
-                rectangle = new Rectangle(width, height);
-                rectangle.setFill(myColor(aircraft.getColor().getRed(),
+                color = myColor(aircraft.getColor().getRed(),
                         aircraft.getColor().getGreen(),
                         aircraft.getColor().getBlue(),
-                        0.5));
+                        0.5);
                 rectangle.setStroke(Color.BLACK);
                 rectangle.getStrokeDashArray().addAll(2d);
                 break;
             case SENT:
-                rectangle = new Rectangle(width, height);
-                rectangle.setFill(myColor(aircraft.getColor().getRed(),
+                color = myColor(aircraft.getColor().getRed(),
                         aircraft.getColor().getGreen(),
                         aircraft.getColor().getBlue(),
-                        0.6));
+                        0.6);
                 break;
             case ACKNOWLEDGED:
-                rectangle = new Rectangle(width, height);
-                rectangle.setFill(myColor(aircraft.getColor().getRed(),
+                color = myColor(aircraft.getColor().getRed(),
                         aircraft.getColor().getGreen(),
                         aircraft.getColor().getBlue(),
-                        0.8));
+                        0.8);
                 break;
             case CANCELED:
-                rectangle = new Rectangle(width, height);
-                rectangle.setFill(myColor(191, 191, 191,1));
+                color = myColor(191, 191, 191,1);
                 break;
             case RUNNING:
-                rectangle = new Rectangle(width, height);
-                rectangle.setFill(myColor(aircraft.getColor().getRed(),
+                color = myColor(aircraft.getColor().getRed(),
                         aircraft.getColor().getGreen(),
                         aircraft.getColor().getBlue(),
-                        1));
+                        1);
                 break;
             case ABORTED:
-                rectangle = new Rectangle(width, height);
-                rectangle.setFill(myColor(223, 0, 11,1));
+                color = myColor(223, 0, 11,1);
                 break;
             case DONE:
-                rectangle = new Rectangle(width, height);
-                rectangle.setFill(myColor(191, 191, 191,1));
+                color = myColor(191, 191, 191,1);
                 break;
         }
+        rectangle.setFill(color);
 
         this.getChildren().add(rectangle);
         this.getChildren().add(text);
