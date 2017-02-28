@@ -11,7 +11,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Popup;
+import skynamiccontrol.model.mission.Circle;
+import skynamiccontrol.model.mission.Instruction;
 import skynamiccontrol.view.ImageButton;
 
 import java.net.URL;
@@ -22,6 +25,8 @@ import java.util.ResourceBundle;
  */
 public class FormCircleController extends AbstractForm implements Initializable{
 
+    private Circle circle;
+
     @FXML
     private AnchorPane form_pane;
 
@@ -29,10 +34,16 @@ public class FormCircleController extends AbstractForm implements Initializable{
     private TextField field_name;
 
     @FXML
-    private TextField field_north;
+    private Text latEast;
 
     @FXML
-    private TextField field_east;
+    private Text lonNorth;
+
+    @FXML
+    private TextField lonNorthField;
+
+    @FXML
+    private TextField latEastField;
 
     @FXML
     private TextField field_radius;
@@ -56,11 +67,38 @@ public class FormCircleController extends AbstractForm implements Initializable{
         btn_next.initButton("/resources/bitmaps/btn_next_form.png",
                 "/resources/bitmaps/hoover_btn_next_form.png",
                 "/resources/bitmaps/press_btn_next_form.png");
+        box_orientation.getItems().addAll("clockwise", "counterclockwise");
+    }
+
+    public void setCircle(Circle circle) {
+        this.circle = circle;
+        field_name.setText(circle.getName());
+        switch (circle.getCenter().getCoordinateSystem()) {
+            case LOCAL:
+                lonNorth.setText("North");
+                latEast.setText("East");
+                lonNorthField.setText(Double.toString(circle.getCenter().getNorth()));
+                latEastField.setText(Double.toString(circle.getCenter().getEast()));
+                break;
+            case LLA:
+                lonNorth.setText("lon");
+                latEast.setText("lat");
+                lonNorthField.setText(Double.toString(circle.getCenter().getLongitude()));
+                latEastField.setText(Double.toString(circle.getCenter().getLatitude()));
+                break;
+        }
+        field_radius.setText(Double.toString(Math.abs(circle.getRadius())));
+        if(Math.signum(circle.getRadius()) > 0) {
+            box_orientation.getSelectionModel().select(0);
+        } else {
+            box_orientation.getSelectionModel().select(1);
+        }
     }
 
     @FXML
     public void onMouseClickedOK(MouseEvent mouseEvent) {
         hide();
+
     }
 
     @FXML
