@@ -4,12 +4,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import skynamiccontrol.view.ImageButton?>
 
 <AnchorPane fx:id="form_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="288.0" style="-fx-background-color: C7D5EA; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.view.forms.FormCircleController">
    <children>
+      <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#c8d5e8" height="360.0" stroke="TRANSPARENT" strokeType="INSIDE" width="288.0" />
       <ImageButton fx:id="btn_ok" fitHeight="61.0" fitWidth="100.0" layoutX="14.0" layoutY="302.0" onMouseClicked="#onMouseClickedOK" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/bitmaps/btn_ok_form.png" />
