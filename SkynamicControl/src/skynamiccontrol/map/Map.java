@@ -28,6 +28,7 @@ public class Map extends StackPane{
         this.zoomLevelsNumber = zoomLevelsNumber;
         currentState = PossibleState.IDLE;
         this.backMapLayers = new ArrayList<>();
+        aircraftPanes = new ArrayList<>();
         for (int i = 0; i < zoomLevelsNumber; i++) {
             BackMapLayer layer = new BackMapLayer(i);
             this.backMapLayers.add(layer);

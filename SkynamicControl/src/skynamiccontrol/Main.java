@@ -64,6 +64,7 @@ public class Main extends Application {
         model.setStatusListContainer(controller.getStatusListContainer());
         model.setTimeline(controller.getTimelineController());
         model.setNotificationManager(controller.getNotificationContainer());
+        model.setMap(map);
 
         Aircraft aircraft = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/microjet.conf");
         aircraft.setBatteryLevel(15.6);

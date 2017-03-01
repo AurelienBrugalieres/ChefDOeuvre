@@ -1,5 +1,7 @@
 package skynamiccontrol.model;
 
+import skynamiccontrol.map.*;
+import skynamiccontrol.map.Map;
 import skynamiccontrol.timeline.Timeline;
 import skynamiccontrol.view.notifications.NotificationContainer;
 import skynamiccontrol.view.status.StatusListContainer;
@@ -15,6 +17,7 @@ public class GCSModel extends Observable{
     private StatusManager statusManager;
     private TimelineManager timelineManager;
     private NotificationManager notificationManager;
+    private MapManager mapManager;
 
     public GCSModel() {
         this.nb_aircraft = 0;
@@ -22,6 +25,7 @@ public class GCSModel extends Observable{
         statusManager = new StatusManager(this);
         timelineManager = new TimelineManager(this);
         notificationManager = new NotificationManager(this);
+        mapManager = new MapManager(this);
     }
 
     public List<Aircraft> getAircrafts() {
@@ -32,7 +36,9 @@ public class GCSModel extends Observable{
         this.aircrafts.add(aircraft);
         statusManager.createView(aircraft);
         timelineManager.addAircraft(aircraft);
+        mapManager.addAircraft(aircraft);
         notificationManager.createView(aircraft);
+
         this.setChanged();
         notifyObservers();
     }
@@ -46,6 +52,10 @@ public class GCSModel extends Observable{
 
     public void setTimeline(Timeline timeline) {
         this.timelineManager.setTimeline(timeline);
+    }
+
+    public void setMap(Map map) {
+        mapManager.setMap(map);
     }
 
 }
