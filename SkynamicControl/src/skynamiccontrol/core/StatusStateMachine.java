@@ -2,6 +2,7 @@ package skynamiccontrol.core;
 
 import javafx.scene.layout.BorderPane;
 import skynamiccontrol.view.status.StatusContainer;
+import skynamiccontrol.view.status.StatusListContainer;
 
 import java.awt.*;
 import java.util.*;
@@ -18,6 +19,7 @@ public class StatusStateMachine {
     }
 
     private States state = States.PRESSED;
+    private StatusListContainer.StatusListener listener = null;
 
     public StatusStateMachine(java.util.List<StatusContainer> l) {
         list = l;
@@ -26,7 +28,7 @@ public class StatusStateMachine {
     public void addStatus(StatusContainer status) {
         list.add(status);
     }
-    public void onMouseClick(StatusContainer statusContainer) {
+    public void onStatusSelected(StatusContainer statusContainer) {
         switch (state) {
 
             case PRESSED:
@@ -44,5 +46,11 @@ public class StatusStateMachine {
                 //pane.setStyle("-fx-background-color: null");
                 break;
         }
+        if (listener != null)
+            listener.onDroneStatusClick(statusContainer.getAircraft());
+    }
+
+    public void setStatusListener(StatusListContainer.StatusListener listener) {
+        this.listener = listener;
     }
 }

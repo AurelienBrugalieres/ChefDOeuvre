@@ -1,5 +1,7 @@
 package skynamiccontrol.view.notifications;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -28,12 +30,32 @@ public class NotificationContainer extends Parent implements Observer{
     private List<Aircraft> aircrafts;
 
     private TabPane tabPane;
-    private Map<Aircraft, ScrollPane> tab_pane;
+    private Map<Aircraft, Tab> tab_pane;
+    public interface ChangeTabListener {
+        void onChangeTab(Tab tab, Aircraft aircraft);
+    }
+    private ChangeTabListener listener = null;
 
     public NotificationContainer() {
         this.aircrafts = new ArrayList<>();
         this.tab_pane = new HashMap<>();
         this.tabPane = new TabPane();
+        this.tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> ov, Number oldValue, Number newValue) {
+                if (listener != null) {
+                    Tab newTab = tabPane.getTabs().get(newValue.intValue());
+                    Aircraft aircraft = null;
+                    for (Map.Entry<Aircraft, Tab> entry : tab_pane.entrySet()) {
+                        if (entry.getValue().equals(newTab)) {
+                            aircraft = entry.getKey();
+                        }
+                    }
+                    listener.onChangeTab(newTab, aircraft);
+
+                }
+            }
+        });
         this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         this.tabPane.getStylesheets().add("skynamiccontrol/view/notifications/pane.css");
         final Point dragDelta = new Point();
@@ -111,7 +133,7 @@ public class NotificationContainer extends Parent implements Observer{
         ((BorderPane)tab.getContent()).setStyle(styleTab);
         ((ScrollPane)((BorderPane)tab.getContent()).getCenter()).getContent().setStyle(styleTab);
         air.addPrivateObserver(this);
-        this.tab_pane.put(air,scrollPane);
+        this.tab_pane.put(air,tab);
     }
 
     public NotificationContainer(List<Aircraft> aircraftList) {
@@ -129,7 +151,7 @@ public class NotificationContainer extends Parent implements Observer{
             scrollPane.setContent(vbox);
             tab.setContent(scrollPane);
             this.tabPane.getTabs().add(tab);
-            this.tab_pane.put(air,scrollPane);
+            this.tab_pane.put(air,tab);
         }
 
         this.getChildren().add(this.tabPane);
@@ -140,7 +162,7 @@ public class NotificationContainer extends Parent implements Observer{
         Text notif = new Text(text);
         VBox.setVgrow(notif, Priority.ALWAYS);
         ((VBox)tab_pane.get(aircraft).getContent()).getChildren().add(notif);
-        tab_pane.get(aircraft).setVvalue(1.0);
+        ((ScrollPane)((BorderPane)tab_pane.get(aircraft).getContent()).getCenter()).setVvalue(1.0);
     }
 
     public void addWarning(Aircraft aircraft, String text) {
@@ -150,7 +172,7 @@ public class NotificationContainer extends Parent implements Observer{
         javafx.scene.paint.Paint paint = new javafx.scene.paint.Color(color.getRed(),color.getGreen(),color.getBlue(),0.7);
         notif.setFill(paint);
         ((VBox)tab_pane.get(aircraft).getContent()).getChildren().add(notif);
-        tab_pane.get(aircraft).setVvalue(1.0);
+        ((ScrollPane)((BorderPane)tab_pane.get(aircraft).getContent()).getCenter()).setVvalue(1.0);
     }
 
     public void addError(Aircraft aircraft, String text) {
@@ -160,7 +182,7 @@ public class NotificationContainer extends Parent implements Observer{
         javafx.scene.paint.Paint paint = new javafx.scene.paint.Color(color.getRed(),color.getGreen(),color.getBlue(),0.7);
         notif.setFill(paint);
         ((VBox)tab_pane.get(aircraft).getContent()).getChildren().add(notif);
-        tab_pane.get(aircraft).setVvalue(1.0);
+        ((ScrollPane)((BorderPane)tab_pane.get(aircraft).getContent()).getCenter()).setVvalue(1.0);
     }
 
     public void addSuccess(Aircraft aircraft, String text) {
@@ -170,7 +192,7 @@ public class NotificationContainer extends Parent implements Observer{
         javafx.scene.paint.Paint paint = new javafx.scene.paint.Color(color.getRed(),color.getGreen(),color.getBlue(),0.7);
         notif.setFill(paint);
         ((VBox)tab_pane.get(aircraft).getContent()).getChildren().add(notif);
-        tab_pane.get(aircraft).setVvalue(1.0);
+        ((ScrollPane)((BorderPane)tab_pane.get(aircraft).getContent()).getCenter()).setVvalue(1.0);
     }
 
     public double getWidth() {
@@ -180,5 +202,14 @@ public class NotificationContainer extends Parent implements Observer{
     @Override
     public void update(Observable o, Object arg) {
 
+    }
+
+    public void selectAircraft(Aircraft aircraft) {
+        SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+        selectionModel.select(tab_pane.get(aircraft));
+    }
+
+    public void setOnChangeTabListener(ChangeTabListener changeTabListener) {
+        this.listener = changeTabListener;
     }
 }

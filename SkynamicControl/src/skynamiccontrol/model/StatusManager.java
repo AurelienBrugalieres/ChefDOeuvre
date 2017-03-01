@@ -24,6 +24,13 @@ public class StatusManager implements Observer{
 
     public void setStatusListContainer(StatusListContainer statusListContainer) {
         this.statusListContainer = statusListContainer;
+        this.statusListContainer.setStatusListener(new StatusListContainer.StatusListener() {
+            @Override
+            public void onDroneStatusClick(Aircraft aircraftClicked) {
+                if (model != null && aircraftClicked != null)
+                    model.selectAircraft(aircraftClicked);
+            }
+        });
     }
 
     public void createView(Aircraft aircraft) {
@@ -34,5 +41,9 @@ public class StatusManager implements Observer{
     @Override
     public void update(Observable observable, Object o) {
 
+    }
+
+    public void selectAircraft(Aircraft aircraft) {
+        statusListContainer.selectAircraft(aircraft);
     }
 }

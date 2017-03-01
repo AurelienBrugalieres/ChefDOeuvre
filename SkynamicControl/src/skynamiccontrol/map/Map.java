@@ -1,11 +1,18 @@
 package skynamiccontrol.map;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import skynamiccontrol.model.Aircraft;
+import skynamiccontrol.model.Constants;
+import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.view.palette.PaletteEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by fabien on 25/02/17.
@@ -13,11 +20,16 @@ import java.util.ArrayList;
 public class Map extends StackPane{
     private int zoomLevelsNumber;
     private ArrayList<BackMapLayer> backMapLayers;
-    private ArrayList<AircraftPane> aircraftPanes;
+    private AircraftPane currentAircraftPane = null;
+    private java.util.Map<Integer,AircraftPane> aircraftPanes;
     int currentZoom;
     double currentScaleFactor;
     double x, y;
     double width, height;
+
+    public void selectAircraft(Aircraft aircraft) {
+            switchToAircraftPane(aircraft);
+    }
 
     private enum PossibleState {
         IDLE, DRAW_CIRCLE, DRAW_PATH, DRAW_GO_TO, DRAW_WAYPOINT
@@ -28,7 +40,7 @@ public class Map extends StackPane{
         this.zoomLevelsNumber = zoomLevelsNumber;
         currentState = PossibleState.IDLE;
         this.backMapLayers = new ArrayList<>();
-        aircraftPanes = new ArrayList<>();
+        aircraftPanes = new HashMap<>();
         for (int i = 0; i < zoomLevelsNumber; i++) {
             BackMapLayer layer = new BackMapLayer(i);
             this.backMapLayers.add(layer);
@@ -47,22 +59,6 @@ public class Map extends StackPane{
         });
 
         this.addEventHandler(ScrollEvent.SCROLL, (e) -> {
-            double factor = Math.sqrt(2);
-            if(e.getDeltaY() < 0) {
-                factor = 1/factor;
-            }
-            double scaleFactor = currentScaleFactor * factor;
-
-            if (scaleFactor < 1 || scaleFactor > Math.pow(2, 23)) {
-                return;
-            }
-
-            this.setTranslateX(this.getTranslateX() - e.getSceneX());
-            this.setTranslateY(this.getTranslateY() - e.getSceneY());
-            setScaleFactor(scaleFactor);
-            this.setTranslateX(this.getTranslateX() + e.getSceneX());
-            this.setTranslateY(this.getTranslateY() + e.getSceneY());
-            pave();
             onScrollMap(e);
         });
 
@@ -74,8 +70,19 @@ public class Map extends StackPane{
 
     public void addAircraft(Aircraft aircraft) {
         AircraftPane aircraftPane = new AircraftPane(aircraft, zoomLevelsNumber);
-        aircraftPanes.add(aircraftPane);
+        aircraftPanes.put(aircraft.getId(), aircraftPane);
         this.getChildren().add(aircraftPane);
+    }
+
+    private void switchToAircraftPane(Aircraft aircraft) {
+        for (int aircraftId : aircraftPanes.keySet()) {
+            if (aircraftId == aircraft.getId()) {
+                aircraftPanes.get(aircraftId).setVisible(true);
+                currentAircraftPane = aircraftPanes.get(aircraftId);
+            } else {
+                aircraftPanes.get(aircraftId).setVisible(false);
+            }
+        }
     }
 
     public void setZoomLevel(int zoom) {
@@ -95,7 +102,7 @@ public class Map extends StackPane{
         double remainingScale = scaleFactor / Math.pow(2, currentZoom);
         this.setScaleX(remainingScale);
         this.setScaleY(remainingScale);
-        for(AircraftPane aircraftPane : aircraftPanes) {
+        for(AircraftPane aircraftPane : aircraftPanes.values()) {
             aircraftPane.changeZoom(currentZoom, remainingScale);
         }
 
@@ -155,6 +162,9 @@ public class Map extends StackPane{
                 y = e.getY();
                 break;
             case DRAW_CIRCLE:
+                x = e.getSceneX();
+                y = e.getSceneY();
+                drawCircle();
                 break;
             case DRAW_PATH:
                 break;
@@ -182,7 +192,26 @@ public class Map extends StackPane{
     }
 
     private void onScrollMap(ScrollEvent e) {
-        System.out.println(e.getDeltaY());
+        double factor = Math.sqrt(2);
+        if(e.getDeltaY() < 0) {
+            factor = 1/factor;
+        }
+        double scaleFactor = currentScaleFactor * factor;
+
+        if (scaleFactor < 1 || scaleFactor > Math.pow(2, 23)) {
+            return;
+        }
+
+        this.setTranslateX(this.getTranslateX() - e.getSceneX());
+        this.setTranslateY(this.getTranslateY() - e.getSceneY());
+        setScaleFactor(scaleFactor);
+        this.setTranslateX(this.getTranslateX() + e.getSceneX());
+        this.setTranslateY(this.getTranslateY() + e.getSceneY());
+        pave();
+    }
+
+    private void drawCircle() {
+
     }
 
     private void goToState(PossibleState state) {
