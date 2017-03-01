@@ -77,10 +77,9 @@ public class Map extends StackPane{
     private void switchToAircraftPane(Aircraft aircraft) {
         for (int aircraftId : aircraftPanes.keySet()) {
             if (aircraftId == aircraft.getId()) {
-                aircraftPanes.get(aircraftId).setVisible(true);
                 currentAircraftPane = aircraftPanes.get(aircraftId);
-            } else {
-                aircraftPanes.get(aircraftId).setVisible(false);
+                currentAircraftPane.toFront();
+                return;
             }
         }
     }
