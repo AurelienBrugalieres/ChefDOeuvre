@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
+import skynamiccontrol.SkycEvent;
 import skynamiccontrol.model.mission.Circle;
 import skynamiccontrol.model.mission.Instruction;
 import skynamiccontrol.view.ImageButton;
@@ -57,6 +58,12 @@ public class FormCircleController extends AbstractForm implements Initializable{
     @FXML
     private ImageButton btn_next;
 
+    @FXML
+    private ImageButton btn_append;
+
+    @FXML
+    private ImageButton btn_choose_emplacement;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), 14);
@@ -95,6 +102,13 @@ public class FormCircleController extends AbstractForm implements Initializable{
         }
     }
 
+    public void setCreateMode(boolean b) {
+        btn_ok.setVisible(!b);
+        btn_next.setVisible(!b);
+        btn_append.setVisible(b);
+        btn_choose_emplacement.setVisible(b);
+    }
+
     @FXML
     public void onMouseClickedOK(MouseEvent mouseEvent) {
         hide();
@@ -104,5 +118,19 @@ public class FormCircleController extends AbstractForm implements Initializable{
     @FXML
     public void onMouseClickedNext(MouseEvent mouseEvent) {
         System.out.println("next");
+    }
+
+    @FXML
+    public void onMouseClickedAppend(MouseEvent mouseEvent) {
+        hide();
+        SkycEvent event = new SkycEvent(SkycEvent.APPEND_INSTRUCTION);
+        getPopup().fireEvent(event);
+
+    }
+
+    @FXML
+    public void onMouseClickedChooseEmplacement(MouseEvent mouseEvent) {
+        SkycEvent event = new SkycEvent(SkycEvent.CHOOSE_INSTRUCTION_EMPLACEMENT);
+        getPopup().fireEvent(event);
     }
 }

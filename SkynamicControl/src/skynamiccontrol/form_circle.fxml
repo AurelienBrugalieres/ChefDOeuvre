@@ -12,16 +12,6 @@
 <AnchorPane fx:id="form_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="288.0" style="-fx-background-color: C7D5EA; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.view.forms.FormCircleController">
    <children>
       <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#c8d5e8" height="360.0" stroke="TRANSPARENT" strokeType="INSIDE" width="288.0" />
-      <ImageButton fx:id="btn_ok" fitHeight="61.0" fitWidth="100.0" layoutX="14.0" layoutY="302.0" onMouseClicked="#onMouseClickedOK" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../resources/bitmaps/btn_ok_form.png" />
-         </image>
-      </ImageButton>
-      <ImageButton fx:id="btn_next" fitHeight="61.0" fitWidth="100.0" layoutX="174.0" layoutY="302.0" onMouseClicked="#onMouseClickedNext" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../resources/bitmaps/btn_next_form.png" />
-         </image>
-      </ImageButton>
       <Text layoutX="21.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
          <font>
             <Font size="14.0" />
@@ -48,9 +38,29 @@
          </font>
       </Text>
       <TextField fx:id="field_name" layoutX="87.0" layoutY="9.0" prefHeight="26.0" prefWidth="187.0" />
-      <TextField fx:id="lonNorthField" layoutX="87.0" layoutY="117.0" prefHeight="31.0" prefWidth="187.0" />
       <TextField fx:id="latEastField" layoutX="87.0" layoutY="65.0" prefHeight="26.0" prefWidth="187.0" />
+      <TextField fx:id="lonNorthField" layoutX="87.0" layoutY="117.0" prefHeight="31.0" prefWidth="187.0" />
       <TextField fx:id="field_radius" layoutX="87.0" layoutY="170.0" prefHeight="26.0" prefWidth="187.0" />
       <ChoiceBox fx:id="box_orientation" layoutX="124.0" layoutY="233.0" prefHeight="26.0" prefWidth="148.0" />
+      <ImageButton fx:id="btn_append" fitHeight="61.0" fitWidth="100.0" layoutX="14.0" layoutY="302.0" onMouseClicked="#onMouseClickedAppend" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@../resources/bitmaps/btn_append_form.png" />
+         </image>
+      </ImageButton>
+      <ImageButton fx:id="btn_ok" fitHeight="61.0" fitWidth="100.0" layoutX="14.0" layoutY="302.0" onMouseClicked="#onMouseClickedOK" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/bitmaps/btn_ok_form.png" />
+         </image>
+      </ImageButton>
+       <ImageButton fx:id="btn_choose_emplacement" fitHeight="61.0" fitWidth="100.0" layoutX="174.0" layoutY="302.0" onMouseClicked="#onMouseClickedChooseEmplacement" pickOnBounds="true" preserveRatio="true" visible="false">
+           <image>
+               <Image url="@../resources/bitmaps/btn_next_form.png" />
+           </image>
+       </ImageButton>
+      <ImageButton fx:id="btn_next" fitHeight="61.0" fitWidth="100.0" layoutX="174.0" layoutY="302.0" onMouseClicked="#onMouseClickedNext" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../resources/bitmaps/btn_next_form.png" />
+         </image>
+       </ImageButton>
    </children>
 </AnchorPane>
