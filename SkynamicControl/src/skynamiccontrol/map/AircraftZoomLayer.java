@@ -20,11 +20,10 @@ public class AircraftZoomLayer extends Pane {
         this.getChildren().add(aircraftIcon);
     }
 
-    public void setAircraftPosition(double x, double y, double heading) {
-        aircraftIcon.setLayoutX(x);
-        aircraftIcon.setLayoutY(y);
+    public void setAircraftPosition(GPSCoordinate aircraftCoordinates, double heading) {
+        XYZCoordinate xyzCoordinate = aircraftCoordinates.toXYCoordinates(zoom);
         aircraftIcon.setRotate(heading);
-        //aircraftIcon.setTranslateX(x);
-        //aircraftIcon.setTranslateY(y);
+        aircraftIcon.setTranslateX(xyzCoordinate.getX() * BackMapLayer.TILE_DIMENSION);
+        aircraftIcon.setTranslateY(xyzCoordinate.getY() * BackMapLayer.TILE_DIMENSION);
     }
 }

@@ -30,17 +30,18 @@ public class AircraftPane extends StackPane implements Observer {
     }
 
     public void changeZoom(int zoom) {
+        aircraftZoomLayers.get(zoom).setVisible(false);
         this.currentZoom = zoom;
+        aircraftZoomLayers.get(zoom).setVisible(true);
     }
 
     @Override
     public void update(Observable observable, Object o) {
         //if(observable instanceof Aircraft) {
         Aircraft aircraft = (Aircraft) observable;
-        XYZCoordinate xyzCoordinate = new GPSCoordinate(aircraft.getLatitude(), aircraft.getLongitude()).toXYCoordinates(currentZoom);
         for(AircraftZoomLayer aircraftZoomLayer : aircraftZoomLayers) {
             Platform.runLater(() -> {
-                aircraftZoomLayer.setAircraftPosition(xyzCoordinate.getX(), xyzCoordinate.getY(), aircraft.getHeading());
+                aircraftZoomLayer.setAircraftPosition(new GPSCoordinate(aircraft.getLatitude(), aircraft.getLongitude()), aircraft.getHeading());
             });
         }
         //}
