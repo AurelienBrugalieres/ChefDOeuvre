@@ -73,7 +73,9 @@ public class Map extends StackPane{
     }
 
     public void addAircraft(Aircraft aircraft) {
-        aircraftPanes.add(new AircraftPane(aircraft, zoomLevelsNumber));
+        AircraftPane aircraftPane = new AircraftPane(aircraft, zoomLevelsNumber);
+        aircraftPanes.add(aircraftPane);
+        this.getChildren().add(aircraftPane);
     }
 
     public void setZoomLevel(int zoom) {

@@ -1,5 +1,6 @@
 package skynamiccontrol.map;
 
+import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
 import skynamiccontrol.model.Aircraft;
 
@@ -35,11 +36,13 @@ public class AircraftPane extends StackPane implements Observer {
     @Override
     public void update(Observable observable, Object o) {
         //if(observable instanceof Aircraft) {
-            Aircraft aircraft = (Aircraft) observable;
-            for(AircraftZoomLayer aircraftZoomLayer : aircraftZoomLayers) {
-                XYZCoordinate xyzCoordinate = new GPSCoordinate(aircraft.getLatitude(), aircraft.getLongitude()).toXYCoordinates(currentZoom);
+        Aircraft aircraft = (Aircraft) observable;
+        XYZCoordinate xyzCoordinate = new GPSCoordinate(aircraft.getLatitude(), aircraft.getLongitude()).toXYCoordinates(currentZoom);
+        for(AircraftZoomLayer aircraftZoomLayer : aircraftZoomLayers) {
+            Platform.runLater(() -> {
                 aircraftZoomLayer.setAircraftPosition(xyzCoordinate.getX(), xyzCoordinate.getY(), aircraft.getHeading());
-            }
+            });
+        }
         //}
     }
 }
