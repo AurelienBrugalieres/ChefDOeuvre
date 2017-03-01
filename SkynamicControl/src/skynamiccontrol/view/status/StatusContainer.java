@@ -7,9 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import skynamiccontrol.FxUtils;
 import skynamiccontrol.model.Aircraft;
 
 
@@ -70,7 +72,7 @@ public class StatusContainer extends Parent implements Observer {
         info_box = new VBox();
 
         Pane title_pane = new Pane();
-        title_pane.setStyle("-fx-background-color: rgb("+air.getColor().getRed()+","+air.getColor().getGreen()+","+air.getColor().getBlue()+");");
+        title_pane.setStyle("-fx-background-color:  " + air.getColor() + ";");
         aircraft_name = new Text(air.getName());
         aircraft_name.setTextAlignment(TextAlignment.CENTER);
         aircraft_name.setTranslateX(TRANSLATE_X);
@@ -135,7 +137,8 @@ public class StatusContainer extends Parent implements Observer {
     }
 
     public void setSelected() {
-        global_pane.setStyle("-fx-background-color: rgba("+aircraft.getColor().getRed()+","+aircraft.getColor().getGreen()+","+aircraft.getColor().getBlue()+",0.7);");
+        Color color = Color.web(aircraft.getColor(), 0.7);
+        global_pane.setStyle(FxUtils.getCssColor(color));
     }
 
     @Override

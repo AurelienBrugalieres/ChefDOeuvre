@@ -21,7 +21,7 @@ public class Aircraft extends Observable implements Observer{
     private int id;
     private String name;
     private MissionManager missionManager;
-    private Color color;
+    private String color;
 
 
     ////Flight parameters
@@ -65,7 +65,7 @@ public class Aircraft extends Observable implements Observer{
         this.altitude = 0;
         this.speed = 0;
         this.status = "AUTO1";
-        this.color = Color.decode(Constants.DEFAULT_AIRCRAFT_COLOR);
+        this.color = Constants.DEFAULT_AIRCRAFT_COLOR;
 
         //FLIGHT_PARAM ac_id roll pitch heading lat long speed course alt climb agl unix_time itow airspeed
         flightParamsMsgId = IvyManager.getInstance().registerRegex("ground FLIGHT_PARAM " + id + " (.*)");
@@ -76,11 +76,11 @@ public class Aircraft extends Observable implements Observer{
         IvyManager.getInstance().addObserver(this);
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
