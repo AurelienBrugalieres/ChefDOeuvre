@@ -2,30 +2,31 @@ package skynamiccontrol.view.status;/**
  * Created by Elodie on 15/02/2017.
  */
 
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.input.*;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Box;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import skynamiccontrol.core.StatusStateMachine;
 import skynamiccontrol.model.Aircraft;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import static javafx.application.Application.launch;
 
 public class StatusListContainer extends Parent {
+
+    public interface StatusListener {
+        void onDroneStatusClick(Aircraft aircraftClicked);
+    };
 
     private VBox vbox;
     public final static int FONT_SIZE_BODY = 14;
@@ -33,7 +34,7 @@ public class StatusListContainer extends Parent {
     public final static int FONT_SIZE_TITLE2 = 18;
     public final static int PADDING = 10;
 
-    private List<StatusContainer> status;
+    private java.util.Map<Aircraft, StatusContainer> status;
     private StatusStateMachine statusStateMachine;
 
     public StatusListContainer() {
@@ -74,8 +75,8 @@ public class StatusListContainer extends Parent {
 
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), FONT_SIZE_BODY);
         this.setStyle("-fx-font-family: OpenSans-Regular;");
-        status = new ArrayList<>();
-        statusStateMachine = new StatusStateMachine(status);
+        status = new HashMap<>();
+        statusStateMachine = new StatusStateMachine(new ArrayList<>(status.values()));
         this.getChildren().add(new Group(vbox));
     }
 
@@ -86,13 +87,18 @@ public class StatusListContainer extends Parent {
         statusContainer.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                statusStateMachine.onMouseClick(statusContainer);
+                statusStateMachine.onStatusSelected(statusContainer);
             }
         });
        vbox.getChildren().add(statusContainer);
-       status.add(statusContainer);
+       status.put(aircraft, statusContainer);
     }
 
+    public void setStatusListener(StatusListener listener) {
+        this.statusStateMachine.setStatusListener(listener);
+    }
 
-
+    public void selectAircraft(Aircraft aircraft) {
+        this.statusStateMachine.onStatusSelected(status.get(aircraft));
+    }
 }

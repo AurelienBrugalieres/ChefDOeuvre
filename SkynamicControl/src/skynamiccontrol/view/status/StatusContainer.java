@@ -149,7 +149,7 @@ public class StatusContainer extends Parent implements Observer {
     }
 
     public void handle(java.util.List<StatusContainer> list) {
-       // statusStateMachine.onMouseClick(this);
+       // statusStateMachine.onStatusSelected(this);
     }
     public BorderPane getGlobal_pane() {
         return global_pane;

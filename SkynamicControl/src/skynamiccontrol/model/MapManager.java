@@ -22,6 +22,7 @@ public class MapManager implements Observer{
 
     public void setMap(Map map) {
         this.map = map;
+
     }
 
     @Override
@@ -31,5 +32,9 @@ public class MapManager implements Observer{
 
     public void addAircraft(Aircraft aircraft) {
         map.addAircraft(aircraft);
+    }
+
+    public void selectAircraft(Aircraft aircraft) {
+        map.selectAircraft(aircraft);
     }
 }

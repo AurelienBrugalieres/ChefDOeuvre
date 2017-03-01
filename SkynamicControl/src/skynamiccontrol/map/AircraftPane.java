@@ -1,23 +1,26 @@
 package skynamiccontrol.map;
 
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.application.Platform;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.StackPane;
 import skynamiccontrol.model.Aircraft;
 
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+import javax.xml.stream.EventFilter;
+import java.util.*;
 
 /**
  * Created by fabien on 25/02/17.
  */
 public class AircraftPane extends StackPane implements Observer {
     private Aircraft aircraft;
-    private ArrayList<AircraftZoomLayer> aircraftZoomLayers;
+    private List<AircraftZoomLayer> aircraftZoomLayers;
     private int currentZoom;
 
     public AircraftPane(Aircraft aircraft, int nbZoomLevels) {
-        aircraftZoomLayers = new ArrayList<>();
+        aircraftZoomLayers = new LinkedList<>();
         aircraft.addObserver(this);
         this.aircraft = aircraft;
         for (int i = 0; i < nbZoomLevels; i++) {

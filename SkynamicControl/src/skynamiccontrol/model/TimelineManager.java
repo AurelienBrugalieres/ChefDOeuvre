@@ -1,6 +1,8 @@
 package skynamiccontrol.model;
 
+import javafx.scene.control.Tab;
 import skynamiccontrol.timeline.Timeline;
+import skynamiccontrol.view.notifications.NotificationContainer;
 import skynamiccontrol.view.status.StatusListContainer;
 
 import java.util.Observable;
@@ -26,6 +28,13 @@ public class TimelineManager implements Observer{
 
     public void setTimeline(Timeline timeline) {
         this.timeline = timeline;
+        this.timeline.setOnChangeTabListener(new Timeline.ChangeTabListener() {
+            @Override
+            public void onChangeTab(Tab tab, Aircraft aircraft) {
+                if (model != null && aircraft != null)
+                    model.selectAircraft(aircraft);
+            }
+        });
     }
 
     public void addAircraft(Aircraft aircraft) {
@@ -36,5 +45,9 @@ public class TimelineManager implements Observer{
     @Override
     public void update(Observable observable, Object o) {
 
+    }
+
+    public void selectAircraft(Aircraft aircraft) {
+        timeline.selectAircraft(aircraft);
     }
 }

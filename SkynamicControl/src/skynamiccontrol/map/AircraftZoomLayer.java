@@ -3,6 +3,7 @@ package skynamiccontrol.map;
 import javafx.geometry.Point2D;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 import static com.sun.javafx.util.Utils.clamp;

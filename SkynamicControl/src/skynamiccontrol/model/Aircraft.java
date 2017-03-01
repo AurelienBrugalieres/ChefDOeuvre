@@ -283,4 +283,20 @@ public class Aircraft extends Observable implements Observer{
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 17 + id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Aircraft) {
+            Aircraft aToComp = (Aircraft)obj;
+            return this.id == aToComp.getId();
+        }
+        return false;
+    }
 }

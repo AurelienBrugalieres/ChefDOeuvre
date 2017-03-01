@@ -13,7 +13,8 @@ import java.util.*;
  */
 public class GCSModel extends Observable{
     private final int nb_aircraft;
-    private List<Aircraft> aircrafts;
+    private java.util.Map<Integer, Aircraft> aircrafts;
+    private int selectedAircraftId = -1;
     private StatusManager statusManager;
     private TimelineManager timelineManager;
     private NotificationManager notificationManager;
@@ -21,7 +22,7 @@ public class GCSModel extends Observable{
 
     public GCSModel() {
         this.nb_aircraft = 0;
-        this.aircrafts = new ArrayList<>();
+        this.aircrafts = new HashMap<>();
         statusManager = new StatusManager(this);
         timelineManager = new TimelineManager(this);
         notificationManager = new NotificationManager(this);
@@ -29,11 +30,11 @@ public class GCSModel extends Observable{
     }
 
     public List<Aircraft> getAircrafts() {
-        return aircrafts;
+        return new LinkedList<Aircraft>(aircrafts.values());
     }
 
     public void addAircraft(Aircraft aircraft) {
-        this.aircrafts.add(aircraft);
+        this.aircrafts.put(aircraft.getId(), aircraft);
         statusManager.createView(aircraft);
         timelineManager.addAircraft(aircraft);
         mapManager.addAircraft(aircraft);
@@ -41,6 +42,13 @@ public class GCSModel extends Observable{
 
         this.setChanged();
         notifyObservers();
+    }
+
+    private void setSelectedAircraft(Aircraft aircraft) {
+        notificationManager.selectAircraft(aircraft);
+        statusManager.selectAircraft(aircraft);
+        timelineManager.selectAircraft(aircraft);
+        mapManager.selectAircraft(aircraft);
     }
 
     public void setNotificationManager(NotificationContainer notificationContainer) {
@@ -56,6 +64,20 @@ public class GCSModel extends Observable{
 
     public void setMap(Map map) {
         mapManager.setMap(map);
+    }
+
+    public void selectAircraft(Aircraft aircraft) {
+        if (this.selectedAircraftId != aircraft.getId() && aircrafts.containsKey(aircraft.getId())) {
+            this.selectedAircraftId = aircraft.getId();
+            setSelectedAircraft(aircrafts.get(selectedAircraftId));
+        }
+    }
+
+    public Aircraft getSelectedAircraft() {
+        if (aircrafts == null || aircrafts.isEmpty() || selectedAircraftId == -1 || !aircrafts.containsKey(selectedAircraftId)) {
+            return null;
+        }
+        return aircrafts.get(selectedAircraftId);
     }
 
 }

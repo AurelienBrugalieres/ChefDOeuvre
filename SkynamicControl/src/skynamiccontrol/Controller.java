@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import skynamiccontrol.map.Map;
+import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.view.palette.PaletteEvent;
 import skynamiccontrol.view.palette.PaletteEventType;
 import skynamiccontrol.timeline.Timeline;

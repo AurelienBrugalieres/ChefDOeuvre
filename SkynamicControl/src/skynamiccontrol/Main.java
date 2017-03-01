@@ -1,9 +1,12 @@
 package skynamiccontrol;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import skynamiccontrol.communication.IvyManager;
@@ -44,8 +47,7 @@ public class Main extends Application {
         Map map = new Map(20);
 
 
-
-
+        primaryStage.getIcons().add(new Image("file:"+ Constants.USER_DIR + "resources/bitmaps/quadrotorLogoDark.png"));
         primaryStage.widthProperty().addListener(((observable, oldValue, newValue) -> {
             double container_width = controller.getNotificationContainer().getWidth();
             controller.getNotificationContainer().setTranslateX((double)newValue - container_width);
