@@ -13,8 +13,11 @@ import java.util.Observer;
 public class AircraftPane extends StackPane implements Observer {
     private Aircraft aircraft;
     private ArrayList<AircraftZoomLayer> aircraftZoomLayers;
+    private int currentZoom;
 
     public AircraftPane(Aircraft aircraft, int nbZoomLevels) {
+        aircraftZoomLayers = new ArrayList<>();
+        aircraft.addObserver(this);
         this.aircraft = aircraft;
         for (int i = 0; i < nbZoomLevels; i++) {
             AircraftZoomLayer layer = new AircraftZoomLayer(i);
@@ -25,8 +28,18 @@ public class AircraftPane extends StackPane implements Observer {
         }
     }
 
+    public void changeZoom(int zoom) {
+        this.currentZoom = zoom;
+    }
+
     @Override
     public void update(Observable observable, Object o) {
-
+        //if(observable instanceof Aircraft) {
+            Aircraft aircraft = (Aircraft) observable;
+            for(AircraftZoomLayer aircraftZoomLayer : aircraftZoomLayers) {
+                XYZCoordinate xyzCoordinate = new GPSCoordinate(aircraft.getLatitude(), aircraft.getLongitude()).toXYCoordinates(currentZoom);
+                aircraftZoomLayer.setAircraftPosition(xyzCoordinate.getX(), xyzCoordinate.getY(), aircraft.getHeading());
+            }
+        //}
     }
 }
