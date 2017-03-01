@@ -29,10 +29,11 @@ public class AircraftPane extends StackPane implements Observer {
         }
     }
 
-    public void changeZoom(int zoom) {
+    public void changeZoom(int zoom, double scale) {
         aircraftZoomLayers.get(zoom).setVisible(false);
         this.currentZoom = zoom;
         aircraftZoomLayers.get(zoom).setVisible(true);
+        aircraftZoomLayers.get(currentZoom).changeScale(scale);
     }
 
     @Override

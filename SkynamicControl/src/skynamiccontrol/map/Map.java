@@ -91,13 +91,13 @@ public class Map extends StackPane{
             this.backMapLayers.get(currentZoom).setVisible(false);
             currentZoom = newZoom;
             this.backMapLayers.get(currentZoom).setVisible(true);
-            for(AircraftPane aircraftPane : aircraftPanes) {
-                aircraftPane.changeZoom(currentZoom);
-            }
          }
         double remainingScale = scaleFactor / Math.pow(2, currentZoom);
         this.setScaleX(remainingScale);
         this.setScaleY(remainingScale);
+        for(AircraftPane aircraftPane : aircraftPanes) {
+            aircraftPane.changeZoom(currentZoom, remainingScale);
+        }
 
     }
 
