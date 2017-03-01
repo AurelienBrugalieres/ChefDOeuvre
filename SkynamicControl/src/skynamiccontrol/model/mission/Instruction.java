@@ -3,7 +3,7 @@ package skynamiccontrol.model.mission;
 /**
  * Created by fabien on 13/02/17.
  */
-public class Instruction {
+public abstract  class Instruction {
     private String name;
     private int index;          //index as in the aircraft
     private double duration;
@@ -91,4 +91,6 @@ public class Instruction {
             return value;
         }
     }
+
+    public abstract Double getAltitude();
 }

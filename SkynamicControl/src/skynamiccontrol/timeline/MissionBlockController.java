@@ -66,15 +66,21 @@ public class MissionBlockController implements Initializable, Observer {
 
     public void updateAircraftMissionBlock() {
         double x = 40;
-        double y = 150;
+        double totalHeigth = 150;
         group.getChildren().clear();
 
         if (aircraft.getMissionManager().getFutureInstructions().isEmpty()) {
             return;
         }
 
+        double altitudeMax = 0;
         for (Instruction instruction : aircraft.getMissionManager().getFutureInstructions()) {
-            double yi = y - (aircraft.getAltitude()*0.244);
+            altitudeMax = Math.max(altitudeMax + 30, instruction.getAltitude());
+        }
+
+        for (Instruction instruction : aircraft.getMissionManager().getFutureInstructions()) {
+            double yi = totalHeigth - totalHeigth*(instruction.getAltitude()/altitudeMax);
+            //double yi = totalHeigth - (aircraft.getAltitude()*0.244);
             StackPaneInstruction sp = new StackPaneInstruction(instruction, aircraft);
             setLayoutStackPane(sp, x, yi);
             x += 120;
