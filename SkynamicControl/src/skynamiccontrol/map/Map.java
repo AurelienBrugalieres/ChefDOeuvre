@@ -3,6 +3,7 @@ package skynamiccontrol.map;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
+import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.view.palette.PaletteEvent;
 import java.util.ArrayList;
 
@@ -10,8 +11,9 @@ import java.util.ArrayList;
  * Created by fabien on 25/02/17.
  */
 public class Map extends StackPane{
-    private int numberZoomLevels;
-    private ArrayList<MapZoomLayer> zoomLayers;
+    private int zoomLevelsNumber;
+    private ArrayList<BackMapLayer> backMapLayers;
+    private ArrayList<AircraftPane> aircraftPanes;
     int currentZoom;
     double currentScaleFactor;
     double x, y;
@@ -23,12 +25,12 @@ public class Map extends StackPane{
     private PossibleState currentState;
 
     public Map(int zoomLevelsNumber) {
-        this.numberZoomLevels = zoomLevelsNumber;
+        this.zoomLevelsNumber = zoomLevelsNumber;
         currentState = PossibleState.IDLE;
-        this.zoomLayers = new ArrayList<>();
+        this.backMapLayers = new ArrayList<>();
         for (int i = 0; i < zoomLevelsNumber; i++) {
-            MapZoomLayer layer = new MapZoomLayer(i);
-            this.zoomLayers.add(layer);
+            BackMapLayer layer = new BackMapLayer(i);
+            this.backMapLayers.add(layer);
             this.getChildren().add(layer);
             layer.setTranslateX(0);
             layer.setTranslateY(0);
@@ -69,6 +71,10 @@ public class Map extends StackPane{
 
     }
 
+    public void addAircraft(Aircraft aircraft) {
+        aircraftPanes.add(new AircraftPane(aircraft, zoomLevelsNumber));
+    }
+
     public void setZoomLevel(int zoom) {
         setScaleFactor(Math.pow(2, zoom));
     }
@@ -79,9 +85,9 @@ public class Map extends StackPane{
         currentScaleFactor = scaleFactor;
         int newZoom = (int)(Math.log(scaleFactor) / Math.log(2));
         if(newZoom != currentZoom && newZoom>=0 && newZoom <=19) {
-            this.zoomLayers.get(currentZoom).setVisible(false);
+            this.backMapLayers.get(currentZoom).setVisible(false);
             currentZoom = newZoom;
-            this.zoomLayers.get(currentZoom).setVisible(true);
+            this.backMapLayers.get(currentZoom).setVisible(true);
          }
         double remainingScale = scaleFactor / Math.pow(2, currentZoom);
         this.setScaleX(remainingScale);
@@ -104,7 +110,7 @@ public class Map extends StackPane{
         }
         double xMin = -this.getTranslateX()/this.getScaleX();
         double yMin = -this.getTranslateY()/this.getScaleY();
-        zoomLayers.get(currentZoom).getBackMapLayer().paveZone(xMin, yMin, xMin + width, yMin + height);
+        backMapLayers.get(currentZoom).paveZone(xMin, yMin, xMin + width, yMin + height);
     }
 
     public void setStageWidth(double stageWidth) {
