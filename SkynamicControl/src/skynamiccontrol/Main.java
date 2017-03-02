@@ -68,15 +68,18 @@ public class Main extends Application {
         Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/ardrone2.conf");
         aircraft2.setColor("#94B7EA");
         aircraft2.setBatteryLevel(13.1);
-        Instruction instruction = new Circle(new Waypoint(43.47, 1.20,200,  Waypoint.CoordinateSystem.LLA),100);
+        Instruction instruction = new Circle(new Waypoint(43.46280, 1.272568,30,  Waypoint.CoordinateSystem.LLA),100);
+        instruction.setName("Loiter 1");
         instruction.setInsertMode(Instruction.InsertMode.APPEND);
         instruction.setState(Instruction.State.SENT);
 
-        Instruction instruction2 = new Circle(new Waypoint(43.47, 1.20,50,  Waypoint.CoordinateSystem.LLA),100);
+        Instruction instruction2 = new Circle(new Waypoint(43.47280, 1.272568,100,  Waypoint.CoordinateSystem.LLA),100);
+        instruction2.setName("Circle house");
         instruction2.setInsertMode(Instruction.InsertMode.APPEND);
         instruction2.setState(Instruction.State.ACKNOWLEDGED);
 
-        Instruction instruction3 = new Circle(new Waypoint(43.47, 1.20,0,  Waypoint.CoordinateSystem.LLA),100);
+        Instruction instruction3 = new Circle(new Waypoint(43.46280, 1.282568,50,  Waypoint.CoordinateSystem.LLA),100);
+        instruction3.setName("Loiter 2");
         instruction3.setInsertMode(Instruction.InsertMode.APPEND);
         instruction3.setState(Instruction.State.ACKNOWLEDGED);
 
