@@ -9,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import skynamiccontrol.SkycEvent;
+import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.Waypoint;
 import skynamiccontrol.model.mission.Circle;
@@ -73,6 +74,13 @@ public class FormCircleController extends AbstractForm implements Initializable{
         btn_next.initButton("/resources/bitmaps/btn_next_form.png",
                 "/resources/bitmaps/hoover_btn_next_form.png",
                 "/resources/bitmaps/press_btn_next_form.png");
+
+        btn_append.initButton("/resources/bitmaps/append_normal.png",
+                "/resources/bitmaps/append_entered.png",
+                "/resources/bitmaps/append_pressed.png");
+        btn_choose_emplacement.initButton("/resources/bitmaps/choose_normal.png",
+                "/resources/bitmaps/choose_entered.png",
+                "/resources/bitmaps/choose_pressed.png");
         box_orientation.getItems().addAll("clockwise", "counterclockwise");
     }
 
@@ -104,10 +112,11 @@ public class FormCircleController extends AbstractForm implements Initializable{
     }
 
     public void setCreateMode(boolean b) {
-        btn_ok.setVisible(!b);
-        btn_next.setVisible(!b);
-        btn_append.setVisible(b);
-        btn_choose_emplacement.setVisible(b);
+        if(b) {
+            form_pane.getChildren().removeAll(btn_next, btn_ok);
+        } else {
+            form_pane.getChildren().removeAll(btn_append, btn_choose_emplacement);
+        }
     }
 
     @FXML
@@ -117,7 +126,8 @@ public class FormCircleController extends AbstractForm implements Initializable{
 
     @FXML
     public void onMouseClickedNext(MouseEvent mouseEvent) {
-        System.out.println("next");
+        getAircraft().getMissionManager().goToNextInstruction();
+        hide();
     }
 
     @FXML

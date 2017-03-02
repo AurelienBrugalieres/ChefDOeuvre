@@ -46,6 +46,7 @@ public class GPSCoordinate {
 
     public double getDistance(GPSCoordinate g2) {
         double angle = Math.acos(Math.sin(latitude)*Math.sin(g2.getLatitude())+Math.cos(latitude)*Math.cos(g2.getLatitude())*Math.cos(longitude-g2.getLongitude()));
-        return angle * 6366;
+        System.out.println(latitude + ", " + longitude + "  |  " + g2.getLatitude() + ", " + g2.getLongitude());
+        return angle * 636600;
     }
 }
