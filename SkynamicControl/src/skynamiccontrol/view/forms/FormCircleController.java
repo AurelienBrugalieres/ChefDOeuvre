@@ -1,21 +1,17 @@
 package skynamiccontrol.view.forms;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
 import skynamiccontrol.SkycEvent;
+import skynamiccontrol.model.Aircraft;
+import skynamiccontrol.model.Waypoint;
 import skynamiccontrol.model.mission.Circle;
-import skynamiccontrol.model.mission.Instruction;
 import skynamiccontrol.view.ImageButton;
 
 import java.net.URL;
@@ -35,10 +31,13 @@ public class FormCircleController extends AbstractForm implements Initializable{
     private TextField field_name;
 
     @FXML
-    private Text latEast;
+    private TextField field_altitude;
 
     @FXML
-    private Text lonNorth;
+    private Text latEastText;
+
+    @FXML
+    private Text lonNorthText;
 
     @FXML
     private TextField lonNorthField;
@@ -77,19 +76,21 @@ public class FormCircleController extends AbstractForm implements Initializable{
         box_orientation.getItems().addAll("clockwise", "counterclockwise");
     }
 
-    public void setCircle(Circle circle) {
+    public void setCircle(Circle circle, boolean isNewInstruction, Aircraft aircraft) {
+        this.setAircraft(aircraft);
         this.circle = circle;
+        setCreateMode(isNewInstruction);
         field_name.setText(circle.getName());
         switch (circle.getCenter().getCoordinateSystem()) {
             case LOCAL:
-                lonNorth.setText("North");
-                latEast.setText("East");
+                lonNorthText.setText("North");
+                latEastText.setText("East");
                 lonNorthField.setText(Double.toString(circle.getCenter().getNorth()));
                 latEastField.setText(Double.toString(circle.getCenter().getEast()));
                 break;
             case LLA:
-                lonNorth.setText("lon");
-                latEast.setText("lat");
+                lonNorthText.setText("lon");
+                latEastText.setText("lat");
                 lonNorthField.setText(Double.toString(circle.getCenter().getLongitude()));
                 latEastField.setText(Double.toString(circle.getCenter().getLatitude()));
                 break;
@@ -112,7 +113,6 @@ public class FormCircleController extends AbstractForm implements Initializable{
     @FXML
     public void onMouseClickedOK(MouseEvent mouseEvent) {
         hide();
-
     }
 
     @FXML
@@ -122,9 +122,28 @@ public class FormCircleController extends AbstractForm implements Initializable{
 
     @FXML
     public void onMouseClickedAppend(MouseEvent mouseEvent) {
-        hide();
-        SkycEvent event = new SkycEvent(SkycEvent.APPEND_INSTRUCTION);
-        getPopup().fireEvent(event);
+
+        try {
+            String name = field_name.getText();
+            double lonN = Double.parseDouble(lonNorthField.getText());
+            double latE = Double.parseDouble(latEastField.getText());
+            double radius = Double.parseDouble(field_radius.getText());
+            double altitude = Double.parseDouble(field_altitude.getText());
+            circle.setCenter(new Waypoint(latE, lonN, altitude, circle.getCenter().getCoordinateSystem()));
+            circle.setName(name);
+            circle.setRadius(radius);
+
+            getAircraft().getMissionManager().addInstruction(circle);
+            hide();
+        } catch (Exception e) {
+
+        }
+
+
+        //TODO : modify parameters.
+
+        //SkycEvent event = new SkycEvent(SkycEvent.APPEND_INSTRUCTION);
+        //getPopup().fireEvent(event);
 
     }
 

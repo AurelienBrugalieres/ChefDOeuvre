@@ -44,7 +44,8 @@ public class GPSCoordinate {
         return new XYZCoordinate(X, Y, zoom);
     }
 
-    public double getDistance(GPSCoordinate finalPointCoordinate) {
-        return 42;
+    public double getDistance(GPSCoordinate g2) {
+        double angle = Math.acos(Math.sin(latitude)*Math.sin(g2.getLatitude())+Math.cos(latitude)*Math.cos(g2.getLatitude())*Math.cos(longitude-g2.getLongitude()));
+        return angle * 6366;
     }
 }
