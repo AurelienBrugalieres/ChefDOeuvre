@@ -31,10 +31,12 @@ public class Map extends StackPane{
         IDLE, DRAW_CIRCLE, DRAW_PATH, DRAW_GO_TO, DRAW_WAYPOINT
     }
     private PossibleState currentState;
+    private DrawingMapEventType drawingEventType;
 
     public Map(int zoomLevelsNumber) {
         this.zoomLevelsNumber = zoomLevelsNumber;
         currentState = PossibleState.IDLE;
+        drawingEventType = DrawingMapEventType.END_DRAW;
         this.backMapLayers = new ArrayList<>();
         aircraftPanes = new HashMap<>();
         for (int i = 0; i < zoomLevelsNumber; i++) {
@@ -45,6 +47,13 @@ public class Map extends StackPane{
             layer.setTranslateY(0);
         }
 
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            onMouseClicked(e);
+        });
+
+        this.addEventHandler(MouseEvent.MOUSE_MOVED, (e) -> {
+            onMouseMoved(e);
+        });
 
         this.addEventHandler(MouseEvent.MOUSE_PRESSED ,(e) -> {
             onMousePressed(e);
@@ -75,6 +84,7 @@ public class Map extends StackPane{
         });
 
     }
+
 
     public void addAircraft(Aircraft aircraft) {
         AircraftPane aircraftPane = new AircraftPane(aircraft, zoomLevelsNumber);
@@ -146,6 +156,74 @@ public class Map extends StackPane{
         this.setTranslateY(this.getTranslateY() + dy);
     }
 
+    private void fireDrawClickEvent(MouseEvent e) {
+        DrawingMapEvent event = null;
+        double xEvent = e.getX()/currentScaleFactor;
+        double yEvent = e.getY()/currentScaleFactor;
+        if (drawingEventType == DrawingMapEventType.END_DRAW) {
+            drawingEventType = DrawingMapEventType.BEGIN_DRAW;
+            event = new DrawingMapEvent(drawingEventType, new Point2D(xEvent, yEvent));
+            fireDrawEvent(event);
+        } else if (drawingEventType == DrawingMapEventType.DRAW) {
+            drawingEventType = DrawingMapEventType.END_DRAW;
+            event = new DrawingMapEvent(drawingEventType, new Point2D(xEvent, yEvent));
+            fireDrawEvent(event);
+        }
+    }
+
+    private void onMouseClicked(MouseEvent e) {
+        switch (currentState) {
+            case IDLE:
+                x = e.getX();
+                y = e.getY();
+                break;
+            case DRAW_CIRCLE:
+                fireDrawClickEvent(e);
+                break;
+            case DRAW_PATH:
+                fireDrawClickEvent(e);
+                break;
+            case DRAW_GO_TO:
+                fireDrawClickEvent(e);
+                break;
+            case DRAW_WAYPOINT:
+                break;
+        }
+    }
+
+    private void fireMoveDrawEvent(MouseEvent e) {
+        DrawingMapEvent event = null;
+        double xEvent = e.getX()/currentScaleFactor;
+        double yEvent = e.getY()/currentScaleFactor;
+        if (drawingEventType == DrawingMapEventType.BEGIN_DRAW || drawingEventType == DrawingMapEventType.DRAW) {
+            drawingEventType = DrawingMapEventType.DRAW;
+            event = new DrawingMapEvent(drawingEventType, new Point2D(xEvent, yEvent));
+            fireDrawEvent(event);
+        }
+    }
+
+    private void onMouseMoved(MouseEvent e) {
+//        System.out.println("Mouse moved start : "+drawingEventType);
+        switch (currentState) {
+            case IDLE:
+                x = e.getX();
+                y = e.getY();
+                break;
+            case DRAW_CIRCLE:
+                fireMoveDrawEvent(e);
+                break;
+            case DRAW_PATH:
+                fireMoveDrawEvent(e);
+                break;
+            case DRAW_GO_TO:
+                fireMoveDrawEvent(e);
+                break;
+            case DRAW_WAYPOINT:
+                break;
+        }
+//        System.out.println("Mouse moved end : "+drawingEventType);
+    }
+
     private void onMouseDragged(MouseEvent e) {
         switch (currentState) {
             case IDLE:
@@ -163,26 +241,16 @@ public class Map extends StackPane{
     }
 
     private void onMousePressed(MouseEvent e) {
-        DrawingMapEvent event = null;
-        double xEvent = e.getX()/currentScaleFactor;
-        double yEvent = e.getY()/currentScaleFactor;
-
         switch (currentState) {
             case IDLE:
                 x = e.getX();
                 y = e.getY();
                 break;
             case DRAW_CIRCLE:
-                event = new DrawingMapEvent(DrawingMapEventType.DRAW_CIRCLE, new Point2D(xEvent, yEvent));
-                fireDrawEvent(event);
                 break;
             case DRAW_PATH:
-                event = new DrawingMapEvent(DrawingMapEventType.DRAW_GOTO, new Point2D(xEvent, yEvent));
-                fireDrawEvent(event);
                 break;
             case DRAW_GO_TO:
-                event = new DrawingMapEvent(DrawingMapEventType.DRAW_PATH, new Point2D(xEvent, yEvent));
-                fireDrawEvent(event);
                 break;
             case DRAW_WAYPOINT:
                 break;
@@ -251,6 +319,9 @@ public class Map extends StackPane{
             case PATH:
                 goToState(PossibleState.DRAW_PATH);
                 break;
+        }
+        if (currentAircraftPane != null) {
+            currentAircraftPane.handleEvent(event);
         }
     }
 }

@@ -26,7 +26,7 @@ public class Main extends Application {
     private Controller controller;
     private GCSModel model;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     private FXMLLoader loader;
     double x,y;
 

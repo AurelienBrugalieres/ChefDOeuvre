@@ -1,12 +1,16 @@
 package skynamiccontrol.map;
 
+import com.sun.org.apache.bcel.internal.generic.GOTO;
 import javafx.geometry.Point2D;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import skynamiccontrol.map.drawing.CircleStateMachine;
 import skynamiccontrol.map.drawing.CircleView;
+import skynamiccontrol.map.drawing.DrawingStateMachine;
 import skynamiccontrol.map.drawing.InstructionView;
 import skynamiccontrol.model.Aircraft;
+import skynamiccontrol.view.palette.PaletteEvent;
 
 import java.util.*;
 
@@ -18,13 +22,19 @@ public class AircraftPane extends StackPane implements Observer {
     private List<AircraftZoomLayer> aircraftZoomLayers;
     private List<InstructionView> instructionViewList;
     private int currentZoom;
+    private final DrawingStateMachine DEFAULT_CIRCLE_STATE_MACHINE = new CircleStateMachine();
+    private final DrawingStateMachine DEFAULT_GOTO_STATE_MACHINE = null;
+    private final DrawingStateMachine DEFAULT_PATH_STATE_MACHINE = null;
+    private DrawingStateMachine currentStateMachine = null;
+    private java.util.Map<PossibleState, DrawingStateMachine> availableDrawingStateMachines;
 
     private enum PossibleState {
-        IDLE, BEGIN_DRAW, DRAWING, END_DRAW
+        IDLE, DRAW_CIRCLE, DRAW_PATH, DRAW_GO_TO, DRAW_WAYPOINT
     }
     private PossibleState currentState;
 
     public AircraftPane(Aircraft aircraft, int nbZoomLevels) {
+        setupStateMachine();
         currentState = PossibleState.IDLE;
         aircraftZoomLayers = new LinkedList<>();
         instructionViewList = new LinkedList<>();
@@ -40,8 +50,18 @@ public class AircraftPane extends StackPane implements Observer {
         }
     }
 
+    private void setupStateMachine() {
+        availableDrawingStateMachines = new EnumMap<>(PossibleState.class);
+        availableDrawingStateMachines.put(PossibleState.DRAW_CIRCLE, DEFAULT_CIRCLE_STATE_MACHINE);
+        availableDrawingStateMachines.put(PossibleState.DRAW_GO_TO, DEFAULT_GOTO_STATE_MACHINE);
+        availableDrawingStateMachines.put(PossibleState.DRAW_PATH, DEFAULT_PATH_STATE_MACHINE);
+    }
+
     private void goToState(PossibleState state) {
         currentState = state;
+        currentStateMachine = availableDrawingStateMachines.get(currentState);
+        if (currentStateMachine != null)
+            currentStateMachine.init(aircraftZoomLayers.get(currentZoom));
     }
 
     public void changeZoom(int zoom, double scale) {
@@ -77,14 +97,129 @@ public class AircraftPane extends StackPane implements Observer {
 
     public void handleEvent(DrawingMapEvent e) {
         switch (e.getEventType()) {
-            case DRAW_WAYPOINT:
+            case BEGIN_DRAW:
+                break;
+            case DRAW:
+                break;
+            case END_DRAW:
+                break;
+        }
+        if (currentStateMachine != null) {
+            currentStateMachine.handleEvent(e);
+        }
+    }
+
+    public void handleEvent(PaletteEvent e) {
+        switch (e.getEventType()){
+            case NO_ACTION:
+                noDrawing();
+                break;
+            case WAYPOINT:
+                drawWaypoint();
+                break;
+            case CIRCLE:
+                drawCircle();
+                break;
+            case GOTO:
+                drawGoTo();
+                break;
+            case PATH:
+                drawPath();
+                break;
+        }
+    }
+
+    private void drawCircle() {
+        switch (currentState) {
+            case IDLE:
+                goToState(PossibleState.DRAW_CIRCLE);
                 break;
             case DRAW_CIRCLE:
-                createCircle(e.getPosition().getX(), e.getPosition().getY(), 50);
-                break;
-            case DRAW_GOTO:
                 break;
             case DRAW_PATH:
+                goToState(PossibleState.DRAW_CIRCLE);
+                break;
+            case DRAW_GO_TO:
+                goToState(PossibleState.DRAW_CIRCLE);
+                break;
+            case DRAW_WAYPOINT:
+                goToState(PossibleState.DRAW_CIRCLE);
+                break;
+        }
+    }
+
+    private void drawPath() {
+        switch (currentState) {
+            case IDLE:
+                goToState(PossibleState.DRAW_CIRCLE);
+                break;
+            case DRAW_CIRCLE:
+                goToState(PossibleState.DRAW_PATH);
+                break;
+            case DRAW_PATH:
+                break;
+            case DRAW_GO_TO:
+                goToState(PossibleState.DRAW_PATH);
+                break;
+            case DRAW_WAYPOINT:
+                goToState(PossibleState.DRAW_PATH);
+                break;
+        }
+    }
+
+    private void drawGoTo() {
+        switch (currentState) {
+            case IDLE:
+                goToState(PossibleState.DRAW_GO_TO);
+                break;
+            case DRAW_CIRCLE:
+                goToState(PossibleState.DRAW_GO_TO);
+                break;
+            case DRAW_PATH:
+                goToState(PossibleState.DRAW_GO_TO);
+                break;
+            case DRAW_GO_TO:
+                break;
+            case DRAW_WAYPOINT:
+                goToState(PossibleState.DRAW_GO_TO);
+                break;
+        }
+    }
+
+    private void drawWaypoint() {
+        switch (currentState) {
+            case IDLE:
+                goToState(PossibleState.DRAW_WAYPOINT);
+                break;
+            case DRAW_CIRCLE:
+                goToState(PossibleState.DRAW_WAYPOINT);
+                break;
+            case DRAW_PATH:
+                goToState(PossibleState.DRAW_WAYPOINT);
+                break;
+            case DRAW_GO_TO:
+                goToState(PossibleState.DRAW_WAYPOINT);
+                break;
+            case DRAW_WAYPOINT:
+                break;
+        }
+    }
+
+    private void noDrawing() {
+        switch (currentState) {
+            case IDLE:
+                break;
+            case DRAW_CIRCLE:
+                goToState(PossibleState.IDLE);
+                break;
+            case DRAW_PATH:
+                goToState(PossibleState.IDLE);
+                break;
+            case DRAW_GO_TO:
+                goToState(PossibleState.IDLE);
+                break;
+            case DRAW_WAYPOINT:
+                goToState(PossibleState.IDLE);
                 break;
         }
     }
