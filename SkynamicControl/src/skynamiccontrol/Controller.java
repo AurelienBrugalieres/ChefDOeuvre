@@ -196,7 +196,7 @@ public class Controller implements Initializable{
 
     public void adjustTimelineYPosition(double stageHeigth) {
         System.out.println(pane_timeline_palette.getHeight());
-        double height = 250;
+        double height = 260;
 
         pane_timeline_palette.setTranslateY(stageHeigth - height);
     }

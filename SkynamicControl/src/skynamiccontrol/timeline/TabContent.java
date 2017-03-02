@@ -11,11 +11,13 @@ import skynamiccontrol.model.Aircraft;
  */
 public class TabContent extends Pane {
 
-    private static final int SCROLLBAR_HEIGHT = 20;
+    public static final int SCROLLBAR_HEIGHT =20;
     private static final int X_START = 55;
+    private static final int TOP_MARGIN = 40;
     private int height;
 
     private Line verticalAxis;
+    private Line lowLine, midLine, highLine;
     private Text highText;
     private Text midText;
     private Text lowText;
@@ -30,12 +32,15 @@ public class TabContent extends Pane {
         lowText = new Text("   0");
         midText = new Text("250");
         highText = new Text("500");
+        lowLine = new Line(0, 0, 10, 0);
+        midLine = new Line(0, 0, 10, 0);
+        highLine = new Line(0, 0, 10, 0);
         verticalAxis = new Line(0, 0, 0, height);
-        content = new Content(aircraft, this);
+        content = new Content(aircraft, this, height);
         scrollPane = new ScrollPane();
         scrollPane.setContent(content);
         this.setPrefWidth(500);
-        this.getChildren().addAll(altitudeText, lowText, midText, highText, verticalAxis, scrollPane);
+        this.getChildren().addAll(altitudeText, lowText, midText, highText, verticalAxis, scrollPane, lowLine, midLine, highLine);
     }
 
     public void tuneLayout(double width) {
@@ -45,23 +50,35 @@ public class TabContent extends Pane {
 
         highText.setTranslateX(20);
         //centered on 40
-        highText.setTranslateY(40-highText.getLayoutBounds().getHeight()/2);
+        highText.setTranslateY(TOP_MARGIN/*-highText.getLayoutBounds().getHeight()/2*/);
 
         midText.setTranslateX(20);
-        midText.setTranslateY(40 + height /2 - midText.getLayoutBounds().getHeight()/2);
+        midText.setTranslateY(TOP_MARGIN + height /2 - midText.getLayoutBounds().getHeight()/2);
 
         lowText.setTranslateX(20);
-        lowText.setTranslateY(40 + height - lowText.getLayoutBounds().getHeight()/2);
+        lowText.setTranslateY(TOP_MARGIN + height - lowText.getLayoutBounds().getHeight()/2);
 
         verticalAxis.setTranslateX(50);
-        verticalAxis.setTranslateY(27);
+        verticalAxis.setTranslateY(TOP_MARGIN);
+
+        lowLine.setTranslateX(45);
+        lowLine.setTranslateY(TOP_MARGIN + height);
+
+        midLine.setTranslateX(45);
+        midLine.setTranslateY(TOP_MARGIN + height/2);
+
+        highLine.setTranslateX(45);
+        highLine.setTranslateY(TOP_MARGIN);
 
         scrollPane.setTranslateX(X_START);
-        scrollPane.setTranslateY(27 - StackPaneInstruction.BLOC_HEIGHT/2);
+        scrollPane.setTranslateY(TOP_MARGIN - StackPaneInstruction.BLOC_HEIGHT/2);
         scrollPane.setFitToHeight(true);
+        //scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setPrefWidth(width - X_START);
+        //scrollPane.setPrefHeight(height + StackPaneInstruction.BLOC_HEIGHT +SCROLLBAR_HEIGHT);
         content.setPrefWidth(width - X_START);
         content.setPrefHeight(height + StackPaneInstruction.BLOC_HEIGHT + SCROLLBAR_HEIGHT);
+
 
     }
 

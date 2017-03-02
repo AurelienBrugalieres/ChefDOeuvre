@@ -17,16 +17,17 @@ public class Content extends Pane implements Observer {
     private static int ALTITUDE_MARGIN = 30;
     Aircraft aircraft;
     TabContent tabContent;
+    double totalHeight;
 
-    public Content(Aircraft aircraft, TabContent tabContent) {
+    public Content(Aircraft aircraft, TabContent tabContent, double height) {
         this.aircraft = aircraft;
         this.tabContent = tabContent;
+        totalHeight = height;
         aircraft.getMissionManager().addObserver(this);
     }
 
     public void updateAircraftMissionBlock() {
         double x = 0;
-        double totalHeight = this.getPrefHeight();
         this.getChildren().clear();
 
         if (aircraft.getMissionManager().getFutureInstructions().isEmpty()) {
@@ -45,7 +46,7 @@ public class Content extends Pane implements Observer {
             double y = totalHeight - totalHeight*(instruction.getAltitude()/altitudeMax);
             StackPaneInstruction sp = new StackPaneInstruction(instruction, aircraft);
             sp.setTranslateX(x);
-            sp.setTranslateY(y - StackPaneInstruction.BLOC_HEIGHT/2);
+            sp.setTranslateY(y);
             x += StackPaneInstruction.BLOC_WIDTH;
             this.getChildren().add(sp);
         }

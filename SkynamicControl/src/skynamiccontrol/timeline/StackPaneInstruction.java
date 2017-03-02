@@ -30,7 +30,7 @@ public class StackPaneInstruction extends StackPane {
     public StackPaneInstruction(Instruction instruction, Aircraft aircraft) {
         this.instruction = instruction;
         this.text = new Text(instruction.getName());
-        this.text.setStroke(Color.WHITE);
+
         rectangle = new Rectangle(BLOC_WIDTH, BLOC_HEIGHT);
         Color color = null;
         switch (instruction.getState()) {
@@ -38,6 +38,7 @@ public class StackPaneInstruction extends StackPane {
                 color = Color.web(aircraft.getColor(), 1).deriveColor(0, 0.6, 1.2, 1);
                 rectangle.setStroke(Color.BLACK);
                 rectangle.getStrokeDashArray().addAll(2d);
+                this.text.setStroke(Color.BLACK);
                 break;
             case SENT:
                 color = Color.web(aircraft.getColor(), 1).deriveColor(0, 0.8, 1, 1);
@@ -50,6 +51,7 @@ public class StackPaneInstruction extends StackPane {
                 break;
             case RUNNING:
                 color = Color.web(aircraft.getColor(), 1).deriveColor(0, 1, 0.5, 1);
+                this.text.setStroke(Color.WHITE);
                 break;
             case ABORTED:
                 color = myColor(223, 0, 11,1);
@@ -74,7 +76,7 @@ public class StackPaneInstruction extends StackPane {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
                     popup.getContent().add(loader.load());
                     formController = loader.getController();
-                    ((FormCircleController)formController).setCircle((Circle)instruction);
+                    ((FormCircleController)formController).setCircle((Circle)instruction, false, aircraft);
                 } else if(instruction instanceof Path) {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_path.fxml"));
                     popup.getContent().add(loader.load());
