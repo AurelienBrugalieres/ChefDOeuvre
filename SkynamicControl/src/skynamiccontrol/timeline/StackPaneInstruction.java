@@ -23,7 +23,6 @@ public class StackPaneInstruction extends StackPane {
     public static final int BLOC_HEIGHT = 20;
 
     private int width = 120;
-    private int height = 20;
 
     private Rectangle rectangle;
     private Text text;
@@ -33,7 +32,7 @@ public class StackPaneInstruction extends StackPane {
         this.instruction = instruction;
         this.text = new Text(instruction.getName());
         this.text.setStroke(Color.WHITE);
-        rectangle = new Rectangle(width, height);
+        rectangle = new Rectangle(width, BLOC_HEIGHT);
         Color color = null;
         switch (instruction.getState()) {
             case NOT_SENT:

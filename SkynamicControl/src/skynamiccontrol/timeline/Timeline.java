@@ -73,14 +73,15 @@ public class Timeline implements Initializable{
         tab.setText(aircraft.getName());
         tab.setStyle(styleTab);
 
-        TabContent tabContent = new TabContent();
+        TabContent tabContent = new TabContent(aircraft);
         String styleContent = FxUtils.getCssColor(color.deriveColor(0, 0.2, 1, 1));
         tabContent.setStyle(styleContent);
         tabContent.setContentBackground(styleContent);
         tab.setContent(tabContent);
-
-        tabPane.getTabs().add(tab);
         tabContent.tuneLayout();
+        tabContent.updateContent();
+        tabPane.getTabs().add(tab);
+
         tabs.put(aircraft, tab);
     }
 

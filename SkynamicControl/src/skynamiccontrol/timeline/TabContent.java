@@ -4,6 +4,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import skynamiccontrol.model.Aircraft;
 
 /**
  * Created by fabien on 01/03/17.
@@ -22,14 +23,14 @@ public class TabContent extends Pane {
     private ScrollPane scrollPane;
 
 
-    public TabContent() {
+    public TabContent(Aircraft aircraft) {
         height = 120;
         altitudeText = new Text("Altitude");
         lowText = new Text("   0");
         midText = new Text("250");
         highText = new Text("500");
         verticalAxis = new Line(0, 0, 0, height);
-        content = new Content();
+        content = new Content(aircraft);
         scrollPane = new ScrollPane();
         scrollPane.setContent(content);
         this.setPrefWidth(500);
@@ -64,5 +65,9 @@ public class TabContent extends Pane {
 
     public void setContentBackground(String style) {
         content.setStyle(style);
+    }
+
+    public void updateContent() {
+        content.updateAircraftMissionBlock();
     }
 }
