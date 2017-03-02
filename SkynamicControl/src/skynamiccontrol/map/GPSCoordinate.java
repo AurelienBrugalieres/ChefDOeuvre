@@ -43,4 +43,8 @@ public class GPSCoordinate {
         double Y = ty*z;
         return new XYZCoordinate(X, Y, zoom);
     }
+
+    public double getDistance(GPSCoordinate finalPointCoordinate) {
+        return 42;
+    }
 }

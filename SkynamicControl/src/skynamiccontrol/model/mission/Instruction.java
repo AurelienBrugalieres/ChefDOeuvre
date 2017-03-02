@@ -10,6 +10,11 @@ public abstract  class Instruction {
     private InsertMode insertMode;
     private State state = State.NOT_SENT;
 
+    public Instruction() {
+        state = State.NOT_SENT;
+        insertMode = InsertMode.APPEND;
+    }
+
     public enum State {
         NOT_SENT(0),
         SENT(1),

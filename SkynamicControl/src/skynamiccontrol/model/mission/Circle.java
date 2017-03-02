@@ -11,6 +11,7 @@ public class Circle extends Instruction {
     private Double altitude = null; //if default value overrided. (default value = waypoint1.altitude)
 
     public Circle(Waypoint center, double radius) {
+        super();
         this.center = center;
         this.radius = radius;
     }

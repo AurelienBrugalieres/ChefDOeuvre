@@ -84,21 +84,22 @@ public class Map extends StackPane{
         });
 
         this.addEventHandler(SkycEvent.CIRCLE_CREATED, (e) -> {
-//            try {
-//                Popup popup = new Popup();
-//                AbstractForm formController = null;
-//                //todo : bind to the right form.
-//                FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
-//                popup.getContent().add(loader.load());
-//                formController = loader.getController();
-//                ((FormCircleController)formController).setCircle((Circle)instruction);
-//
-//                formController.setPopup(popup);
-//                //TODO : set better position.
-//                popup.show(this, e.getScreenX() - popup.getWidth() / 2, e.getScreenY() - popup.getHeight() - 200);
-//            } catch (IOException e1) {
-//                e1.printStackTrace();
-//            }
+            try {
+                Circle circle = (Circle)e.getInstruction();
+                Popup popup = new Popup();
+                AbstractForm formController = null;
+                //todo : bind to the right form.
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
+                popup.getContent().add(loader.load());
+                formController = loader.getController();
+                ((FormCircleController)formController).setCircle(circle);
+
+                formController.setPopup(popup);
+                //TODO : set better position.
+                popup.show(this, 20, this.getScene().getHeight()/2 - popup.getHeight()/2);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         });
 
         this.addEventHandler(SkycEvent.GOTO_WP_CREATED, (e) -> {

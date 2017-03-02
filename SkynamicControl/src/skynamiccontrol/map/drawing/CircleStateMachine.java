@@ -3,8 +3,7 @@ package skynamiccontrol.map.drawing;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Circle;
 import skynamiccontrol.SkycEvent;
-import skynamiccontrol.map.AircraftZoomLayer;
-import skynamiccontrol.map.DrawingMapEvent;
+import skynamiccontrol.map.*;
 import skynamiccontrol.model.Waypoint;
 
 /**
@@ -74,12 +73,20 @@ public class CircleStateMachine implements DrawingStateMachine {
                 gotoState(PossibleState.IDLE);
                 break;
             case CIRCLE:
+                Point2D finalPoint = zoomLayer.sceneToLocal(point);
+                GPSCoordinate finalPointCoordinate = new XYZCoordinate(finalPoint.getX()/ BackMapLayer.TILE_DIMENSION, finalPoint.getY()/BackMapLayer.TILE_DIMENSION, zoomLayer.getZoom()).toGPSCoordinate();
                 CircleView oldGhost = ghost;
+                Point2D pt = zoomLayer.sceneToLocal(ghost.getPosition());
+                GPSCoordinate gpsCoordinate = new XYZCoordinate(pt.getX()/ BackMapLayer.TILE_DIMENSION, pt.getY()/BackMapLayer.TILE_DIMENSION, zoomLayer.getZoom()).toGPSCoordinate();
+                Waypoint wp = new Waypoint(gpsCoordinate.getLatitude(), gpsCoordinate.getLongitude(), 200, Waypoint.CoordinateSystem.LLA);
+                double radius = gpsCoordinate.getDistance(finalPointCoordinate);
+                skynamiccontrol.model.mission.Circle circle = new skynamiccontrol.model.mission.Circle(wp, radius);
                 ghost = null;
                 gotoState(PossibleState.IDLE);
                 paintInstruction();
+
 //                skynamiccontrol.model.mission.Circle c = new skynamiccontrol.model.mission.Circle(new Waypoint());
-                SkycEvent event = new SkycEvent(SkycEvent.CIRCLE_CREATED);
+                SkycEvent event = new SkycEvent(SkycEvent.CIRCLE_CREATED, circle);
                 zoomLayer.fireEvent(event);
                 break;
         }
