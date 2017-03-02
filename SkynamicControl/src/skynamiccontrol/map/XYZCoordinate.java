@@ -42,4 +42,17 @@ public class XYZCoordinate {
         this.y = y;
         this.zoom = zoom;
     }
+
+    /**
+     * you may divide by TILE_DIMENSION befor using this method.
+     * @return
+     */
+    public GPSCoordinate toGPSCoordinate() {
+        double zn = 1 << zoom;
+        double lon = x * 360/zn - 180;
+        double A = Math.exp(2*Math.PI * (0.5 - y / zn));
+        double lat = Math.atan((Math.pow(A,2)-1) / (2*A));
+        lat = lat * 180 / Math.PI;
+        return new GPSCoordinate(lat, lon);
+    }
 }

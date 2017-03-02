@@ -1,13 +1,10 @@
 package skynamiccontrol;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.*;
 import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.map.Map;
@@ -18,8 +15,6 @@ import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.model.Waypoint;
 import skynamiccontrol.model.mission.Circle;
 import skynamiccontrol.model.mission.Instruction;
-
-import java.awt.*;
 
 
 public class Main extends Application {
@@ -51,13 +46,13 @@ public class Main extends Application {
         primaryStage.widthProperty().addListener(((observable, oldValue, newValue) -> {
             double container_width = controller.getNotificationContainer().getWidth();
             controller.getNotificationContainer().setTranslateX((double)newValue - container_width);
+            controller.adjustTimelineWidth(primaryStage.getWidth());
             map.setStageWidth(primaryStage.getWidth());
             map.pave();
         }));
 
         primaryStage.heightProperty().addListener(((observable, oldValue, newValue) -> {
-                        //  controller.getPane_timeline_palette().setTranslateX(Screen.getPrimary().getVisualBounds().getWidth()-56);
-            controller.getPane_timeline_palette().setTranslateY(Screen.getPrimary().getVisualBounds().getHeight()-252);//(double) newValue - (controller.getPaletteController().getHeigth()+27));
+            controller.adjustTimelineYPosition(primaryStage.getHeight());
             map.setStageHeight(primaryStage.getHeight());
             map.pave();
         }));
@@ -73,10 +68,21 @@ public class Main extends Application {
         Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/ardrone2.conf");
         aircraft2.setColor("#94B7EA");
         aircraft2.setBatteryLevel(13.1);
-        Instruction instruction = new Circle(new Waypoint(43.47, 1.20,125,  Waypoint.CoordinateSystem.LOCAL),25);
+        Instruction instruction = new Circle(new Waypoint(43.47, 1.20,200,  Waypoint.CoordinateSystem.LLA),100);
         instruction.setInsertMode(Instruction.InsertMode.APPEND);
-        instruction.setState(Instruction.State.ACKNOWLEDGED);
+        instruction.setState(Instruction.State.SENT);
+
+        Instruction instruction2 = new Circle(new Waypoint(43.47, 1.20,50,  Waypoint.CoordinateSystem.LLA),100);
+        instruction2.setInsertMode(Instruction.InsertMode.APPEND);
+        instruction2.setState(Instruction.State.ACKNOWLEDGED);
+
+        Instruction instruction3 = new Circle(new Waypoint(43.47, 1.20,0,  Waypoint.CoordinateSystem.LLA),100);
+        instruction3.setInsertMode(Instruction.InsertMode.APPEND);
+        instruction3.setState(Instruction.State.ACKNOWLEDGED);
+
         aircraft.getMissionManager().addInstruction(instruction);
+        aircraft.getMissionManager().addInstruction(instruction2);
+        aircraft.getMissionManager().addInstruction(instruction3);
         aircraft2.getMissionManager().addInstruction(instruction);
 
         model.addAircraft(aircraft);

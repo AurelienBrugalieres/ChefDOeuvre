@@ -20,9 +20,8 @@ import java.io.IOException;
  * Created by Lioz-MBPR on 27/02/2017.
  */
 public class StackPaneInstruction extends StackPane {
-
-    private int width = 120;
-    private int height = 20;
+    public static final int BLOC_HEIGHT = 20;
+    public static final int BLOC_WIDTH = 120;
 
     private Rectangle rectangle;
     private Text text;
@@ -32,7 +31,7 @@ public class StackPaneInstruction extends StackPane {
         this.instruction = instruction;
         this.text = new Text(instruction.getName());
         this.text.setStroke(Color.WHITE);
-        rectangle = new Rectangle(width, height);
+        rectangle = new Rectangle(BLOC_WIDTH, BLOC_HEIGHT);
         Color color = null;
         switch (instruction.getState()) {
             case NOT_SENT:

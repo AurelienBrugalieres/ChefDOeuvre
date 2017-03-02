@@ -5,23 +5,16 @@ package skynamiccontrol.timeline;
  * Created by Lioz-MBPR on 14/02/2017.
  *
  **/
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import skynamiccontrol.FxUtils;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,23 +40,18 @@ public class Timeline implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tabPane.getStylesheets().add("/resources/css/timelineTab.css");
-        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-        tabPane.setLayoutX(visualBounds.getWidth());
-        this.tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> ov, Number oldValue, Number newValue) {
-                if (listener != null) {
-                    Tab newTab = tabPane.getTabs().get(newValue.intValue());
-                    Aircraft aircraft = null;
-                    for (Map.Entry<Aircraft, Tab> entry : tabs.entrySet()) {
-                        if (entry.getValue().equals(newTab)) {
-                            aircraft = entry.getKey();
-                        }
+        tabPane.getStylesheets().add("resources/css/timelineTab.css");
+        this.tabPane.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+            if (listener != null) {
+                Tab newTab = tabPane.getTabs().get(newValue.intValue());
+                Aircraft aircraft = null;
+                for (Map.Entry<Aircraft, Tab> entry : tabs.entrySet()) {
+                    if (entry.getValue().equals(newTab)) {
+                        aircraft = entry.getKey();
                     }
-                    listener.onChangeTab(newTab, aircraft);
-
                 }
+                listener.onChangeTab(newTab, aircraft);
+
             }
         });
         tabs = new HashMap<>();
@@ -76,23 +64,23 @@ public class Timeline implements Initializable{
         tab.setText(aircraft.getName());
         tab.setStyle(styleTab);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/timeline/MissionBlockUI.fxml"));
-        try {
-            Parent node = loader.load();
-            MissionBlockController missionBlockController = loader.getController();
-            missionBlockController.init(aircraft);
-            String styleContent = FxUtils.getCssColor(color.deriveColor(0, 0.2, 1, 1));
-            missionBlockController.setStyle(styleContent);
-            tab.setContent(node);
-            node.toFront();
-            missionBlockController.updateAircraftMissionBlock();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+        TabContent tabContent = new TabContent(aircraft);
+        String styleContent = FxUtils.getCssColor(color.deriveColor(0, 0.2, 1, 1));
+        tabContent.setStyle(styleContent);
+        tabContent.setContentBackground(styleContent);
+        tab.setContent(tabContent);
+        tabContent.tuneLayout(tabContent.getPrefWidth());
+        tabContent.updateContent();
         tabPane.getTabs().add(tab);
+
         tabs.put(aircraft, tab);
+    }
+
+    public void adjustWidth(double desiredWidth) {
+        tabPane.setPrefWidth(desiredWidth);
+        for(Tab tab : tabs.values()) {
+            ((TabContent)tab.getContent()).adjustWidth(desiredWidth);
+        }
     }
 
     public void setModel(GCSModel model) {

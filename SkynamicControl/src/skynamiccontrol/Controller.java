@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -187,4 +189,15 @@ public class Controller implements Initializable{
     public HBox getPane_timeline_palette(){ return pane_timeline_palette;}
 
     public PaletteController getPaletteController(){ return paletteController;}
+
+    public void adjustTimelineWidth(double stageWidth) {
+        timelineController.adjustWidth(stageWidth - paletteController.getWidth());
+    }
+
+    public void adjustTimelineYPosition(double stageHeigth) {
+        System.out.println(pane_timeline_palette.getHeight());
+        double height = 250;
+
+        pane_timeline_palette.setTranslateY(stageHeigth - height);
+    }
 }

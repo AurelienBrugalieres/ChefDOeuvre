@@ -73,14 +73,15 @@ public class AircraftPane extends StackPane implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-        //if(observable instanceof Aircraft) {
-        Aircraft aircraft = (Aircraft) observable;
-        for(AircraftZoomLayer aircraftZoomLayer : aircraftZoomLayers) {
-            Platform.runLater(() -> {
-                aircraftZoomLayer.setAircraftPosition(new GPSCoordinate(aircraft.getLatitude(), aircraft.getLongitude()), aircraft.getHeading());
-            });
+        if(!(observable instanceof Aircraft)) {
+            return;
         }
-        //}
+        Aircraft aircraft = (Aircraft) observable;
+        Platform.runLater(() -> {
+            for(AircraftZoomLayer aircraftZoomLayer : aircraftZoomLayers) {
+                aircraftZoomLayer.setAircraftPosition(new GPSCoordinate(aircraft.getLatitude(), aircraft.getLongitude()), aircraft.getHeading());
+            }
+        });
     }
 
 
