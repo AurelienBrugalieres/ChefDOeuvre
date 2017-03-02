@@ -1,12 +1,8 @@
 package skynamiccontrol.map;
 
-import com.sun.org.apache.bcel.internal.generic.GOTO;
-import javafx.geometry.Point2D;
 import javafx.application.Platform;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import skynamiccontrol.map.drawing.CircleStateMachine;
-import skynamiccontrol.map.drawing.CircleView;
 import skynamiccontrol.map.drawing.DrawingStateMachine;
 import skynamiccontrol.map.drawing.InstructionView;
 import skynamiccontrol.model.Aircraft;
@@ -85,17 +81,6 @@ public class AircraftPane extends StackPane implements Observer {
     }
 
 
-    public void createCircle(double x, double y, int radius) {
-        CircleView circleView = new CircleView(null, radius, new Point2D(x, y));
-        circleView.setColor(Color.web(aircraft.getColor()));
-        instructionViewList.add(circleView);
-        for(AircraftZoomLayer aircraftZoomLayer : aircraftZoomLayers) {
-            Platform.runLater(() -> {
-                aircraftZoomLayer.repaint();
-            });
-        }
-    }
-
     public void handleEvent(DrawingMapEvent e) {
         switch (e.getEventType()) {
             case BEGIN_DRAW:
@@ -106,7 +91,7 @@ public class AircraftPane extends StackPane implements Observer {
                 break;
         }
         if (currentStateMachine != null) {
-            currentStateMachine.handleEvent(e);
+            currentStateMachine.handleEvent(e, aircraft);
         }
     }
 

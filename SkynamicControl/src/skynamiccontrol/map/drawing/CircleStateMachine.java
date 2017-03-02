@@ -1,9 +1,9 @@
 package skynamiccontrol.map.drawing;
 
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Circle;
 import skynamiccontrol.SkycEvent;
 import skynamiccontrol.map.*;
+import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.Waypoint;
 
 /**
@@ -15,6 +15,7 @@ public class CircleStateMachine implements DrawingStateMachine {
     private CircleView oldGhost;
     private Point2D center;
     private AircraftZoomLayer zoomLayer;
+    private Aircraft aircraft;
 
     private enum PossibleState {
         IDLE, BEGIN, CIRCLE;
@@ -86,7 +87,7 @@ public class CircleStateMachine implements DrawingStateMachine {
                 paintInstruction();
 
 //                skynamiccontrol.model.mission.Circle c = new skynamiccontrol.model.mission.Circle(new Waypoint());
-                SkycEvent event = new SkycEvent(SkycEvent.CIRCLE_CREATED, circle);
+                SkycEvent event = new SkycEvent(SkycEvent.CIRCLE_CREATED, circle, aircraft);
                 zoomLayer.fireEvent(event);
                 break;
         }
@@ -97,7 +98,8 @@ public class CircleStateMachine implements DrawingStateMachine {
     }
 
     @Override
-    public void handleEvent(DrawingMapEvent event) {
+    public void handleEvent(DrawingMapEvent event, Aircraft aircraft) {
+        this.aircraft = aircraft;
         switch (event.getEventType()) {
             case BEGIN_DRAW:
                 beginDraw(event.getPosition());

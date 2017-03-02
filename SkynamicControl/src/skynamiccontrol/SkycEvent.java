@@ -4,6 +4,7 @@ import javafx.beans.NamedArg;
 import javafx.event.Event;
 import javafx.event.EventType;
 import skynamiccontrol.model.Aircraft;
+import skynamiccontrol.model.mission.Circle;
 import skynamiccontrol.model.mission.Instruction;
 
 /**
@@ -29,6 +30,11 @@ public class SkycEvent extends Event {
     public SkycEvent(@NamedArg("eventType") EventType<? extends Event> eventType, Instruction instruction) {
         super(eventType);
         this.instruction = instruction;
+    }
+
+    public SkycEvent(EventType<SkycEvent> circleCreated, Circle circle, Aircraft aircraft) {
+        this(circleCreated, circle);
+        this.aircraft = aircraft;
     }
 
     public Instruction getInstruction() {
