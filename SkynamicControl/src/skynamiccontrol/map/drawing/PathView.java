@@ -16,4 +16,9 @@ public class PathView implements InstructionView {
     public Point2D getPosition() {
         return null;
     }
+
+    @Override
+    public void remove() {
+
+    }
 }

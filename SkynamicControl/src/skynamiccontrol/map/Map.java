@@ -1,12 +1,24 @@
 package skynamiccontrol.map;
 
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Popup;
 import skynamiccontrol.SkycEvent;
 import skynamiccontrol.model.Aircraft;
+import skynamiccontrol.model.mission.Circle;
+import skynamiccontrol.model.mission.GoToWP;
+import skynamiccontrol.model.mission.Path;
+import skynamiccontrol.model.mission.Survey;
+import skynamiccontrol.view.forms.AbstractForm;
+import skynamiccontrol.view.forms.FormCircleController;
+import skynamiccontrol.view.forms.FormGoToController;
+import skynamiccontrol.view.forms.FormPathController;
 import skynamiccontrol.view.palette.PaletteEvent;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -72,7 +84,21 @@ public class Map extends StackPane{
         });
 
         this.addEventHandler(SkycEvent.CIRCLE_CREATED, (e) -> {
-
+//            try {
+//                Popup popup = new Popup();
+//                AbstractForm formController = null;
+//                //todo : bind to the right form.
+//                FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
+//                popup.getContent().add(loader.load());
+//                formController = loader.getController();
+//                ((FormCircleController)formController).setCircle((Circle)instruction);
+//
+//                formController.setPopup(popup);
+//                //TODO : set better position.
+//                popup.show(this, e.getScreenX() - popup.getWidth() / 2, e.getScreenY() - popup.getHeight() - 200);
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
         });
 
         this.addEventHandler(SkycEvent.GOTO_WP_CREATED, (e) -> {
@@ -158,8 +184,8 @@ public class Map extends StackPane{
 
     private void fireDrawClickEvent(MouseEvent e) {
         DrawingMapEvent event = null;
-        double xEvent = e.getX()/currentScaleFactor;
-        double yEvent = e.getY()/currentScaleFactor;
+        double xEvent = e.getSceneX();
+        double yEvent = e.getSceneY();
         if (drawingEventType == DrawingMapEventType.END_DRAW) {
             drawingEventType = DrawingMapEventType.BEGIN_DRAW;
             event = new DrawingMapEvent(drawingEventType, new Point2D(xEvent, yEvent));
@@ -193,8 +219,8 @@ public class Map extends StackPane{
 
     private void fireMoveDrawEvent(MouseEvent e) {
         DrawingMapEvent event = null;
-        double xEvent = e.getX()/currentScaleFactor;
-        double yEvent = e.getY()/currentScaleFactor;
+        double xEvent = e.getSceneX();
+        double yEvent = e.getSceneY();
         if (drawingEventType == DrawingMapEventType.BEGIN_DRAW || drawingEventType == DrawingMapEventType.DRAW) {
             drawingEventType = DrawingMapEventType.DRAW;
             event = new DrawingMapEvent(drawingEventType, new Point2D(xEvent, yEvent));

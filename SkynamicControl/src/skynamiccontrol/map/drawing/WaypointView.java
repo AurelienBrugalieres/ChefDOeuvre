@@ -9,6 +9,8 @@ import javafx.scene.layout.Pane;
  */
 public class WaypointView implements InstructionView {
     private Point2D leftTopCorner;
+    private Pane parent;
+    private ImageView waypointImg;
 
     public WaypointView() {
         this(new Point2D(0, 0));
@@ -21,7 +23,8 @@ public class WaypointView implements InstructionView {
 
     @Override
     public void paint(Pane parent, Point2D position) {
-        ImageView waypointImg = new ImageView("resources/bitmaps/waypoint32x32.png");
+        this.parent = parent;
+        waypointImg = new ImageView("resources/bitmaps/waypoint32x32.png");
         parent.getChildren().add(waypointImg);
         waypointImg.setTranslateX(position.getX()-waypointImg.getImage().getWidth()/2);
         waypointImg.setTranslateY(position.getY()-waypointImg.getImage().getHeight()/2);
@@ -30,5 +33,10 @@ public class WaypointView implements InstructionView {
     @Override
     public Point2D getPosition() {
         return leftTopCorner;
+    }
+
+    @Override
+    public void remove() {
+        this.parent.getChildren().remove(waypointImg);
     }
 }

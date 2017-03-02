@@ -3,11 +3,14 @@ package skynamiccontrol;
 import javafx.beans.NamedArg;
 import javafx.event.Event;
 import javafx.event.EventType;
+import skynamiccontrol.model.mission.Instruction;
 
 /**
  * Created by fabien on 01/03/17.
  */
 public class SkycEvent extends Event {
+
+    private Instruction instruction;
 
     public final static EventType<SkycEvent> CIRCLE_CREATED = new EventType<>("Circle Created");
     public final static EventType<SkycEvent> PATH_CREATED = new EventType<>("Path Created");
@@ -20,4 +23,13 @@ public class SkycEvent extends Event {
         super(eventType);
     }
 
+
+    public SkycEvent(@NamedArg("eventType") EventType<? extends Event> eventType, Instruction instruction) {
+        super(eventType);
+        this.instruction = instruction;
+    }
+
+    public Instruction getInstruction() {
+        return instruction;
+    }
 }

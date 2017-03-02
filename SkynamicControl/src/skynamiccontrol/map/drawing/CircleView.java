@@ -1,9 +1,11 @@
 package skynamiccontrol.map.drawing;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Shape;
 import skynamiccontrol.model.mission.Circle;
 
 /**
@@ -16,6 +18,9 @@ public class CircleView implements InstructionView {
     private int radius;
     private Point2D centerPosition;
     private WaypointView waypointView;
+    private Pane parent;
+    private javafx.scene.shape.Circle circle;
+
 
     public CircleView() {
         this(null, 0, new Point2D(0, 0));
@@ -30,8 +35,9 @@ public class CircleView implements InstructionView {
 
     @Override
     public void paint(Pane parent, Point2D position) {
+        this.parent = parent;
         waypointView.paint(parent, position);
-        javafx.scene.shape.Circle circle = new javafx.scene.shape.Circle(position.getX(), position.getY(), radius);
+        circle = new javafx.scene.shape.Circle(position.getX(), position.getY(), radius);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(Color.BLACK);
         circle.setStrokeWidth(circle.getStrokeWidth()+2);
@@ -62,7 +68,23 @@ public class CircleView implements InstructionView {
         return centerPosition;
     }
 
+    @Override
+    public void remove() {
+        if (parent != null) {
+            waypointView.remove();
+            parent.getChildren().remove(circle);
+        }
+    }
+
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CircleView))
+            return false;
+        CircleView c = (CircleView)obj;
+        return (c.radius == this.radius && c.centerPosition.equals(this.centerPosition));
     }
 }

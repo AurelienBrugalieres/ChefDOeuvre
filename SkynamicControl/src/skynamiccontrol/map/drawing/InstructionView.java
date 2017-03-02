@@ -9,4 +9,5 @@ import javafx.scene.layout.Pane;
 public interface InstructionView {
     void paint(Pane parent, Point2D position);
     Point2D getPosition();
+    void remove();
 }

@@ -2,8 +2,10 @@ package skynamiccontrol.map.drawing;
 
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Circle;
+import skynamiccontrol.SkycEvent;
 import skynamiccontrol.map.AircraftZoomLayer;
 import skynamiccontrol.map.DrawingMapEvent;
+import skynamiccontrol.model.Waypoint;
 
 /**
  * Created by aurelien on 02/03/17.
@@ -11,6 +13,7 @@ import skynamiccontrol.map.DrawingMapEvent;
 public class CircleStateMachine implements DrawingStateMachine {
 
     private CircleView ghost;
+    private CircleView oldGhost;
     private Point2D center;
     private AircraftZoomLayer zoomLayer;
 
@@ -39,15 +42,12 @@ public class CircleStateMachine implements DrawingStateMachine {
     }
 
     private int computeDistance(Point2D center, Point2D point) {
-        System.out.println("Center = "+center+", Point = "+point);
         double res = (point.getX()-center.getX())*(point.getX()-center.getX());
         res += (point.getY()-center.getY())*(point.getY()-center.getY());
-        System.out.println("Radius = "+(int)Math.sqrt(res));
         return (int)Math.sqrt(res);
     }
 
     private void draw(Point2D point) {
-        CircleView oldGhost;
         switch (currentState) {
             case IDLE:
                 break;
@@ -58,7 +58,7 @@ public class CircleStateMachine implements DrawingStateMachine {
                 paintInstruction();
                 break;
             case CIRCLE:
-                oldGhost = ghost;
+                ghost.remove();
                 ghost = new CircleView(null, computeDistance(center, point), center);
                 gotoState(PossibleState.CIRCLE);
                 paintInstruction();
@@ -78,6 +78,9 @@ public class CircleStateMachine implements DrawingStateMachine {
                 ghost = null;
                 gotoState(PossibleState.IDLE);
                 paintInstruction();
+//                skynamiccontrol.model.mission.Circle c = new skynamiccontrol.model.mission.Circle(new Waypoint());
+                SkycEvent event = new SkycEvent(SkycEvent.CIRCLE_CREATED);
+                zoomLayer.fireEvent(event);
                 break;
         }
     }
@@ -112,10 +115,10 @@ public class CircleStateMachine implements DrawingStateMachine {
     @Override
     public void paintInstruction() {
         if (ghost != null) {
-            zoomLayer.getChildren().remove(ghost);
-            double newX = ghost.getPosition().getX() * Math.pow(2, zoomLayer.getZoom());
-            double newY = ghost.getPosition().getY() * Math.pow(2, zoomLayer.getZoom());
-            ghost.paint(zoomLayer, new Point2D(newX, newY));
+//            double newX = ghost.getPosition().getX() * Math.pow(2, zoomLayer.getZoom());
+//            double newY = ghost.getPosition().getY() * Math.pow(2, zoomLayer.getZoom());
+            Point2D pt = zoomLayer.sceneToLocal(ghost.getPosition().getX(), ghost.getPosition().getY());
+            ghost.paint(zoomLayer, pt);
         }
     }
 }
