@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * The MIT License
+ * Copyright (c) 2014 Varun Pant
+ *
  * Datastructure: A point Quad Tree for representing 2D data. Each
  * region has the same ratio as the bounds for the tree.
  * <p/>

@@ -36,33 +36,21 @@ public class StackPaneInstruction extends StackPane {
         Color color = null;
         switch (instruction.getState()) {
             case NOT_SENT:
-                color = myColor(aircraft.getColor().getRed(),
-                        aircraft.getColor().getGreen(),
-                        aircraft.getColor().getBlue(),
-                        0.5);
+                color = Color.web(aircraft.getColor(), 1).deriveColor(0, 0.6, 1.2, 1);
                 rectangle.setStroke(Color.BLACK);
                 rectangle.getStrokeDashArray().addAll(2d);
                 break;
             case SENT:
-                color = myColor(aircraft.getColor().getRed(),
-                        aircraft.getColor().getGreen(),
-                        aircraft.getColor().getBlue(),
-                        0.6);
+                color = Color.web(aircraft.getColor(), 1).deriveColor(0, 0.8, 1, 1);
                 break;
             case ACKNOWLEDGED:
-                color = myColor(aircraft.getColor().getRed(),
-                        aircraft.getColor().getGreen(),
-                        aircraft.getColor().getBlue(),
-                        0.8);
+                color = Color.web(aircraft.getColor(), 1).deriveColor(0, 1, 0.8, 1);
                 break;
             case CANCELED:
                 color = myColor(191, 191, 191,1);
                 break;
             case RUNNING:
-                color = myColor(aircraft.getColor().getRed(),
-                        aircraft.getColor().getGreen(),
-                        aircraft.getColor().getBlue(),
-                        1);
+                color = Color.web(aircraft.getColor(), 1).deriveColor(0, 1, 0.5, 1);
                 break;
             case ABORTED:
                 color = myColor(223, 0, 11,1);

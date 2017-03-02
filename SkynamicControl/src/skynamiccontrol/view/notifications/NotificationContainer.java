@@ -16,6 +16,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import skynamiccontrol.FxUtils;
 import skynamiccontrol.model.Aircraft;
 
 import java.awt.*;
@@ -93,11 +94,8 @@ public class NotificationContainer extends Parent implements Observer{
     }
 
     public void AddTab(Aircraft air) {
-        String backgroundColor = "("+air.getColor().getRed()+","+
-                air.getColor().getGreen()+","+
-                air.getColor().getBlue()+",0.7)";
-        String styleTab = "-fx-background-color: rgba"+backgroundColor;
-
+        Color color = Color.web(air.getColor(), 0.7);
+        String styleTab = FxUtils.getCssColor(color);
         Tab tab = new Tab();
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToHeight(true);
@@ -147,7 +145,8 @@ public class NotificationContainer extends Parent implements Observer{
             ScrollPane scrollPane = new ScrollPane();
             VBox vbox = new VBox();
             tab.setText(air.getName());
-            tab.setStyle("-fx-background-color: rgba(" + air.getColor().getRed() + "," + air.getColor().getGreen() + "," + air.getColor().getBlue() + ";");
+            Color color = Color.web(air.getColor(), 1);
+            tab.setStyle(FxUtils.getCssColor(color));
             scrollPane.setContent(vbox);
             tab.setContent(scrollPane);
             this.tabPane.getTabs().add(tab);
@@ -194,6 +193,7 @@ public class NotificationContainer extends Parent implements Observer{
         ((VBox)tab_pane.get(aircraft).getContent()).getChildren().add(notif);
         ((ScrollPane)((BorderPane)tab_pane.get(aircraft).getContent()).getCenter()).setVvalue(1.0);
     }
+
 
     public double getWidth() {
         return tabPane.getWidth();

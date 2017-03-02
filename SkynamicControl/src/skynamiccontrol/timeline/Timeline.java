@@ -15,10 +15,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
+import skynamiccontrol.FxUtils;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
-import skynamiccontrol.view.notifications.NotificationContainer;
 
 import java.io.IOException;
 import java.net.URL;
@@ -69,22 +70,19 @@ public class Timeline implements Initializable{
     }
 
     public void addAircraft(Aircraft aircraft) {
-        String backgroundColor = "("+aircraft.getColor().getRed()+","+
-                aircraft.getColor().getGreen()+","+
-                aircraft.getColor().getBlue();
-        String styleTab = "-fx-background-color: rgba"+backgroundColor;
+        Color color = Color.web(aircraft.getColor(), 0.7);
+        String styleTab = FxUtils.getCssColor(color);
         Tab tab = new Tab();
         tab.setText(aircraft.getName());
-        tab.setStyle(styleTab+",0.7)");
+        tab.setStyle(styleTab);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/timeline/MissionBlockUI.fxml"));
         try {
             Parent node = loader.load();
             MissionBlockController missionBlockController = loader.getController();
-            //missionBlockController.setAircraft(aircraft);
-            //missionBlockController.setModel(model);
             missionBlockController.init(aircraft);
-            missionBlockController.setStyle(styleTab+",0.7)");
+            String styleContent = FxUtils.getCssColor(color.deriveColor(0, 0.2, 1, 1));
+            missionBlockController.setStyle(styleContent);
             tab.setContent(node);
             node.toFront();
             missionBlockController.updateAircraftMissionBlock();
@@ -95,7 +93,6 @@ public class Timeline implements Initializable{
 
         tabPane.getTabs().add(tab);
         tabs.put(aircraft, tab);
-        tabPane.setStyle(styleTab+",0)");
     }
 
     public void setModel(GCSModel model) {

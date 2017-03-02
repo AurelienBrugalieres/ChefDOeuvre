@@ -71,11 +71,13 @@ public class Main extends Application {
         Aircraft aircraft = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/microjet.conf");
         aircraft.setBatteryLevel(15.6);
         Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/ardrone2.conf");
-        aircraft2.setColor(Color.decode("#94B7EA"));
+        aircraft2.setColor("#94B7EA");
         aircraft2.setBatteryLevel(13.1);
         Instruction instruction = new Circle(new Waypoint(43.47, 1.20,125,  Waypoint.CoordinateSystem.LOCAL),25);
         instruction.setInsertMode(Instruction.InsertMode.APPEND);
+        instruction.setState(Instruction.State.ACKNOWLEDGED);
         aircraft.getMissionManager().addInstruction(instruction);
+        aircraft2.getMissionManager().addInstruction(instruction);
 
         model.addAircraft(aircraft);
         model.addAircraft(aircraft2);
