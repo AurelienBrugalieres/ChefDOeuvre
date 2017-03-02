@@ -30,7 +30,7 @@ public class TabContent extends Pane {
         midText = new Text("250");
         highText = new Text("500");
         verticalAxis = new Line(0, 0, 0, height);
-        content = new Content(aircraft);
+        content = new Content(aircraft, this);
         scrollPane = new ScrollPane();
         scrollPane.setContent(content);
         this.setPrefWidth(500);
@@ -69,5 +69,10 @@ public class TabContent extends Pane {
 
     public void updateContent() {
         content.updateAircraftMissionBlock();
+    }
+
+    public void setMaxAltitude(int maxAlt) {
+        highText.setText(Integer.toString(maxAlt));
+        midText.setText(Integer.toString(maxAlt / 2));
     }
 }

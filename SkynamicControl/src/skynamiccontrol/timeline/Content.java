@@ -13,11 +13,14 @@ import java.util.Observer;
  */
 public class Content extends Pane implements Observer {
     private static int DEFAULT_HEIGHT = 150;
+    private static int ALTITUDE_ROUND = 50;
     private static int ALTITUDE_MARGIN = 30;
     Aircraft aircraft;
+    TabContent tabContent;
 
-    public Content(Aircraft aircraft) {
+    public Content(Aircraft aircraft, TabContent tabContent) {
         this.aircraft = aircraft;
+        this.tabContent = tabContent;
         aircraft.getMissionManager().addObserver(this);
     }
 
@@ -32,14 +35,17 @@ public class Content extends Pane implements Observer {
 
         double altitudeMax = DEFAULT_HEIGHT;
         for (Instruction instruction : aircraft.getMissionManager().getFutureInstructions()) {
-            altitudeMax = Math.max(altitudeMax, instruction.getAltitude()+ALTITUDE_MARGIN);
+            altitudeMax = Math.max(altitudeMax, instruction.getAltitude() + ALTITUDE_MARGIN);
         }
+        altitudeMax = altitudeMax + ALTITUDE_ROUND - (altitudeMax % ALTITUDE_ROUND);
+        tabContent.setMaxAltitude((int) altitudeMax);
+
 
         for (Instruction instruction : aircraft.getMissionManager().getFutureInstructions()) {
             double y = totalHeight - totalHeight*(instruction.getAltitude()/altitudeMax);
             StackPaneInstruction sp = new StackPaneInstruction(instruction, aircraft);
             sp.setTranslateX(x);
-            sp.setTranslateY(y + StackPaneInstruction.BLOC_HEIGHT/2);
+            sp.setTranslateY(y - StackPaneInstruction.BLOC_HEIGHT/2);
             x += StackPaneInstruction.BLOC_WIDTH;
             this.getChildren().add(sp);
         }
