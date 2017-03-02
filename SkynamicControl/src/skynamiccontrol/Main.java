@@ -73,10 +73,21 @@ public class Main extends Application {
         Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/ardrone2.conf");
         aircraft2.setColor("#94B7EA");
         aircraft2.setBatteryLevel(13.1);
-        Instruction instruction = new Circle(new Waypoint(43.47, 1.20,125,  Waypoint.CoordinateSystem.LOCAL),25);
+        Instruction instruction = new Circle(new Waypoint(43.47, 1.20,200,  Waypoint.CoordinateSystem.LLA),100);
         instruction.setInsertMode(Instruction.InsertMode.APPEND);
-        instruction.setState(Instruction.State.ACKNOWLEDGED);
+        instruction.setState(Instruction.State.SENT);
+
+        Instruction instruction2 = new Circle(new Waypoint(43.47, 1.20,50,  Waypoint.CoordinateSystem.LLA),100);
+        instruction2.setInsertMode(Instruction.InsertMode.APPEND);
+        instruction2.setState(Instruction.State.ACKNOWLEDGED);
+
+        Instruction instruction3 = new Circle(new Waypoint(43.47, 1.20,0,  Waypoint.CoordinateSystem.LLA),100);
+        instruction3.setInsertMode(Instruction.InsertMode.APPEND);
+        instruction3.setState(Instruction.State.ACKNOWLEDGED);
+
         aircraft.getMissionManager().addInstruction(instruction);
+        aircraft.getMissionManager().addInstruction(instruction2);
+        aircraft.getMissionManager().addInstruction(instruction3);
         aircraft2.getMissionManager().addInstruction(instruction);
 
         model.addAircraft(aircraft);
