@@ -1,19 +1,13 @@
 package skynamiccontrol.map;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.input.MouseEvent;
 import javafx.application.Platform;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import skynamiccontrol.map.drawing.CircleView;
 import skynamiccontrol.map.drawing.InstructionView;
-import skynamiccontrol.map.drawing.WaypointView;
 import skynamiccontrol.model.Aircraft;
 
-import javax.xml.stream.EventFilter;
 import java.util.*;
 
 /**
@@ -25,7 +19,13 @@ public class AircraftPane extends StackPane implements Observer {
     private List<InstructionView> instructionViewList;
     private int currentZoom;
 
+    private enum PossibleState {
+        IDLE, BEGIN_DRAW, DRAWING, END_DRAW
+    }
+    private PossibleState currentState;
+
     public AircraftPane(Aircraft aircraft, int nbZoomLevels) {
+        currentState = PossibleState.IDLE;
         aircraftZoomLayers = new LinkedList<>();
         instructionViewList = new LinkedList<>();
         aircraft.addObserver(this);
@@ -38,6 +38,10 @@ public class AircraftPane extends StackPane implements Observer {
             layer.setTranslateX(0);
             layer.setTranslateY(0);
         }
+    }
+
+    private void goToState(PossibleState state) {
+        currentState = state;
     }
 
     public void changeZoom(int zoom, double scale) {
@@ -60,9 +64,9 @@ public class AircraftPane extends StackPane implements Observer {
     }
 
 
-    public void addCircle(double x, double y) {
-        CircleView circleView = new CircleView(null, 50, new Point2D(x, y));
-
+    public void createCircle(double x, double y, int radius) {
+        CircleView circleView = new CircleView(null, radius, new Point2D(x, y));
+        circleView.setColor(Color.web(aircraft.getColor()));
         instructionViewList.add(circleView);
         for(AircraftZoomLayer aircraftZoomLayer : aircraftZoomLayers) {
             Platform.runLater(() -> {
@@ -76,7 +80,7 @@ public class AircraftPane extends StackPane implements Observer {
             case DRAW_WAYPOINT:
                 break;
             case DRAW_CIRCLE:
-                addCircle(e.getPosition().getX(), e.getPosition().getY());
+                createCircle(e.getPosition().getX(), e.getPosition().getY(), 50);
                 break;
             case DRAW_GOTO:
                 break;

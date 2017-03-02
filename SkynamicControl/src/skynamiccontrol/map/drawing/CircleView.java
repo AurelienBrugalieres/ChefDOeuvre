@@ -31,9 +31,10 @@ public class CircleView implements InstructionView {
     @Override
     public void paint(Pane parent, Point2D position) {
         waypointView.paint(parent, position);
-        javafx.scene.shape.Circle circle = new javafx.scene.shape.Circle(position.getX(), position.getY(), 50);
+        javafx.scene.shape.Circle circle = new javafx.scene.shape.Circle(position.getX(), position.getY(), radius);
         circle.setFill(Color.TRANSPARENT);
         circle.setStroke(color);
+        circle.setStrokeWidth(circle.getStrokeWidth()+2);
         parent.getChildren().add(circle);
     }
 
