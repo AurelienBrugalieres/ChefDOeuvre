@@ -12,6 +12,7 @@ import skynamiccontrol.model.Aircraft;
 public class TabContent extends Pane {
 
     private static final int SCROLLBAR_HEIGHT = 20;
+    private static final int X_START = 55;
     private int height;
 
     private Line verticalAxis;
@@ -37,7 +38,8 @@ public class TabContent extends Pane {
         this.getChildren().addAll(altitudeText, lowText, midText, highText, verticalAxis, scrollPane);
     }
 
-    public void tuneLayout() {
+    public void tuneLayout(double width) {
+        //width = this.getPrefWidth()
         altitudeText.setTranslateX(20);
         altitudeText.setTranslateY( 15);
 
@@ -54,11 +56,11 @@ public class TabContent extends Pane {
         verticalAxis.setTranslateX(50);
         verticalAxis.setTranslateY(27);
 
-        scrollPane.setTranslateX(55);
+        scrollPane.setTranslateX(X_START);
         scrollPane.setTranslateY(27 - StackPaneInstruction.BLOC_HEIGHT/2);
         scrollPane.setFitToHeight(true);
-        scrollPane.setPrefWidth(this.getPrefWidth() - 55);
-        content.setPrefWidth(this.getPrefWidth() - 55);
+        scrollPane.setPrefWidth(width - X_START);
+        content.setPrefWidth(width - X_START);
         content.setPrefHeight(height + StackPaneInstruction.BLOC_HEIGHT + SCROLLBAR_HEIGHT);
 
     }
@@ -74,5 +76,10 @@ public class TabContent extends Pane {
     public void setMaxAltitude(int maxAlt) {
         highText.setText(Integer.toString(maxAlt));
         midText.setText(Integer.toString(maxAlt / 2));
+    }
+
+    public void adjustWidth(double desiredWidth) {
+        scrollPane.setPrefWidth(desiredWidth - X_START);
+        content.setPrefWidth(desiredWidth - X_START);
     }
 }

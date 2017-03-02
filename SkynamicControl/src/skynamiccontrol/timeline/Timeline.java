@@ -31,12 +31,25 @@ public class Timeline implements Initializable{
 
     GCSModel model;
 
+
+
     public interface ChangeTabListener {
         void onChangeTab(Tab tab, Aircraft aircraft);
     }
     private ChangeTabListener listener = null;
 
     private Map<Aircraft, Tab> tabs = null;
+
+    public void adjustWidth(double desiredWidth) {
+        tabPane.setPrefWidth(desiredWidth);
+        for(Tab tab : tabs.values()) {
+            ((TabContent)tab.getContent()).adjustWidth(desiredWidth);
+        }
+    }
+
+    public void adjustYPosition(double stageHeigth) {
+        tabPane.setLayoutY(stageHeigth - tabPane.getHeight() - 20);
+    }
 
     public Timeline() {
 
@@ -45,8 +58,6 @@ public class Timeline implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tabPane.getStylesheets().add("/resources/css/timelineTab.css");
-        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-        tabPane.setLayoutX(visualBounds.getWidth());
         this.tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> ov, Number oldValue, Number newValue) {
@@ -78,7 +89,7 @@ public class Timeline implements Initializable{
         tabContent.setStyle(styleContent);
         tabContent.setContentBackground(styleContent);
         tab.setContent(tabContent);
-        tabContent.tuneLayout();
+        tabContent.tuneLayout(tabContent.getPrefWidth());
         tabContent.updateContent();
         tabPane.getTabs().add(tab);
 

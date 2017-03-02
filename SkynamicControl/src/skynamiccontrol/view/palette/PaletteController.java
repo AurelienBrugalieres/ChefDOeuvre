@@ -402,4 +402,8 @@ public class PaletteController implements Initializable {
     public double getHeigth() {
         return this.vbox.getHeight();
     }
+
+    public double getWidth() {
+        return this.vbox.getWidth();
+    }
 }
