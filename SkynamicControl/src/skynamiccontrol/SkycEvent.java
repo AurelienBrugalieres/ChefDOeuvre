@@ -3,6 +3,7 @@ package skynamiccontrol;
 import javafx.beans.NamedArg;
 import javafx.event.Event;
 import javafx.event.EventType;
+import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.mission.Instruction;
 
 /**
@@ -11,6 +12,7 @@ import skynamiccontrol.model.mission.Instruction;
 public class SkycEvent extends Event {
 
     private Instruction instruction;
+    private Aircraft aircraft;
 
     public final static EventType<SkycEvent> CIRCLE_CREATED = new EventType<>("Circle Created");
     public final static EventType<SkycEvent> PATH_CREATED = new EventType<>("Path Created");
@@ -31,5 +33,9 @@ public class SkycEvent extends Event {
 
     public Instruction getInstruction() {
         return instruction;
+    }
+
+    public Aircraft getAircraft() {
+        return aircraft;
     }
 }
