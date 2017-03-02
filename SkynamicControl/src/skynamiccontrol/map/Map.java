@@ -86,13 +86,14 @@ public class Map extends StackPane{
         this.addEventHandler(SkycEvent.CIRCLE_CREATED, (e) -> {
             try {
                 Circle circle = (Circle)e.getInstruction();
+                Aircraft aircraft = e.getAircraft();
                 Popup popup = new Popup();
                 AbstractForm formController = null;
                 //todo : bind to the right form.
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
                 popup.getContent().add(loader.load());
                 formController = loader.getController();
-                ((FormCircleController)formController).setCircle(circle);
+                ((FormCircleController)formController).setCircle(circle, true, aircraft);
 
                 formController.setPopup(popup);
                 //TODO : set better position.
