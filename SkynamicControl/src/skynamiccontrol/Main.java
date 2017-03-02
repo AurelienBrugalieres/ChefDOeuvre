@@ -1,13 +1,10 @@
 package skynamiccontrol;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.*;
 import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import skynamiccontrol.communication.IvyManager;
 import skynamiccontrol.map.Map;
@@ -18,8 +15,6 @@ import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.model.Waypoint;
 import skynamiccontrol.model.mission.Circle;
 import skynamiccontrol.model.mission.Instruction;
-
-import java.awt.*;
 
 
 public class Main extends Application {
@@ -51,15 +46,13 @@ public class Main extends Application {
         primaryStage.widthProperty().addListener(((observable, oldValue, newValue) -> {
             double container_width = controller.getNotificationContainer().getWidth();
             controller.getNotificationContainer().setTranslateX((double)newValue - container_width);
-            controller.adjustTimeline(primaryStage.getWidth());
+            controller.adjustTimelineWidth(primaryStage.getWidth());
             map.setStageWidth(primaryStage.getWidth());
             map.pave();
         }));
 
         primaryStage.heightProperty().addListener(((observable, oldValue, newValue) -> {
-                        //  controller.getPane_timeline_palette().setTranslateX(Screen.getPrimary().getVisualBounds().getWidth()-56);
-            controller.getPane_timeline_palette().setTranslateY(Screen.getPrimary().getVisualBounds().getHeight()-252);//(double) newValue - (controller.getPaletteController().getHeigth()+27));
-            controller.adjustYPosition(primaryStage.getHeight());
+            controller.adjustTimelineYPosition(primaryStage.getHeight());
             map.setStageHeight(primaryStage.getHeight());
             map.pave();
         }));

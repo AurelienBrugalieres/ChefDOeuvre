@@ -5,16 +5,12 @@ package skynamiccontrol.timeline;
  * Created by Lioz-MBPR on 14/02/2017.
  *
  **/
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import skynamiccontrol.FxUtils;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
@@ -31,8 +27,6 @@ public class Timeline implements Initializable{
 
     GCSModel model;
 
-
-
     public interface ChangeTabListener {
         void onChangeTab(Tab tab, Aircraft aircraft);
     }
@@ -40,38 +34,24 @@ public class Timeline implements Initializable{
 
     private Map<Aircraft, Tab> tabs = null;
 
-    public void adjustWidth(double desiredWidth) {
-        tabPane.setPrefWidth(desiredWidth);
-        for(Tab tab : tabs.values()) {
-            ((TabContent)tab.getContent()).adjustWidth(desiredWidth);
-        }
-    }
-
-    public void adjustYPosition(double stageHeigth) {
-        tabPane.setLayoutY(stageHeigth - tabPane.getHeight() - 20);
-    }
-
     public Timeline() {
 
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tabPane.getStylesheets().add("/resources/css/timelineTab.css");
-        this.tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> ov, Number oldValue, Number newValue) {
-                if (listener != null) {
-                    Tab newTab = tabPane.getTabs().get(newValue.intValue());
-                    Aircraft aircraft = null;
-                    for (Map.Entry<Aircraft, Tab> entry : tabs.entrySet()) {
-                        if (entry.getValue().equals(newTab)) {
-                            aircraft = entry.getKey();
-                        }
+        tabPane.getStylesheets().add("resources/css/timelineTab.css");
+        this.tabPane.getSelectionModel().selectedIndexProperty().addListener((ov, oldValue, newValue) -> {
+            if (listener != null) {
+                Tab newTab = tabPane.getTabs().get(newValue.intValue());
+                Aircraft aircraft = null;
+                for (Map.Entry<Aircraft, Tab> entry : tabs.entrySet()) {
+                    if (entry.getValue().equals(newTab)) {
+                        aircraft = entry.getKey();
                     }
-                    listener.onChangeTab(newTab, aircraft);
-
                 }
+                listener.onChangeTab(newTab, aircraft);
+
             }
         });
         tabs = new HashMap<>();
@@ -94,6 +74,13 @@ public class Timeline implements Initializable{
         tabPane.getTabs().add(tab);
 
         tabs.put(aircraft, tab);
+    }
+
+    public void adjustWidth(double desiredWidth) {
+        tabPane.setPrefWidth(desiredWidth);
+        for(Tab tab : tabs.values()) {
+            ((TabContent)tab.getContent()).adjustWidth(desiredWidth);
+        }
     }
 
     public void setModel(GCSModel model) {
