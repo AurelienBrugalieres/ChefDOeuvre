@@ -1,18 +1,14 @@
 package skynamiccontrol.map;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
+import skynamiccontrol.SkycEvent;
 import skynamiccontrol.model.Aircraft;
-import skynamiccontrol.model.Constants;
-import skynamiccontrol.model.GCSModel;
 import skynamiccontrol.view.palette.PaletteEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Created by fabien on 25/02/17.
@@ -64,6 +60,18 @@ public class Map extends StackPane{
 
         this.addEventHandler(MouseEvent.MOUSE_RELEASED ,(e) -> {
             onMouseReleased(e);
+        });
+
+        this.addEventHandler(SkycEvent.CIRCLE_CREATED, (e) -> {
+
+        });
+
+        this.addEventHandler(SkycEvent.GOTO_WP_CREATED, (e) -> {
+
+        });
+
+        this.addEventHandler(SkycEvent.PATH_CREATED, (e) -> {
+
         });
 
     }
@@ -155,19 +163,26 @@ public class Map extends StackPane{
     }
 
     private void onMousePressed(MouseEvent e) {
+        DrawingMapEvent event = null;
+        double xEvent = e.getX()/currentScaleFactor;
+        double yEvent = e.getY()/currentScaleFactor;
+
         switch (currentState) {
             case IDLE:
                 x = e.getX();
                 y = e.getY();
                 break;
             case DRAW_CIRCLE:
-                x = e.getSceneX();
-                y = e.getSceneY();
-                drawCircle();
+                event = new DrawingMapEvent(DrawingMapEventType.DRAW_CIRCLE, new Point2D(xEvent, yEvent));
+                fireDrawEvent(event);
                 break;
             case DRAW_PATH:
+                event = new DrawingMapEvent(DrawingMapEventType.DRAW_GOTO, new Point2D(xEvent, yEvent));
+                fireDrawEvent(event);
                 break;
             case DRAW_GO_TO:
+                event = new DrawingMapEvent(DrawingMapEventType.DRAW_PATH, new Point2D(xEvent, yEvent));
+                fireDrawEvent(event);
                 break;
             case DRAW_WAYPOINT:
                 break;
@@ -209,13 +224,14 @@ public class Map extends StackPane{
         pave();
     }
 
-    private void drawCircle() {
-
+    private void fireDrawEvent(DrawingMapEvent e) {
+        if (currentAircraftPane != null) {
+            currentAircraftPane.handleEvent(e);
+        }
     }
 
     private void goToState(PossibleState state) {
         currentState = state;
-        System.out.println(currentState);
     }
 
     public void handleEvent(PaletteEvent event) {

@@ -1,6 +1,7 @@
 package skynamiccontrol.map;
 
 import javafx.event.*;
+import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 
 import java.awt.*;
@@ -10,46 +11,31 @@ import java.util.EventObject;
  * Created by aurelien on 25/02/17.
  */
 public class DrawingMapEvent {
-    private int aircraftId;
     private DrawingMapEventType eventType;
-    private MouseEvent mouseEvent;
+    private Point2D position;
 
     public DrawingMapEvent(DrawingMapEventType eventType) {
         this.eventType = eventType;
     }
 
-    public DrawingMapEvent(DrawingMapEventType eventType, int aircraftId) {
-        this.aircraftId = aircraftId;
+    public DrawingMapEvent(DrawingMapEventType eventType,  Point2D position) {
         this.eventType = eventType;
-    }
-
-    public DrawingMapEvent(DrawingMapEventType eventType, int aircraftId,  MouseEvent mouseEvent) {
-        this.aircraftId = aircraftId;
-        this.eventType = eventType;
-        this.mouseEvent = mouseEvent;
+        this.position = position;
     }
 
     public DrawingMapEventType getEventType() {
         return eventType;
     }
 
-    public int getAircraftId() {
-        return aircraftId;
-    }
-
-    public MouseEvent getMouseEvent() {
-        return mouseEvent;
-    }
-
-    public void setAircraftId(int aircraftId) {
-        this.aircraftId = aircraftId;
+    public Point2D getPosition() {
+        return position;
     }
 
     public void setEventType(DrawingMapEventType eventType) {
         this.eventType = eventType;
     }
 
-    public void setMouseEvent(MouseEvent mouseEvent) {
-        this.mouseEvent = mouseEvent;
+    public void setPosition(Point2D position) {
+        this.position = position;
     }
 }

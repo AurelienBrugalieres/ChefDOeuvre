@@ -1,10 +1,13 @@
 package skynamiccontrol.map;
 
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import skynamiccontrol.map.drawing.InstructionView;
+
+import java.util.List;
 
 import static com.sun.javafx.util.Utils.clamp;
 
@@ -12,11 +15,20 @@ import static com.sun.javafx.util.Utils.clamp;
  * Created by fabien on 01/03/17.
  */
 public class AircraftZoomLayer extends Pane {
-    int zoom;
-    ImageView aircraftIcon;
-    ImageView aircraftOutIcon;
+    private int zoom;
+    private ImageView aircraftIcon;
+    private ImageView aircraftOutIcon;
+    private InstructionView ghost = null;
+    private List<InstructionView> instructionViewList = null;
+    private Canvas canvas;
+
+
 
     public AircraftZoomLayer(int zoom) {
+        canvas = new Canvas(getWidth(), getHeight());
+        getChildren().add(canvas);
+        widthProperty().addListener(e -> canvas.setWidth(getWidth()));
+        heightProperty().addListener(e -> canvas.setHeight(getHeight()));
         this.zoom = zoom;
         aircraftIcon = new ImageView("resources/bitmaps/aircraft.png");
         aircraftOutIcon = new ImageView("resources/bitmaps/aircraftOut.png");
@@ -50,8 +62,24 @@ public class AircraftZoomLayer extends Pane {
         }
     }
 
+    public void setInstructionViewList(List<InstructionView> list) {
+        this.instructionViewList = list;
+    }
+
     public void changeScale(double scale) {
         aircraftIcon.setScaleX(1/scale);
         aircraftIcon.setScaleY(1/scale);
+    }
+
+    public void repaint() {
+        for (InstructionView instructionView : instructionViewList) {
+            double newX = instructionView.getPosition().getX()*Math.pow(2, zoom);
+            double newY = instructionView.getPosition().getY()*Math.pow(2, zoom);
+            instructionView.paint(this, new Point2D(newX, newY));
+        }
+    }
+
+    public int getZoom() {
+        return zoom;
     }
 }

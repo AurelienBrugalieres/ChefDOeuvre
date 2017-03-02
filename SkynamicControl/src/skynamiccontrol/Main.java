@@ -47,7 +47,7 @@ public class Main extends Application {
         Map map = new Map(20);
 
 
-        primaryStage.getIcons().add(new Image("file:"+ Constants.USER_DIR + "resources/bitmaps/quadrotorLogoDark.png"));
+        primaryStage.getIcons().add(new Image("resources/bitmaps/quadrotorLogoDark.png"));
         primaryStage.widthProperty().addListener(((observable, oldValue, newValue) -> {
             double container_width = controller.getNotificationContainer().getWidth();
             controller.getNotificationContainer().setTranslateX((double)newValue - container_width);
