@@ -8,10 +8,8 @@ package skynamiccontrol.timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -21,7 +19,6 @@ import skynamiccontrol.FxUtils;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.GCSModel;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,22 +73,14 @@ public class Timeline implements Initializable{
         tab.setText(aircraft.getName());
         tab.setStyle(styleTab);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/timeline/MissionBlockUI.fxml"));
-        try {
-            Parent node = loader.load();
-            MissionBlockController missionBlockController = loader.getController();
-            missionBlockController.init(aircraft);
-            String styleContent = FxUtils.getCssColor(color.deriveColor(0, 0.2, 1, 1));
-            missionBlockController.setStyle(styleContent);
-            tab.setContent(node);
-            node.toFront();
-            missionBlockController.updateAircraftMissionBlock();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        TabContent tabContent = new TabContent();
+        String styleContent = FxUtils.getCssColor(color.deriveColor(0, 0.2, 1, 1));
+        tabContent.setStyle(styleContent);
+        tabContent.setContentBackground(styleContent);
+        tab.setContent(tabContent);
 
         tabPane.getTabs().add(tab);
+        tabContent.tuneLayout();
         tabs.put(aircraft, tab);
     }
 

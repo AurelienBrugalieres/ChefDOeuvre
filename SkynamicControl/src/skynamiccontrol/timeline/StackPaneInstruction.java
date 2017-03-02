@@ -20,6 +20,7 @@ import java.io.IOException;
  * Created by Lioz-MBPR on 27/02/2017.
  */
 public class StackPaneInstruction extends StackPane {
+    public static final int BLOC_HEIGHT = 20;
 
     private int width = 120;
     private int height = 20;
