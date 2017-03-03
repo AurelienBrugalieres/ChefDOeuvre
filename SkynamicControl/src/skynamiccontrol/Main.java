@@ -64,10 +64,10 @@ public class Main extends Application {
         model.setMap(map);
 
         Aircraft aircraft = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/microjet.conf");
-        aircraft.setBatteryLevel(15.6);
-        Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/ardrone2.conf");
+        Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/twinjet.conf");
         aircraft2.setColor("#94B7EA");
-        aircraft2.setBatteryLevel(13.1);
+
+        /*
         Instruction instruction = new Circle(new Waypoint(43.46280, 1.272568,30,  Waypoint.CoordinateSystem.LLA),100);
         instruction.setName("Loiter 1");
         instruction.setInsertMode(Instruction.InsertMode.APPEND);
@@ -82,11 +82,7 @@ public class Main extends Application {
         instruction3.setName("Loiter 2");
         instruction3.setInsertMode(Instruction.InsertMode.APPEND);
         instruction3.setState(Instruction.State.ACKNOWLEDGED);
-
-        aircraft.getMissionManager().addInstruction(instruction);
-        aircraft.getMissionManager().addInstruction(instruction2);
-        aircraft.getMissionManager().addInstruction(instruction3);
-        aircraft2.getMissionManager().addInstruction(instruction);
+        */
 
         model.addAircraft(aircraft);
         model.addAircraft(aircraft2);
