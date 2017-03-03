@@ -61,25 +61,24 @@ public class AircraftZoomLayer extends Pane {
                 pt.getY() > height) {
             double dy = height/2 - pt.getY();
             double dx = pt.getX() - width/2;
-            double angle = Math.atan2(dy, dx);
-            double angleUpRight = Math.atan2(height/2, width/2);
-            double angleUpLeft = Math.atan2(height/2, -width/2);
-            double angleBottomRight = Math.atan2(-height/2, width/2);
-            double angleBottomLeft = Math.atan2(-height/2, -width/2);
-            System.out.println(angle + " " + angleUpRight + " " + angleUpLeft  + " " + angleBottomLeft + " " + angleBottomRight);
+            double angle = (Math.atan2(dy, dx) + 2*Math.PI)%(2*Math.PI);
+            double angleUpRight = (Math.atan2(height/2, width/2) + 2*Math.PI)%(2*Math.PI);
+            double angleUpLeft = (Math.atan2(height/2, -width/2) + 2*Math.PI) % (2*Math.PI);
+            double angleBottomRight = (Math.atan2(-height/2, width/2) + 2*Math.PI) % (2*Math.PI);
+            double angleBottomLeft = (Math.atan2(-height/2, -width/2) + 2*Math.PI) % (2*Math.PI);
             Point2D outAircraft;
             if(angle > angleUpRight && angle < angleUpLeft) {
-                //haut
+                //up
                 outAircraft = new Point2D(width/2 + (height/2)/Math.tan(angle), 0);
             } else if (angle > angleUpLeft && angle < angleBottomLeft) {
-                //gauche
-                outAircraft = new Point2D(0, 0);
+                //left
+                outAircraft = new Point2D(0, height/2 - (height/2)*Math.tan(Math.PI - angle));
             } else if (angle > angleBottomLeft && angle < angleBottomRight) {
-                //bas
-                outAircraft = new Point2D(0, 0);
+                //bottom
+                outAircraft = new Point2D(width/2 + (height/2)/Math.tan(angle), height);
             } else {
-                //droite
-                outAircraft = new Point2D(0, 0);
+                //right
+                outAircraft = new Point2D(width, height/2 - (height/2)*Math.tan(angle));
             }
 
             aircraftOutIcon.setVisible(true);
