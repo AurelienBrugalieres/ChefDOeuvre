@@ -141,6 +141,9 @@ public class FormCircleController extends AbstractForm implements Initializable{
             double radius = Double.parseDouble(field_radius.getText());
             double altitude = Double.parseDouble(field_altitude.getText());
             circle.setCenter(new Waypoint(latE, lonN, altitude, circle.getCenter().getCoordinateSystem()));
+            if(box_orientation.getSelectionModel().getSelectedIndex() == 1) {
+                radius = -radius;
+            }
             circle.setName(name);
             circle.setRadius(radius);
 
