@@ -104,6 +104,7 @@ public class FormCircleController extends AbstractForm implements Initializable{
                 break;
         }
         field_radius.setText(Double.toString(Math.abs(circle.getRadius())));
+        field_altitude.setText(Double.toString(Math.abs(circle.getAltitude())));
         if(Math.signum(circle.getRadius()) > 0) {
             box_orientation.getSelectionModel().select(0);
         } else {
