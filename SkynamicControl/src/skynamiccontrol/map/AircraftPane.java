@@ -37,7 +37,7 @@ public class AircraftPane extends StackPane implements Observer {
         aircraft.addObserver(this);
         this.aircraft = aircraft;
         for (int i = 0; i < nbZoomLevels; i++) {
-            AircraftZoomLayer layer = new AircraftZoomLayer(i);
+            AircraftZoomLayer layer = new AircraftZoomLayer(i, aircraft.getColor());
             layer.setInstructionViewList(instructionViewList);
             this.aircraftZoomLayers.add(layer);
             this.getChildren().add(layer);

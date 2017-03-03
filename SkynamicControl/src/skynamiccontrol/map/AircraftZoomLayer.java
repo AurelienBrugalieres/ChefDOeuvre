@@ -5,6 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import skynamiccontrol.map.drawing.InstructionView;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class AircraftZoomLayer extends Pane {
 
 
 
-    public AircraftZoomLayer(int zoom) {
+    public AircraftZoomLayer(int zoom, String aircraftColor) {
         canvas = new Canvas(getWidth(), getHeight());
         getChildren().add(canvas);
         widthProperty().addListener(e -> canvas.setWidth(getWidth()));
@@ -32,9 +33,13 @@ public class AircraftZoomLayer extends Pane {
         this.zoom = zoom;
         aircraftIcon = new ImageView("resources/bitmaps/aircraft.png");
         aircraftOutIcon = new ImageView("resources/bitmaps/aircraftOut.png");
+        Color color = Color.web(aircraftColor);
         ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setHue(0.2);
+        double hue = ((color.getHue() + 180) % 360);
+        System.out.println(hue/360);
+        colorAdjust.setHue(hue/360);
         aircraftIcon.setEffect(colorAdjust);
+        aircraftOutIcon.setEffect(colorAdjust);
         this.getChildren().add(aircraftIcon);
         this.getChildren().add(aircraftOutIcon);
         aircraftOutIcon.setVisible(false);
