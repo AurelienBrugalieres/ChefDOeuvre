@@ -36,13 +36,13 @@ public class AircraftZoomLayer extends Pane {
         Color color = Color.web(aircraftColor);
         ColorAdjust colorAdjust = new ColorAdjust();
         double hue = ((color.getHue() + 180) % 360);
-        System.out.println(hue/360);
         colorAdjust.setHue(hue/360);
         aircraftIcon.setEffect(colorAdjust);
         aircraftOutIcon.setEffect(colorAdjust);
         this.getChildren().add(aircraftIcon);
         this.getChildren().add(aircraftOutIcon);
         aircraftOutIcon.setVisible(false);
+        this.setVisible(false);
     }
 
     public void setAircraftPosition(GPSCoordinate aircraftCoordinates, double heading) {
@@ -53,14 +53,40 @@ public class AircraftZoomLayer extends Pane {
         aircraftIcon.setTranslateX(x);
         aircraftIcon.setTranslateY(y);
         Point2D  pt =this.localToScene(x,y);
+        double width = getScene().getWidth();
+        double height = getScene().getHeight();
         if(pt.getX() < 0 ||
                 pt.getY() < 0 ||
-                pt.getX() > getScene().getWidth() ||
-                pt.getY() > getScene().getHeight()) {
+                pt.getX() > width ||
+                pt.getY() > height) {
+            double dy = height/2 - pt.getY();
+            double dx = pt.getX() - width/2;
+            double angle = Math.atan2(dy, dx);
+            double angleUpRight = Math.atan2(height/2, width/2);
+            double angleUpLeft = Math.atan2(height/2, -width/2);
+            double angleBottomRight = Math.atan2(-height/2, width/2);
+            double angleBottomLeft = Math.atan2(-height/2, -width/2);
+            System.out.println(angle + " " + angleUpRight + " " + angleUpLeft  + " " + angleBottomLeft + " " + angleBottomRight);
+            Point2D outAircraft;
+            if(angle > angleUpRight && angle < angleUpLeft) {
+                //haut
+                outAircraft = new Point2D(width/2 + (height/2)/Math.tan(angle), 0);
+            } else if (angle > angleUpLeft && angle < angleBottomLeft) {
+                //gauche
+                outAircraft = new Point2D(0, 0);
+            } else if (angle > angleBottomLeft && angle < angleBottomRight) {
+                //bas
+                outAircraft = new Point2D(0, 0);
+            } else {
+                //droite
+                outAircraft = new Point2D(0, 0);
+            }
+
             aircraftOutIcon.setVisible(true);
-            Point2D newPt = this.sceneToLocal(new Point2D(clamp(0, pt.getX(), getScene().getWidth()), clamp(0, pt.getY(), getScene().getWidth())));
-            aircraftOutIcon.setTranslateX(newPt.getX());
-            aircraftOutIcon.setTranslateY(newPt.getY());
+            Point2D newPt = this.sceneToLocal(outAircraft);
+            aircraftOutIcon.setTranslateX(newPt.getX() - aircraftOutIcon.getImage().getWidth()/2);
+            aircraftOutIcon.setTranslateY(newPt.getY() - aircraftOutIcon.getImage().getHeight()/2);
+            aircraftOutIcon.setRotate(Math.toDegrees(-angle));
 
         } else {
             aircraftOutIcon.setVisible(false);
@@ -74,6 +100,8 @@ public class AircraftZoomLayer extends Pane {
     public void changeScale(double scale) {
         aircraftIcon.setScaleX(1/scale);
         aircraftIcon.setScaleY(1/scale);
+        aircraftOutIcon.setScaleX(1/scale);
+        aircraftOutIcon.setScaleY(1/scale);
     }
 
     public void repaint() {
