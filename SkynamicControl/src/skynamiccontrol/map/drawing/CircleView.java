@@ -39,7 +39,10 @@ public class CircleView implements InstructionView {
         waypointView.paint(parent, position);
         circle = new javafx.scene.shape.Circle(position.getX(), position.getY(), radius);
         circle.setFill(Color.TRANSPARENT);
-        circle.setStroke(Color.BLACK);
+        if (color == null)
+            circle.setStroke(Color.BLACK);
+        else
+            circle.setStroke(color);
         circle.setStrokeWidth(circle.getStrokeWidth()+2);
         parent.getChildren().add(circle);
     }
