@@ -2,6 +2,8 @@ package skynamiccontrol.map;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
@@ -9,13 +11,8 @@ import javafx.stage.Popup;
 import skynamiccontrol.SkycEvent;
 import skynamiccontrol.model.Aircraft;
 import skynamiccontrol.model.mission.Circle;
-import skynamiccontrol.model.mission.GoToWP;
-import skynamiccontrol.model.mission.Path;
-import skynamiccontrol.model.mission.Survey;
 import skynamiccontrol.view.forms.AbstractForm;
 import skynamiccontrol.view.forms.FormCircleController;
-import skynamiccontrol.view.forms.FormGoToController;
-import skynamiccontrol.view.forms.FormPathController;
 import skynamiccontrol.view.palette.PaletteEvent;
 
 import java.io.IOException;
@@ -83,6 +80,11 @@ public class Map extends StackPane{
             onMouseReleased(e);
         });
 
+        this.addEventHandler(KeyEvent.KEY_PRESSED, (e) -> {
+            System.out.println("Key Pressed");
+            onKeyPressed(e);
+        });
+
         this.addEventHandler(SkycEvent.CIRCLE_CREATED, (e) -> {
             try {
                 Circle circle = (Circle)e.getInstruction();
@@ -112,6 +114,7 @@ public class Map extends StackPane{
         });
 
     }
+
 
 
     public void addAircraft(Aircraft aircraft) {
@@ -191,11 +194,11 @@ public class Map extends StackPane{
         if (drawingEventType == DrawingMapEventType.END_DRAW) {
             drawingEventType = DrawingMapEventType.BEGIN_DRAW;
             event = new DrawingMapEvent(drawingEventType, new Point2D(xEvent, yEvent));
-            fireDrawEvent(event);
+            fireDrawingMapEvent(event);
         } else if (drawingEventType == DrawingMapEventType.DRAW) {
             drawingEventType = DrawingMapEventType.END_DRAW;
             event = new DrawingMapEvent(drawingEventType, new Point2D(xEvent, yEvent));
-            fireDrawEvent(event);
+            fireDrawingMapEvent(event);
         }
     }
 
@@ -219,6 +222,39 @@ public class Map extends StackPane{
         }
     }
 
+    private void onKeyPressed(KeyEvent e) {
+        DrawingMapEvent event = null;
+
+        switch (currentState) {
+            case IDLE:
+                break;
+            case DRAW_CIRCLE:
+                if (e.getCode() == KeyCode.ESCAPE) {
+                    event = new DrawingMapEvent(DrawingMapEventType.CANCEL_DRAW);
+                    fireDrawingMapEvent(event);
+                }
+                break;
+            case DRAW_PATH:
+                if (e.getCode() == KeyCode.ESCAPE) {
+                    event = new DrawingMapEvent(DrawingMapEventType.CANCEL_DRAW);
+                    fireDrawingMapEvent(event);
+                }
+                break;
+            case DRAW_GO_TO:
+                if (e.getCode() == KeyCode.ESCAPE) {
+                    event = new DrawingMapEvent(DrawingMapEventType.CANCEL_DRAW);
+                    fireDrawingMapEvent(event);
+                }
+                break;
+            case DRAW_WAYPOINT:
+                if (e.getCode() == KeyCode.ESCAPE) {
+                    event = new DrawingMapEvent(DrawingMapEventType.CANCEL_DRAW);
+                    fireDrawingMapEvent(event);
+                }
+                break;
+        }
+    }
+
     private void fireMoveDrawEvent(MouseEvent e) {
         DrawingMapEvent event = null;
         double xEvent = e.getSceneX();
@@ -226,7 +262,7 @@ public class Map extends StackPane{
         if (drawingEventType == DrawingMapEventType.BEGIN_DRAW || drawingEventType == DrawingMapEventType.DRAW) {
             drawingEventType = DrawingMapEventType.DRAW;
             event = new DrawingMapEvent(drawingEventType, new Point2D(xEvent, yEvent));
-            fireDrawEvent(event);
+            fireDrawingMapEvent(event);
         }
     }
 
@@ -320,7 +356,7 @@ public class Map extends StackPane{
         pave();
     }
 
-    private void fireDrawEvent(DrawingMapEvent e) {
+    private void fireDrawingMapEvent(DrawingMapEvent e) {
         if (currentAircraftPane != null) {
             currentAircraftPane.handleEvent(e);
         }

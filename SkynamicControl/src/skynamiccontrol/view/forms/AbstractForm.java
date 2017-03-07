@@ -1,5 +1,8 @@
 package skynamiccontrol.view.forms;
 
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Popup;
 import skynamiccontrol.model.Aircraft;
 
@@ -24,9 +27,18 @@ public abstract class AbstractForm {
 
     public void setPopup(Popup popup) {
         this.popup = popup;
+        popup.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    hide();
+                }
+            }
+        });
     }
 
     public void hide() {
-        popup.hide();
+        if (popup != null && popup.isShowing())
+            popup.hide();
     }
 }
