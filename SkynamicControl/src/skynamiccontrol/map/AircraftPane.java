@@ -76,6 +76,7 @@ public class AircraftPane extends StackPane implements Observer {
         Aircraft aircraft = (Aircraft) observable;
         Platform.runLater(() -> {
             aircraftZoomLayers.get(currentZoom).setAircraftPosition(new GPSCoordinate(aircraft.getLatitude(), aircraft.getLongitude()), aircraft.getHeading());
+            aircraftZoomLayers.get(currentZoom).setBatteryStatus(aircraft.getBatteryPercentage() < 0.2);
         });
     }
 

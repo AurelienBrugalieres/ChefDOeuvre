@@ -19,6 +19,7 @@ public class AircraftZoomLayer extends Pane {
     private int zoom;
     private ImageView aircraftIcon;
     private ImageView aircraftOutIcon;
+    private ImageView lowBatIcon;
     private InstructionView ghost = null;
     private List<InstructionView> instructionViewList = null;
     private Canvas canvas;
@@ -33,6 +34,7 @@ public class AircraftZoomLayer extends Pane {
         this.zoom = zoom;
         aircraftIcon = new ImageView("resources/bitmaps/aircraft.png");
         aircraftOutIcon = new ImageView("resources/bitmaps/aircraftOut.png");
+        lowBatIcon = new ImageView("resources/bitmaps/lowBatIcon.png");
         Color color = Color.web(aircraftColor);
         ColorAdjust colorAdjust = new ColorAdjust();
         double hue = ((color.getHue() - 180));
@@ -41,7 +43,9 @@ public class AircraftZoomLayer extends Pane {
         aircraftOutIcon.setEffect(colorAdjust);
         this.getChildren().add(aircraftIcon);
         this.getChildren().add(aircraftOutIcon);
+        this.getChildren().add(lowBatIcon);
         aircraftOutIcon.setVisible(false);
+        lowBatIcon.setVisible(false);
         this.setVisible(false);
     }
 
@@ -52,6 +56,8 @@ public class AircraftZoomLayer extends Pane {
         double y = xyzCoordinate.getY() * BackMapLayer.TILE_DIMENSION - aircraftIcon.getImage().getHeight()/2;
         aircraftIcon.setTranslateX(x);
         aircraftIcon.setTranslateY(y);
+        lowBatIcon.setTranslateX(x);
+        lowBatIcon.setTranslateY(y);
         Point2D  pt =this.localToScene(x,y);
         double width = getScene().getWidth();
         double height = getScene().getHeight();
@@ -85,6 +91,8 @@ public class AircraftZoomLayer extends Pane {
             Point2D newPt = this.sceneToLocal(outAircraft);
             aircraftOutIcon.setTranslateX(newPt.getX() - aircraftOutIcon.getImage().getWidth()/2);
             aircraftOutIcon.setTranslateY(newPt.getY() - aircraftOutIcon.getImage().getHeight()/2);
+            lowBatIcon.setTranslateX(newPt.getX());
+            lowBatIcon.setTranslateY(newPt.getY() + aircraftOutIcon.getImage().getHeight()/2);
             aircraftOutIcon.setRotate(Math.toDegrees(-angle));
 
         } else {
@@ -109,6 +117,10 @@ public class AircraftZoomLayer extends Pane {
             double newY = instructionView.getPosition().getY()*Math.pow(2, zoom);
             instructionView.paint(this, new Point2D(newX, newY));
         }
+    }
+
+    public void setBatteryStatus(boolean isLow) {
+        lowBatIcon.setVisible(isLow);
     }
 
     public int getZoom() {
