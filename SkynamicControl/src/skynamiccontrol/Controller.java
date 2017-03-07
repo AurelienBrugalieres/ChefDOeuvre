@@ -82,18 +82,21 @@ public class Controller implements Initializable{
             @Override
             public void handle(SkycEvent event) {
                 paletteController.reinitializePalette();
+                map.reinitialize();
             }
         });
         map.addEventHandler(SkycEvent.PATH_CREATED, new EventHandler<SkycEvent>() {
             @Override
             public void handle(SkycEvent event) {
                 paletteController.reinitializePalette();
+                map.reinitialize();
             }
         });
         map.addEventHandler(SkycEvent.GOTO_WP_CREATED, new EventHandler<SkycEvent>() {
             @Override
             public void handle(SkycEvent event) {
                 paletteController.reinitializePalette();
+                map.reinitialize();
             }
         });
         map.toBack();

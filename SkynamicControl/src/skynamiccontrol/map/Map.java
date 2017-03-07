@@ -36,6 +36,10 @@ public class Map extends StackPane{
             switchToAircraftPane(aircraft);
     }
 
+    public void reinitialize() {
+        goToState(PossibleState.IDLE);
+    }
+
     private enum PossibleState {
         IDLE, DRAW_CIRCLE, DRAW_PATH, DRAW_GO_TO, DRAW_WAYPOINT
     }
