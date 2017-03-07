@@ -1,6 +1,7 @@
 package skynamiccontrol.map.drawing;
 
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import skynamiccontrol.SkycEvent;
 import skynamiccontrol.map.*;
 import skynamiccontrol.model.Aircraft;
@@ -146,6 +147,8 @@ public class CircleStateMachine implements DrawingStateMachine {
     public void paintInstruction() {
         if (ghost != null) {
             Point2D pt = zoomLayer.sceneToLocal(ghost.getPosition().getX(), ghost.getPosition().getY());
+            if (aircraft != null)
+                ghost.setColor(Color.web(aircraft.getColor()));
             ghost.paint(zoomLayer, pt);
         }
     }

@@ -1,5 +1,6 @@
 package skynamiccontrol;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -77,6 +78,24 @@ public class Controller implements Initializable{
     public void setMap(Map map) {
         this.map = map;
         borderPane.getChildren().add(map);
+        map.addEventHandler(SkycEvent.CIRCLE_CREATED, new EventHandler<SkycEvent>() {
+            @Override
+            public void handle(SkycEvent event) {
+                paletteController.reinitializePalette();
+            }
+        });
+        map.addEventHandler(SkycEvent.PATH_CREATED, new EventHandler<SkycEvent>() {
+            @Override
+            public void handle(SkycEvent event) {
+                paletteController.reinitializePalette();
+            }
+        });
+        map.addEventHandler(SkycEvent.GOTO_WP_CREATED, new EventHandler<SkycEvent>() {
+            @Override
+            public void handle(SkycEvent event) {
+                paletteController.reinitializePalette();
+            }
+        });
         map.toBack();
     }
 

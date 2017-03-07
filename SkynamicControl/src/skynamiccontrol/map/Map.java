@@ -41,6 +41,7 @@ public class Map extends StackPane{
     }
     private PossibleState currentState;
     private DrawingMapEventType drawingEventType;
+    private FormCircleController circleController = null;
 
     public Map(int zoomLevelsNumber) {
         this.zoomLevelsNumber = zoomLevelsNumber;
@@ -94,10 +95,9 @@ public class Map extends StackPane{
                 //todo : bind to the right form.
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
                 popup.getContent().add(loader.load());
-                formController = loader.getController();
-                ((FormCircleController)formController).setCircle(circle, true, aircraft);
-
-                formController.setPopup(popup);
+                circleController = (FormCircleController)loader.getController();
+                circleController.setCircle(circle, true, aircraft);
+                circleController.setPopup(popup);
                 //TODO : set better position.
                 popup.show(this, 20, this.getScene().getHeight()/2 - popup.getHeight()/2);
             } catch (IOException e1) {

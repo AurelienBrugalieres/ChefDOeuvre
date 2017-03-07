@@ -65,6 +65,10 @@ public class PaletteController implements Initializable {
         activeButtons();
     }
 
+    public void reinitializePalette() {
+        goToState(PaletteState.IDLE);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         goToState(PaletteState.IDLE);
