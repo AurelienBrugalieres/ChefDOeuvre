@@ -65,27 +65,12 @@ public class Main extends Application {
 
         Aircraft aircraft = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/microjet.conf");
         Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/twinjet.conf");
-        aircraft2.setColor("#94B7EA");
-
-        /*
-        Instruction instruction = new Circle(new Waypoint(43.46280, 1.272568,30,  Waypoint.CoordinateSystem.LLA),100);
-        instruction.setName("Loiter 1");
-        instruction.setInsertMode(Instruction.InsertMode.APPEND);
-        instruction.setState(Instruction.State.SENT);
-
-        Instruction instruction2 = new Circle(new Waypoint(43.47280, 1.272568,100,  Waypoint.CoordinateSystem.LLA),100);
-        instruction2.setName("Circle house");
-        instruction2.setInsertMode(Instruction.InsertMode.APPEND);
-        instruction2.setState(Instruction.State.ACKNOWLEDGED);
-
-        Instruction instruction3 = new Circle(new Waypoint(43.46280, 1.282568,50,  Waypoint.CoordinateSystem.LLA),100);
-        instruction3.setName("Loiter 2");
-        instruction3.setInsertMode(Instruction.InsertMode.APPEND);
-        instruction3.setState(Instruction.State.ACKNOWLEDGED);
-        */
+        aircraft2.setColor("#7caeff");
 
         model.addAircraft(aircraft);
         model.addAircraft(aircraft2);
+        model.selectAircraft(aircraft);
+
 
         if (DEBUG) {
             primaryStage.setMaximized(true);
@@ -93,7 +78,7 @@ public class Main extends Application {
         map.pave();
         controller.setMap(map);
         primaryStage.setTitle("Skynamic Control");
-        Scene scene = new Scene(root, 800, 500);
+        Scene scene = new Scene(root, 1200, 800);
 
        // scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
        // primaryStage.initStyle(StageStyle.TRANSPARENT);

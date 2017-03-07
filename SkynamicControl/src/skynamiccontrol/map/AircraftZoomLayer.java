@@ -35,8 +35,8 @@ public class AircraftZoomLayer extends Pane {
         aircraftOutIcon = new ImageView("resources/bitmaps/aircraftOut.png");
         Color color = Color.web(aircraftColor);
         ColorAdjust colorAdjust = new ColorAdjust();
-        double hue = ((color.getHue() + 180) % 360);
-        colorAdjust.setHue(hue/360);
+        double hue = ((color.getHue() - 180));
+        colorAdjust.setHue(hue/180);
         aircraftIcon.setEffect(colorAdjust);
         aircraftOutIcon.setEffect(colorAdjust);
         this.getChildren().add(aircraftIcon);

@@ -72,7 +72,9 @@ public class StatusContainer extends Parent implements Observer {
         info_box = new VBox();
 
         Pane title_pane = new Pane();
-        title_pane.setStyle("-fx-background-color:  " + air.getColor() + ";");
+        String st = FxUtils.getCssColor(Color.web(air.getColor()));
+        title_pane.setStyle(st);
+        //title_pane.setStyle("-fx-background-color:  " + air.getColor() + ";");
         aircraft_name = new Text(air.getName());
         aircraft_name.setTextAlignment(TextAlignment.CENTER);
         aircraft_name.setTranslateX(TRANSLATE_X);
@@ -143,7 +145,7 @@ public class StatusContainer extends Parent implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        this.altitude.setText(String.valueOf(aircraft.getAltitude()));
+        this.altitude.setText(String.valueOf(Math.round(aircraft.getAltitude())));
         this.speed.setText(String.valueOf(aircraft.getSpeed()));
         this.status.setText(String.valueOf(aircraft.getStatus()));
         //System.out.println("update");

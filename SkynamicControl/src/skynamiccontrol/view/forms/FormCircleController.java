@@ -6,6 +6,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import skynamiccontrol.SkycEvent;
@@ -64,6 +66,9 @@ public class FormCircleController extends AbstractForm implements Initializable{
     @FXML
     private ImageButton btn_choose_emplacement;
 
+    @FXML
+    private Rectangle backgroungRectangle;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), 14);
@@ -110,6 +115,10 @@ public class FormCircleController extends AbstractForm implements Initializable{
         } else {
             box_orientation.getSelectionModel().select(1);
         }
+
+        Color color =Color.web(aircraft.getColor()).deriveColor(0, 0.5, 1.5, 1);
+        backgroungRectangle.setFill(color);
+
     }
 
     public void setCreateMode(boolean b) {

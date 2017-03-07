@@ -10,7 +10,9 @@ import javafx.scene.Parent;
 import javafx.scene.input.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import skynamiccontrol.FxUtils;
 import skynamiccontrol.core.StatusStateMachine;
 import skynamiccontrol.model.Aircraft;
 
@@ -38,11 +40,9 @@ public class StatusListContainer extends Parent {
     private StatusStateMachine statusStateMachine;
 
     public StatusListContainer() {
-
-        Color color = Color.decode("#E1E5FF");
         vbox = new VBox();
         vbox.setPadding(new Insets(PADDING,PADDING,PADDING,PADDING));
-        vbox.setStyle("-fx-background-color: rgba("+color.getRed()+","+color.getGreen()+","+color.getBlue()+",0.7); -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
+        vbox.setStyle("-fx-background-color: rgba(225,229,255,0.7); -fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
         final Point dragDelta = new Point();
         vbox.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override

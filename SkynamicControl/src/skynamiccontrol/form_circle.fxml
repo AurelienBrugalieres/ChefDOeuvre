@@ -11,7 +11,7 @@
 
 <AnchorPane fx:id="form_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="288.0" style="-fx-background-color: C7D5EA; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="skynamiccontrol.view.forms.FormCircleController">
    <children>
-      <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#c8d5e8" height="405.0" stroke="TRANSPARENT" strokeType="INSIDE" width="288.0" />
+      <Rectangle fx:id="backgroungRectangle" arcHeight="20.0" arcWidth="20.0" fill="#c8d5e8" height="405.0" stroke="TRANSPARENT" strokeType="INSIDE" width="288.0" />
       <Text layoutX="21.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
          <font>
             <Font size="14.0" />
