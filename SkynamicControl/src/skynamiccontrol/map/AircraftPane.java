@@ -88,6 +88,8 @@ public class AircraftPane extends StackPane implements Observer {
                 break;
             case END_DRAW:
                 break;
+            case CANCEL_DRAW:
+                break;
         }
         if (currentStateMachine != null) {
             currentStateMachine.handleEvent(e, aircraft);

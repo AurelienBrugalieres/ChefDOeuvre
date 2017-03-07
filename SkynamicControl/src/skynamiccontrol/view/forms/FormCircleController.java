@@ -64,6 +64,9 @@ public class FormCircleController extends AbstractForm implements Initializable{
     @FXML
     private ImageButton btn_choose_emplacement;
 
+    @FXML
+    private ImageButton btn_close;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), 14);
@@ -82,6 +85,7 @@ public class FormCircleController extends AbstractForm implements Initializable{
                 "/resources/bitmaps/choose_entered.png",
                 "/resources/bitmaps/choose_pressed.png");
         box_orientation.getItems().addAll("clockwise", "counterclockwise");
+        btn_close.initButton("/resources/bitmaps/close_default.png", "/resources/bitmaps/close_over.png", "/resources/bitmaps/close_pressed.png");
     }
 
     public void setCircle(Circle circle, boolean isNewInstruction, Aircraft aircraft) {
@@ -165,5 +169,10 @@ public class FormCircleController extends AbstractForm implements Initializable{
     public void onMouseClickedChooseEmplacement(MouseEvent mouseEvent) {
         SkycEvent event = new SkycEvent(SkycEvent.CHOOSE_INSTRUCTION_EMPLACEMENT);
         getPopup().fireEvent(event);
+    }
+
+    @FXML
+    public void onPopupClose() {
+        hide();
     }
 }

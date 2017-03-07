@@ -76,7 +76,7 @@ public class CircleStateMachine implements DrawingStateMachine {
             case CIRCLE:
                 Point2D finalPoint = zoomLayer.sceneToLocal(point);
                 GPSCoordinate finalPointCoordinate = new XYZCoordinate(finalPoint.getX()/ BackMapLayer.TILE_DIMENSION, finalPoint.getY()/BackMapLayer.TILE_DIMENSION, zoomLayer.getZoom()).toGPSCoordinate();
-                CircleView oldGhost = ghost;
+                oldGhost = ghost;
                 Point2D pt = zoomLayer.sceneToLocal(ghost.getPosition());
                 GPSCoordinate gpsCoordinate = new XYZCoordinate(pt.getX()/ BackMapLayer.TILE_DIMENSION, pt.getY()/BackMapLayer.TILE_DIMENSION, zoomLayer.getZoom()).toGPSCoordinate();
                 Waypoint wp = new Waypoint(gpsCoordinate.getLatitude(), gpsCoordinate.getLongitude(), 200, Waypoint.CoordinateSystem.LLA);
@@ -91,6 +91,25 @@ public class CircleStateMachine implements DrawingStateMachine {
                 zoomLayer.fireEvent(event);
                 break;
         }
+    }
+
+    private void cancelDraw() {
+        System.out.println("Cancel");
+        switch (currentState) {
+            case IDLE:
+                break;
+            case BEGIN:
+                gotoState(PossibleState.IDLE);
+                break;
+            case CIRCLE:
+                oldGhost = ghost;
+                ghost.remove();
+                ghost = null;
+                gotoState(PossibleState.IDLE);
+                paintInstruction();
+                break;
+        }
+
     }
 
     private void gotoState(PossibleState possibleState) {
@@ -110,22 +129,22 @@ public class CircleStateMachine implements DrawingStateMachine {
             case END_DRAW:
                 endDraw(event.getPosition());
                 break;
+            case CANCEL_DRAW:
+                System.out.println("Coucou");
+                cancelDraw();
         }
     }
 
     @Override
     public void init(AircraftZoomLayer container) {
-        CircleView oldGhost = ghost;
+        oldGhost = ghost;
         zoomLayer = container;
-//        ghost = null;
         gotoState(PossibleState.IDLE);
     }
 
     @Override
     public void paintInstruction() {
         if (ghost != null) {
-//            double newX = ghost.getPosition().getX() * Math.pow(2, zoomLayer.getZoom());
-//            double newY = ghost.getPosition().getY() * Math.pow(2, zoomLayer.getZoom());
             Point2D pt = zoomLayer.sceneToLocal(ghost.getPosition().getX(), ghost.getPosition().getY());
             ghost.paint(zoomLayer, pt);
         }
