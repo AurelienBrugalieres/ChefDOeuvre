@@ -27,7 +27,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        IvyManager.getInstance().initIvyBus("SkynamicControl", "SkynamicControl Ready", "127.255.255.255:2010");
+        //IvyManager.getInstance().initIvyBus("SkynamicControl", "SkynamicControl Ready", "127.255.255.255:2010");
+        IvyManager.getInstance().initIvyBus("SkynamicControl", "SkynamicControl Ready", "192.168.0.255:2010");
         model = new GCSModel();
 
         //StackPane root = new StackPane();

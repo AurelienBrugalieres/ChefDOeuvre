@@ -55,15 +55,15 @@ public class StatusContainer extends Parent implements Observer {
 
     private Text status;
 
+    private Text mode_gps;
+
     private javafx.scene.image.ImageView batterie_image;
 
     private Aircraft aircraft;
-  // private StatusStateMachine statusStateMachine;
+
     public boolean isSelected = false;
 
     public StatusContainer(Aircraft air) {
-        System.out.println("construct status container");
-     //  statusStateMachine = new StatusStateMachine();
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), StatusListContainer.FONT_SIZE_BODY);
         this.setStyle("-fx-font-family: OpenSans-Regular;");
         global_pane = new BorderPane();
@@ -85,6 +85,7 @@ public class StatusContainer extends Parent implements Observer {
         aircraft = air;
         altitude = new Text(String.valueOf(air.getAltitude()));
         speed = new Text(String.valueOf(air.getSpeed()));
+        mode_gps = new Text(String.valueOf(air.getGpsMode()));
 
 
         status = new Text(air.getStatus());
@@ -109,9 +110,13 @@ public class StatusContainer extends Parent implements Observer {
         status_box.getChildren().addAll(new Text("Status: "),status);
         status_box.setSpacing(SPACING_STATUS);
 
+        HBox gps_mode = new HBox();
+        gps_mode.getChildren().addAll(new Text("GPS Mode: "),mode_gps);
+        gps_mode.setSpacing(SPACING_STATUS);
+
         info_box.setSpacing(SPACING);
         info_box.setPadding(new Insets(SPACING,StatusListContainer.PADDING,StatusListContainer.PADDING,StatusListContainer.PADDING));
-        info_box.getChildren().addAll(alt_box,speed_box,status_box);
+        info_box.getChildren().addAll(alt_box,speed_box,status_box,gps_mode);
         global_pane.setCenter(info_box);
         aircraft.addPrivateObserver(this);
         this.getChildren().add(global_pane);
@@ -148,8 +153,6 @@ public class StatusContainer extends Parent implements Observer {
         this.altitude.setText(String.valueOf(Math.round(aircraft.getAltitude())));
         this.speed.setText(String.valueOf(aircraft.getSpeed()));
         this.status.setText(String.valueOf(aircraft.getStatus()));
-        //System.out.println("update");
-        //System.out.println(aircraft.getStatus());
         setBatteryImage();
     }
 
