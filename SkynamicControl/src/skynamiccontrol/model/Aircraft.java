@@ -284,6 +284,10 @@ public class Aircraft extends Observable implements Observer{
         this.longitude = longitude;
     }
 
+    public String getGpsMode() {
+        return gpsMode;
+    }
+
     @Override
     public int hashCode() {
         int hash = 1;
