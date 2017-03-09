@@ -153,6 +153,7 @@ public class StatusContainer extends Parent implements Observer {
         this.altitude.setText(String.valueOf(Math.round(aircraft.getAltitude())));
         this.speed.setText(String.valueOf(aircraft.getSpeed()));
         this.status.setText(String.valueOf(aircraft.getStatus()));
+        this.mode_gps.setText(aircraft.getGpsMode());
         setBatteryImage();
     }
 
