@@ -6,12 +6,13 @@ import java.util.*;
 
 /**
  * Created by Elodie on 14/02/2017.
+ * Manage the comportement of the list of strips.
  */
 public class StatusManager implements Observer{
 
-
-   // private StatusListController statusListController;
+    //List of strips.
     private StatusListContainer statusListContainer;
+    //Model
     private GCSModel model;
 
     public StatusManager(GCSModel model) {
@@ -22,8 +23,14 @@ public class StatusManager implements Observer{
 
     }
 
+    /**
+     * Set the list of strips.
+     * @param statusListContainer
+     * List of strips.
+     */
     public void setStatusListContainer(StatusListContainer statusListContainer) {
         this.statusListContainer = statusListContainer;
+        //Set a listener to select a strip/ a drone
         this.statusListContainer.setStatusListener(new StatusListContainer.StatusListener() {
             @Override
             public void onDroneStatusClick(Aircraft aircraftClicked) {
@@ -33,6 +40,11 @@ public class StatusManager implements Observer{
         });
     }
 
+    /**
+     * Create a view for an aircraft.
+     * @param aircraft
+     * the new aircraft
+     */
     public void createView(Aircraft aircraft) {
         statusListContainer.addStatus(aircraft);
     }
@@ -43,6 +55,11 @@ public class StatusManager implements Observer{
 
     }
 
+    /**
+     * Select the strip of the aircraft.
+     * @param aircraft
+     * aircraft selected.
+     */
     public void selectAircraft(Aircraft aircraft) {
         statusListContainer.selectAircraft(aircraft);
     }
