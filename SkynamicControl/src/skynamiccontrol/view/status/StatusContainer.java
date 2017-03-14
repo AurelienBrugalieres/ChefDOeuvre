@@ -18,8 +18,14 @@ import skynamiccontrol.model.Aircraft;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * View of strip module.
+ */
 public class StatusContainer extends Parent implements Observer {
 
+    /**
+     * Constants for location of elements.
+     */
     private final static int SIZE = 150;
 
     private final static int BAT_HEIGHT = 70;
@@ -42,45 +48,58 @@ public class StatusContainer extends Parent implements Observer {
 
     private final static double NB_BITMAPS_BATTERIES = 5.0;
 
-
+    //global pane
     private BorderPane global_pane;
 
+    // pane with drone's informations
     private VBox info_box;
 
+    // aircraft's name
     private Text aircraft_name;
 
+    //aircraft's altitude
     private Text altitude;
 
+    //aircraft's speed
     private Text speed;
 
+    //aircraft's status
     private Text status;
 
+    //aircraft's GPS mode
     private Text mode_gps;
 
+    //image of the batterie
     private javafx.scene.image.ImageView batterie_image;
 
+    //aircraft concerned
     private Aircraft aircraft;
 
+    //if the strip is selected or not
     public boolean isSelected = false;
 
     public StatusContainer(Aircraft air) {
+        //Get and set Font Open Sans
         Font.loadFont(getClass().getResourceAsStream("resources/font/OpenSans-Regular.ttf"), StatusListContainer.FONT_SIZE_BODY);
         this.setStyle("-fx-font-family: OpenSans-Regular;");
+
+        //Create global pane
         global_pane = new BorderPane();
         global_pane.setPrefSize(SIZE,SIZE);
         global_pane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10;");
         info_box = new VBox();
 
+        //Create the title of the strip with the aircraft's name
         Pane title_pane = new Pane();
         String st = FxUtils.getCssColor(Color.web(air.getColor()));
         title_pane.setStyle(st);
-        //title_pane.setStyle("-fx-background-color:  " + air.getColor() + ";");
         aircraft_name = new Text(air.getName());
         aircraft_name.setTextAlignment(TextAlignment.CENTER);
         aircraft_name.setTranslateX(TRANSLATE_X);
         aircraft_name.setTranslateY(TRANSLATE_Y);
         aircraft_name.setStyle("-fx-font-size: 18;");
 
+        //Create views of aircraft's parameters
         this.batterie_image = new ImageView();
         aircraft = air;
         altitude = new Text(String.valueOf(air.getAltitude()));
@@ -90,6 +109,7 @@ public class StatusContainer extends Parent implements Observer {
 
         status = new Text(air.getStatus());
 
+        //Create view of the batterie
         setBatteryImage();
         batterie_image.setSmooth(true);
         batterie_image.setTranslateY(TRANSLATE_BATTERY);
@@ -99,6 +119,7 @@ public class StatusContainer extends Parent implements Observer {
         global_pane.setTop(title_pane);
         global_pane.setLeft(batterie_image);
 
+        //Set all the elements in panes
         HBox alt_box = new HBox();
         alt_box.getChildren().addAll(new Text("Altitude: "),altitude);
         alt_box.setSpacing(SPACING_ALTITUDE);
@@ -118,12 +139,16 @@ public class StatusContainer extends Parent implements Observer {
         info_box.setPadding(new Insets(SPACING,StatusListContainer.PADDING,StatusListContainer.PADDING,StatusListContainer.PADDING));
         info_box.getChildren().addAll(alt_box,speed_box,status_box,gps_mode);
         global_pane.setCenter(info_box);
+        //Observe the aircraft
         aircraft.addPrivateObserver(this);
         this.getChildren().add(global_pane);
 
 
     }
 
+    /**
+     * Set the good image for the batterie (depending on the current level on drone's batterie).
+     */
     public void setBatteryImage() {
         double batteryPercentage = aircraft.getBatteryPercentage();
         if (batteryPercentage < 1.0/NB_BITMAPS_BATTERIES) {
@@ -139,10 +164,16 @@ public class StatusContainer extends Parent implements Observer {
         }
     }
 
+    /**
+     * Deselect the strip.
+     */
     public void setDeselected() {
         global_pane.setStyle("-fx-background-color: null");
     }
 
+    /**
+     * Select the strip.
+     */
     public void setSelected() {
         Color color = Color.web(aircraft.getColor(), 0.7);
         global_pane.setStyle(FxUtils.getCssColor(color));
