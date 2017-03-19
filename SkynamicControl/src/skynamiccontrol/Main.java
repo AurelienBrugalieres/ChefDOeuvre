@@ -20,10 +20,7 @@ import skynamiccontrol.model.mission.Instruction;
 public class Main extends Application {
     private Controller controller;
     private GCSModel model;
-
-    public static final boolean DEBUG = false;
     private FXMLLoader loader;
-    double x,y;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -31,19 +28,21 @@ public class Main extends Application {
         //IvyManager.getInstance().initIvyBus("SkynamicControl", "SkynamicControl Ready", "192.168.0.255:2010");
         model = new GCSModel();
 
-        //StackPane root = new StackPane();
+        //load interface
         loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/skynamicControlMain.fxml"));
         Parent root = loader.load();
 
 
-        //Test map listener
         //Access to controller
         controller = loader.getController();
 
+        //instanciate the map with 20 zoom levels
         Map map = new Map(20);
 
 
         primaryStage.getIcons().add(new Image("resources/bitmaps/quadrotorLogoDark.png"));
+
+        //add listener on width change to adjust graphics
         primaryStage.widthProperty().addListener(((observable, oldValue, newValue) -> {
             double container_width = controller.getNotificationContainer().getWidth();
             controller.getNotificationContainer().setTranslateX((double)newValue - container_width);
@@ -52,56 +51,61 @@ public class Main extends Application {
             map.pave();
         }));
 
+        //add listener on height change to adjust graphics
         primaryStage.heightProperty().addListener(((observable, oldValue, newValue) -> {
             controller.adjustTimelineYPosition(primaryStage.getHeight());
             map.setStageHeight(primaryStage.getHeight());
             map.pave();
         }));
 
+        //bind all components together
         controller.setModel(model);
         model.setStatusListContainer(controller.getStatusListContainer());
         model.setTimeline(controller.getTimelineController());
         model.setNotificationManager(controller.getNotificationContainer());
         model.setMap(map);
 
+        //Adds 2 aircraft. Should not be done statically.
         Aircraft aircraft = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/microjet.conf");
         Aircraft aircraft2 = Aircraft.loadAircraft(Constants.USER_DIR + "conf/aircrafts/twinjet.conf");
         aircraft2.setColor("#7caeff");
 
         model.addAircraft(aircraft);
         model.addAircraft(aircraft2);
+        //default selected aircraft
         model.selectAircraft(aircraft);
 
-
-        if (DEBUG) {
-            primaryStage.setMaximized(true);
-        }
-        map.pave();
+        //map.pave();           //sound useless, uncomment if the map is not displayed
         controller.setMap(map);
         primaryStage.setTitle("Skynamic Control");
         Scene scene = new Scene(root, 1200, 800);
-
-       // scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
-       // primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.setScene(scene);
 
         primaryStage.show();
+
+        //init map zoom and position
         map.setZoomLevel(18);
         map.setCoordinates(new GPSCoordinate(43.462344, 1.273044));
+        //load and display tiles
         map.pave();
     }
 
     @Override
     public void stop() throws Exception {
         super.stop();
+        //stop Ivy
         IvyManager.getInstance().stop();
+        //stop mission manager threads
         for(Aircraft aircraft : model.getAircrafts()) {
             aircraft.getMissionManager().stop();
         }
     }
 
     public static void main(String[] args) {
+        //use system proxies
         System.setProperty("java.net.useSystemProxies", "true");
+
+        //parse args from command line to set proxy, or working directory (for configuration files and tiles directory)
         int i = 0;
         while (i < args.length) {
             if(args[i].equals("-u") || args[i].equals("--user-directory")) {
@@ -113,7 +117,7 @@ public class Main extends Application {
                 System.out.println("proxy : " + args[i+1] + ":" + args[i+2]);
                 i+=3;
             } else {
-                System.out.println("Usage : EXECUTABLE [-d|--user-directory <user directory>] [-p|--proxy <host> <port>]");
+                System.out.println("Usage : EXECUTABLE [-u|--user-directory <user directory>] [-p|--proxy <host> <port>]");
                 System.exit(-1);
             }
         }

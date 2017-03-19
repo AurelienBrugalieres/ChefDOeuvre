@@ -4,6 +4,7 @@ import skynamiccontrol.model.Waypoint;
 
 /**
  * Created by fabien on 13/02/17.
+ * Circle instruction, as defined in paparazzi
  */
 public class Circle extends Instruction {
     private Waypoint center;

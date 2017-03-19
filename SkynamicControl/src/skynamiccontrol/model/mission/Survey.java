@@ -4,6 +4,7 @@ import skynamiccontrol.model.Waypoint;
 
 /**
  * Created by fabien on 13/02/17.
+ * Survey instruction, as defined in paparazzi messages
  */
 public class Survey extends Instruction {
     private Waypoint wpStart;

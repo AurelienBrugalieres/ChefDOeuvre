@@ -10,6 +10,8 @@ import java.util.Observer;
 
 /**
  * Created by fabien on 02/03/17.
+ *
+ * Timeline content
  */
 public class Content extends Pane implements Observer {
     private static int DEFAULT_HEIGHT = 150;
@@ -26,6 +28,9 @@ public class Content extends Pane implements Observer {
         aircraft.getMissionManager().addObserver(this);
     }
 
+    /**
+     * Draw all instruction blocks
+     */
     public void updateAircraftMissionBlock() {
         double x = 0;
         this.getChildren().clear();
@@ -34,6 +39,7 @@ public class Content extends Pane implements Observer {
             return;
         }
 
+        //get maximum alitude of instructions
         double altitudeMax = DEFAULT_HEIGHT;
         for (Instruction instruction : aircraft.getMissionManager().getFutureInstructions()) {
             altitudeMax = Math.max(altitudeMax, instruction.getAltitude() + ALTITUDE_MARGIN);
@@ -41,7 +47,7 @@ public class Content extends Pane implements Observer {
         altitudeMax = altitudeMax + ALTITUDE_ROUND - (altitudeMax % ALTITUDE_ROUND);
         tabContent.setMaxAltitude((int) altitudeMax);
 
-
+        //draw instructions
         for (Instruction instruction : aircraft.getMissionManager().getFutureInstructions()) {
             double y = totalHeight - totalHeight*(instruction.getAltitude()/altitudeMax);
             StackPaneInstruction sp = new StackPaneInstruction(instruction, aircraft);

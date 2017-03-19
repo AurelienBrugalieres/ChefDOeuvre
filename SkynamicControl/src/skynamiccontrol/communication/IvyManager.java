@@ -11,6 +11,7 @@ import java.util.Observable;
  * Created by fabien on 13/02/17.
  */
 public class IvyManager extends Observable{
+    // the drone listen only messages from the gcs, so we fake our identity.
     private static String NAME_ON_IVY = "gcs";
     private Ivy bus;
     private ArrayList<String> regexes;
@@ -31,6 +32,11 @@ public class IvyManager extends Observable{
         bus.stop();
     }
 
+    /**
+     * Register new regex
+     * @param regex
+     * @return id for the regex. The same regex may be used from multiple objects.
+     */
     public int registerRegex(String regex) {
         //if the regex is already registered, just return its id.
         int regexNb;
@@ -61,7 +67,11 @@ public class IvyManager extends Observable{
         return -1;
     }
 
-
+    /**
+     * Send Ivy message. Add "NAME_ON_IVY " before the message.
+     * @param message
+     * @return
+     */
     public boolean sendMessage(String message) {
         try {
             bus.sendMsg(NAME_ON_IVY + " " + message);

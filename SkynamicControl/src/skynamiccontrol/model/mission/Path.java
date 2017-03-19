@@ -4,6 +4,7 @@ import skynamiccontrol.model.Waypoint;
 
 /**
  * Created by fabien on 13/02/17.
+ * Path instruction, as defined in paparazzi. Work also for Segment instruction.
  */
 public class Path extends Instruction {
     public static int NB_WAYPOINTS_MAX = 5;

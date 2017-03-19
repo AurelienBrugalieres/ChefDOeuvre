@@ -2,6 +2,7 @@ package skynamiccontrol.model.mission;
 
 /**
  * Created by fabien on 13/02/17.
+ * Common part to all instructions
  */
 public abstract  class Instruction {
     private String name;

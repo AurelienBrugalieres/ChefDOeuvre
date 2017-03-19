@@ -8,6 +8,8 @@ import skynamiccontrol.model.Aircraft;
 
 /**
  * Created by fabien on 01/03/17.
+ *
+ * Skin of a tab in the timeline.
  */
 public class TabContent extends Pane {
 

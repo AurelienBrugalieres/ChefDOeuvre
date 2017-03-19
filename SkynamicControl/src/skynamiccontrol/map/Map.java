@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 /**
  * Created by fabien on 25/02/17.
+ * Main class for the map
  */
 public class Map extends StackPane{
     private int zoomLevelsNumber;
@@ -96,7 +97,6 @@ public class Map extends StackPane{
                 Aircraft aircraft = e.getAircraft();
                 Popup popup = new Popup();
                 AbstractForm formController = null;
-                //todo : bind to the right form.
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/skynamiccontrol/form_circle.fxml"));
                 popup.getContent().add(loader.load());
                 circleController = (FormCircleController)loader.getController();

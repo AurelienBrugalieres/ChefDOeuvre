@@ -131,7 +131,6 @@ public class CircleStateMachine implements DrawingStateMachine {
                 endDraw(event.getPosition());
                 break;
             case CANCEL_DRAW:
-                System.out.println("Coucou");
                 cancelDraw();
         }
     }

@@ -2,6 +2,7 @@ package skynamiccontrol.communication;
 
 /**
  * Created by fabien on 13/02/17.
+ * package incoming Ivy message in a class
  */
 public class IncomeMessage {
     private int id;

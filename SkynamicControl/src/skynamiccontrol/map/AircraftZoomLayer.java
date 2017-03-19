@@ -14,6 +14,7 @@ import static com.sun.javafx.util.Utils.clamp;
 
 /**
  * Created by fabien on 01/03/17.
+ * Pane containing all draws for an ancraift at a zoom layer.
  */
 public class AircraftZoomLayer extends Pane {
     private int zoom;
@@ -36,6 +37,7 @@ public class AircraftZoomLayer extends Pane {
         aircraftOutIcon = new ImageView("resources/bitmaps/aircraftOut.png");
         lowBatIcon = new ImageView("resources/bitmaps/lowBatIcon.png");
         Color color = Color.web(aircraftColor);
+        //Change icon color
         ColorAdjust colorAdjust = new ColorAdjust();
         double hue = ((color.getHue() - 180));
         colorAdjust.setHue(hue/180);
@@ -49,6 +51,11 @@ public class AircraftZoomLayer extends Pane {
         this.setVisible(false);
     }
 
+    /**
+     * Set aircraft icon position and orientation, and arrow position if the aircraft is not visible on the map.
+     * @param aircraftCoordinates
+     * @param heading
+     */
     public void setAircraftPosition(GPSCoordinate aircraftCoordinates, double heading) {
         XYZCoordinate xyzCoordinate = aircraftCoordinates.toXYCoordinates(zoom);
         aircraftIcon.setRotate(heading);
@@ -61,6 +68,8 @@ public class AircraftZoomLayer extends Pane {
         Point2D  pt =this.localToScene(x,y);
         double width = getScene().getWidth();
         double height = getScene().getHeight();
+
+        //if the aircraft is outside the screen, draw the arrow.
         if(pt.getX() < 0 ||
                 pt.getY() < 0 ||
                 pt.getX() > width ||

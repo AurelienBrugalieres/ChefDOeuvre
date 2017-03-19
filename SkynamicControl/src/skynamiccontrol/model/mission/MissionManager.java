@@ -9,20 +9,21 @@ import java.util.*;
 
 /**
  * Created by fabien on 13/02/17.
+ * Class managing instructions for an aircraft.
  */
 public class MissionManager  extends Observable implements Observer{
-    private int missionStatusMessageId;
-    private int aircraftId;
-    private ArrayList<Instruction> pastInstructions;
-    private int currentInstructionAircraftIndex;
-    private Queue<Instruction> instructionsToSend;
-    private int nextIndex;
-    private ArrayList<Instruction> pendingInstructions;
-    private Instruction travelingInstruction;
-    private long timeSinceSent;
-    private InstructionsSender instructionsSender;
-    private Timer instructionsSenderTimer;
-    private int nbInstructionsInAircraft;
+    private int missionStatusMessageId;                     //IvyManager satus message id
+    private int aircraftId;                                 // aircraft id
+    private ArrayList<Instruction> pastInstructions;        //List of past instructions
+    private int currentInstructionAircraftIndex;            //index of the instruction the drone is currently doing
+    private Queue<Instruction> instructionsToSend;          //Queue of instruction wainting to be sent to the aircraft
+    private int nextIndex;                                  //index of the next instruction
+    private ArrayList<Instruction> pendingInstructions;     //instructions sent to the aircraft, not yet done
+    private Instruction travelingInstruction;               //instruction sent to the aircraft but not yet acknowledged
+    private long timeSinceSent;                             //time since the instruction was sent (useful to detect timeout)
+    private InstructionsSender instructionsSender;          //class used to send instructions to the aircraft
+    private Timer instructionsSenderTimer;                  //timer triggering the instruction sender
+    private int nbInstructionsInAircraft;                   //number of instructions sent to the aircraft
 
     public MissionManager(int aircraftId) {
         this.aircraftId = aircraftId;
@@ -97,6 +98,10 @@ public class MissionManager  extends Observable implements Observer{
         return currentInstructionAircraftIndex;
     }
 
+    /**
+     * Only insertion mode used for now.
+     * @param instruction
+     */
     private void appendInstruction(Instruction instruction) {
         pendingInstructions.add(instruction);
     }
@@ -180,6 +185,12 @@ public class MissionManager  extends Observable implements Observer{
         return insertIndex;
     }
 
+    /**
+     * Forge message for a circle instruction.
+     * @param circle
+     * @param index
+     * @return
+     */
     private String forgeCircleMessage(Circle circle, int index) {
         String msg = "";
         if(circle.getCenter().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
@@ -200,6 +211,12 @@ public class MissionManager  extends Observable implements Observer{
         return msg;
     }
 
+    /**
+     * Forge message for a goTo instruction.
+     * @param goToWP
+     * @param index
+     * @return
+     */
     private String forgeGoToWPMessage(GoToWP goToWP, int index) {
         String msg = "";
         if(goToWP.getWaypoint().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
@@ -219,6 +236,13 @@ public class MissionManager  extends Observable implements Observer{
         return msg;
     }
 
+    /**
+     * Forge message for a path or segment instruction.
+     * @param path
+     * @param index
+     * @return
+     * @throws Exception
+     */
     private String forgePathMessage(Path path, int index) throws Exception {
         int nbPoints = path.getNbWaypoints();
         if(nbPoints < 2) {
@@ -260,6 +284,12 @@ public class MissionManager  extends Observable implements Observer{
         return msg;
     }
 
+    /**
+     * Forge message for a survey instruction.
+     * @param survey
+     * @param index
+     * @return
+     */
     private String forgeSurveyMessage(Survey survey, int index) {
         String msg = "";
         if(survey.getWpStart().getCoordinateSystem() == Waypoint.CoordinateSystem.LLA) {
@@ -314,6 +344,10 @@ public class MissionManager  extends Observable implements Observer{
 
     }
 
+    /**
+     * Update instructions lists and states according to received MISSION_STATUS message.
+     * @param indexes
+     */
     private void updatePendingInstructions(Integer[] indexes) {
         ArrayList<Instruction> removeList = new ArrayList<>();
         for(Instruction instruction : pendingInstructions) {
@@ -376,10 +410,20 @@ public class MissionManager  extends Observable implements Observer{
         notifyObservers();
     }
 
+    /**
+     * The aircraft store the instruction index on a limited range. (like a char: 8 bits => 255 is the maximum)
+     * @param index
+     * @return
+     */
     private Integer getAircraftIndex(int index) {
         return index % Constants.MAX_INDEX_VALUE;
     }
 
+    /**
+     * return indexes present in a message
+     * @param s
+     * @return
+     */
     private Integer[] parseIndexes(String s) {
         String[] items = (s.substring(0, s.length()-1)).split(",");
         Integer[] indexes = new Integer[items.length];

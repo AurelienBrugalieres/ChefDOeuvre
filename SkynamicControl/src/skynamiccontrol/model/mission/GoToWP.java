@@ -4,6 +4,7 @@ import skynamiccontrol.model.Waypoint;
 
 /**
  * Created by fabien on 13/02/17.
+ * Go to Waypoint instruction, as defined in paparazzi
  */
 public class GoToWP extends Instruction {
     private Waypoint waypoint;

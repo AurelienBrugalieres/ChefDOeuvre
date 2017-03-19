@@ -10,6 +10,8 @@ import skynamiccontrol.model.mission.Circle;
 
 /**
  * Created by aurelien on 01/03/17.
+ *
+ * Graphic stuff to draw the circle
  */
 public class CircleView implements InstructionView {
 

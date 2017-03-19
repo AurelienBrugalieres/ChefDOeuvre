@@ -168,6 +168,11 @@ public class Aircraft extends Observable implements Observer{
         return flightTime;
     }
 
+    /**
+     * Load aircraft from a configuaration file
+     * @param filename
+     * @return loaded aircraft
+     */
     @SuppressWarnings("Duplicates")
     public static Aircraft loadAircraft(String filename) {
             BufferedReader br = null;
@@ -221,6 +226,11 @@ public class Aircraft extends Observable implements Observer{
             return aircraft;
         }
 
+    /**
+     * Parse message according to its type, and set aircraft parameters.
+     * @param observable
+     * @param o
+     */
     @Override
     public void update(Observable observable, Object o) {
         if(o instanceof IncomeMessage) {
@@ -228,19 +238,15 @@ public class Aircraft extends Observable implements Observer{
             String[] strs = incomeMessage.getPayload();
             int msgId = incomeMessage.getId();
             if(msgId== apStatusMsgId) {
-                //ap_mode lat_mode horiz_mode gaz_mode gps_mode kill_mode flight_time state_filter_mode
                 status = strs[0];
                 gpsMode = strs[4];
                 flightTime = Integer.parseInt(strs[6]);
                 setChanged();
             } else if (msgId == engineStatusMsgId) {
-                //throttle throttle_accu rpm temp bat amp energy
                 throttle = Double.parseDouble(strs[0]);
                 batteryLevel = Double.parseDouble(strs[4]);
                 setChanged();
             } else if (msgId == flightParamsMsgId) {
-                //11.883718 1.123226 198.300979 43.462915 1.274396 12.670000 198.7 260.997925 -0.030000 75.997925 1487725470.567468 263086240 12.700000
-                //roll pitch heading lat long speed course alt climb agl unix_time itow airspeed
                 String[] params = strs[0].split(" ");
                 roll = Double.parseDouble(params[0]);
                 pitch = Double.parseDouble(params[1]);

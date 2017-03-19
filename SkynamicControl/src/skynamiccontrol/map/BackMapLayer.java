@@ -18,8 +18,10 @@ import static com.sun.javafx.util.Utils.clamp;
 
 /**
  * Created by fabien on 23/02/17.
+ * Contains and load tiles for a zoom level
  */
 public class BackMapLayer extends Pane{
+    //pixel tile size
     public static int TILE_DIMENSION = 256;
     private static int GOOGLE_VERSION = 716;
     private QuadTree imageTree;
@@ -49,6 +51,12 @@ public class BackMapLayer extends Pane{
 
     }
 
+    /**
+     * Load and draw a tile
+     * @param filename
+     * @param x
+     * @param y
+     */
     private void addTile(String filename, int x, int y) {
         File file = new File( filename);
         if(file.exists() && !file.isDirectory()) {
@@ -60,6 +68,11 @@ public class BackMapLayer extends Pane{
         }
     }
 
+    /**
+     * Draw an empty tile : usefull for allowing drag on the  map even if the tiles can't be downloaded.
+     * @param x
+     * @param y
+     */
     private void setNoTile(int x, int y) {
         ImageView noTile = new ImageView(noMap);
         this.getChildren().add(noTile);
@@ -69,30 +82,37 @@ public class BackMapLayer extends Pane{
     }
 
     private void requestTile(int X, int Y, int zoom) {
-        //Is the image in memory ?
+        //if the image is already loaded, do nothing
         if (imageTree.contains(X, Y)) {
             return;
         }
 
         setNoTile(X, Y);
 
-        //Is the image in local directory ?
+        //if the image is in local directory, load it
         String filename = String.format("%s%d,%d,%d",DIRECTORY , zoom, X, Y);
-        //String filename = DIRECTORY+zoom+""+X+""+Y+;
         File file = new File( filename);
         if(file.exists() && !file.isDirectory()) {
             addTile(filename, X, Y);
             return;
         }
 
-        //Download the image from the internet !
-        //String url = String.format("http://khm0.google.com/kh/v=%d&x=%d&s=&y=%d&z=%d", GOOGLE_VERSION, X, Y, zoom);
-        String url = "http://tile.openstreetmap.org/" + zoom + "/" + X + "/" + Y + ".png";
+        //else, download the image from the internet !
+        //If the tiles aren't downloaded, use openstreetmap instead of google. You may have been "ban" by google. (change commented lines)
+        String url = String.format("http://khm0.google.com/kh/v=%d&x=%d&s=&y=%d&z=%d", GOOGLE_VERSION, X, Y, zoom);
+        //String url = "http://tile.openstreetmap.org/" + zoom + "/" + X + "/" + Y + ".png";
         downloadAsync(url, filename, X, Y, zoom);
     }
 
 
-
+    /**
+     * Download asynchronously a tile, and display it.
+     * @param sourceUrl
+     * @param filename
+     * @param X
+     * @param Y
+     * @param zoom
+     */
     private void downloadAsync(String sourceUrl, String filename, int X, int Y, int zoom) {
         Thread download = new Thread(()->{
             URL url= null;
@@ -147,6 +167,13 @@ public class BackMapLayer extends Pane{
         }
     }
 
+    /**
+     * Pave the map within the given rectangle
+     * @param xMin
+     * @param yMin
+     * @param xMax
+     * @param yMax
+     */
     public void paveZone(double xMin, double yMin, double xMax, double yMax) {
         int x0 = clamp(0,(int) xMin/TILE_DIMENSION, (int)Math.pow(2, zoom) - 1);
         int y0 = clamp(0,(int) yMin/TILE_DIMENSION, (int)Math.pow(2, zoom) - 1);

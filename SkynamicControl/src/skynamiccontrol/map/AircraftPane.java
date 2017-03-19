@@ -12,6 +12,7 @@ import java.util.*;
 
 /**
  * Created by fabien on 25/02/17.
+ * Pane containing all aircraftZoomLayers
  */
 public class AircraftPane extends StackPane implements Observer {
     private Aircraft aircraft;
